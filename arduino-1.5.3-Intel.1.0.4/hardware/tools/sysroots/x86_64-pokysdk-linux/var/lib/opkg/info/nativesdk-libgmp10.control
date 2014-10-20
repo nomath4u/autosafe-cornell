@@ -1,0 +1,13 @@
+Package: nativesdk-libgmp10
+Version: 5.1.0-r2
+Description: nativesdk-gmp version 5.1.0-r2
+ GNU multiprecision arithmetic library
+Section: devel
+Priority: optional
+Maintainer: Poky <poky@yoctoproject.org>
+License: LGPLv3&GPLv3
+Architecture: x86_64-nativesdk
+OE: nativesdk-gmp
+Homepage: http://gmplib.org/
+Depends: nativesdk-libc6 (>= 2.17)
+Source: ftp://ftp.gmplib.org/pub/gmp-5.1.0/gmp-5.1.0a.tar.bz2 file://configure.patch file://amd64.patch file://use-includedir.patch file://gmp_fix_for_x32.patch file://187b7b1646ee.patch file://obsolete_automake_macros.patch

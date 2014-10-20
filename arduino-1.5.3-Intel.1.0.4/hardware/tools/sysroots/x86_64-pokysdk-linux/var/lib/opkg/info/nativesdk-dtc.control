@@ -1,0 +1,14 @@
+Package: nativesdk-dtc
+Version: 1.3.0+git0+033089f29099bdfd5c2d6986cdb9fd07b16cfde0-r3.1
+Description: Device Tree Compiler
+ The Device Tree Compiler is a tool used to manipulate the Open-Firmware-
+ like device tree used by PowerPC kernels.
+Section: bootloader
+Priority: optional
+Maintainer: Poky <poky@yoctoproject.org>
+License: GPLv2 | BSD
+Architecture: x86_64-nativesdk
+OE: nativesdk-dtc
+Homepage: unknown
+Depends: nativesdk-libc6 (>= 2.17)
+Source: git://www.jdl.com/software/dtc.git;protocol=git file://make_install.patch
