@@ -1,0 +1,3 @@
+#!/bin/sh
+realpath=`readlink -fn $0`
+exec env PERL5LIB=$PERL5LIB:$OECORE_NATIVE_SYSROOT//usr/lib/perl:$OECORE_NATIVE_SYSROOT//usr/lib/perl/5.14.3 `dirname $realpath`/perl.real "$@"

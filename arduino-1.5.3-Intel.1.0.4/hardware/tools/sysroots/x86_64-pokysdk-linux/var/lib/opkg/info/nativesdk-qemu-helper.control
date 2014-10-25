@@ -1,0 +1,13 @@
+Package: nativesdk-qemu-helper
+Version: 1.0-r9
+Description: Qemu helper scripts
+ Qemu helper scripts
+Section: base
+Priority: optional
+Maintainer: Poky <poky@yoctoproject.org>
+License: GPLv2
+Architecture: x86_64-nativesdk
+OE: nativesdk-qemu-helper
+Homepage: unknown
+Depends: nativesdk-libc6 (>= 2.17), nativesdk-qemu
+Source: file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu-internal file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu-addptable2image file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu-gen-tapdevs file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu-ifup file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu-ifdown file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/oe-find-native-sysroot file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu-extract-sdk file:///jenkins_builder/workspace/GLLO_ToolChain-Linux64/meta-clanton_v1.0.1/poky/scripts/runqemu-export-rootfs file://tunctl.c file://raw2flash.c
