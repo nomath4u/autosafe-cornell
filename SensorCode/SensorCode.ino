@@ -3,6 +3,7 @@
 
 #define OBDRX 10
 #define OBDTX 11
+#define NUMCOMMANDS 1
 
 /******GLOBALS*****/
 //OBDII
@@ -10,6 +11,7 @@ char rxData[20]
 rxIndex=0;
 int vehicleRPM=0; //Used as an example until we decide on commands
 SoftwareSerial obd2(OBDRX,OBDTX);
+char commands [NUMCOMMANDS][4] = {"010C"}; //This could be done better,NUMCOMMANDS must be updated
 
 void setup()
 { //9DOF
@@ -41,6 +43,12 @@ void loop()
   }
 
   /*Need to add OBD2 decode data here*/
-  
-  delay(500);
+  for(int i= 0; i < NUMCOMMANDS; i++){
+    obd2.flush(); //Just in case
+    obd2.println(commands[i]); //Vehicle speed command
+    getResponse(); //Responds first with the command you sent
+    getResponse(); //The actual information we want
+    /*Case statement depending on command assuming in loop*/ 
+    delay(100); //So we don't query the CANbus too fast and cause a buffer overflow
+  }
 }
