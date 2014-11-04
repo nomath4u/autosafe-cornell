@@ -1,1 +1,0 @@
-../../libpthread/nptl/sysdeps/pthread/bits/stdio-lock.h

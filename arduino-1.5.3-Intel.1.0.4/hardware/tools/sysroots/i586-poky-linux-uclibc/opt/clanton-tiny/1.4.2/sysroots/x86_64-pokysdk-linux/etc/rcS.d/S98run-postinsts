@@ -1,4 +1,0 @@
-#!/bin/sh
-opkg-cl configure >/var/log/postinstall.log 2>&1
-rm -f //opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/etc/rcS.d/S98run-postinsts
-

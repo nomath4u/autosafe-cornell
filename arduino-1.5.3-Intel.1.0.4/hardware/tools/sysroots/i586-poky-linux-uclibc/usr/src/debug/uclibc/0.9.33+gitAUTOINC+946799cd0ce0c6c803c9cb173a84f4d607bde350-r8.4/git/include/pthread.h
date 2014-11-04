@@ -1,1 +1,0 @@
-../libpthread/nptl/sysdeps/pthread/pthread.h

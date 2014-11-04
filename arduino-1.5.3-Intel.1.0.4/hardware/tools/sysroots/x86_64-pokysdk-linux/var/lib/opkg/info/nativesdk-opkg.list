@@ -1,7 +1,0 @@
-/opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/usr/share/opkg/intercept/ldconfig
-/opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/usr/share/opkg/intercept/depmod
-/opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/usr/share/opkg/intercept/update-modules
-/opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/usr/share/opkg/intercept/
-/opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/usr/share/opkg/
-/opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/usr/bin/opkg-cl
-/opt/clanton-tiny/1.4.2/sysroots/x86_64-pokysdk-linux/usr/bin/opkg-key
