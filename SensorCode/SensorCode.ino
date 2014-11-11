@@ -5,14 +5,45 @@
 #define OBDTX 11
 #define NUMCOMMANDS 1
 
+/*****Packet Def***/
+/*******************************************************
+** This is the definition of the packet struct that we
+** will be sending back to crash detection algorithms
+** and the like. The idea is to assign your values into
+** the global version of this packet so we can simply
+** manipulate the packet to send values. Ideally 
+** everything will be an int but feel free to add 
+** and changes types/fields as we decide we need more 
+** information
+*******************************************************/
+typedef struct packet packet;
+
+struct packet{
+  /*GPS*/
+  int latitude;
+  int longitude;
+  /*9DOF*/
+  //I don't know what we need here
+  /*OBDII*/
+  char[20] name; //Idea here being we only send one piece of OBDII data per packet and this tells which one
+  int obdval;
+}
+  
+
+
 /******GLOBALS*****/
 //OBDII
 char rxData[20];
 int rxIndex=0;
 int vehicleRPM=0; //Used as an example until we decide on commands
 SoftwareSerial obd2(OBDRX,OBDTX);
+//command format is MSByte = Mode LSByte = Device
 char commands [NUMCOMMANDS][5] = {"010C"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
-
+//This way we can use a case statement based on how many times through the command loop we have gone to get the name
+enum cmd_names{ //The names of the commands with the same ordering as the commands array
+  RPM
+}
+  
 void setup()
 { //9DOF
   Wire.begin();
