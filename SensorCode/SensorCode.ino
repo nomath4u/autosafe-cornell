@@ -2,10 +2,12 @@
 #include <SoftwareSerial.h>
 #include "I2Cdev.h"
 #include "MPU6050.h"
+#include <Adafruit_GPS.h>
+
 
 #define OBDRX 10
 #define OBDTX 11
-#define NUMCOMMANDS 1
+#define NUMCOMMANDS 2
 
 /*****Packet Def***/
 /*******************************************************
@@ -24,10 +26,13 @@ struct packet{
   /*GPS*/
   int latitude;
   int longitude;
+  int fix;
   /*9DOF*/
+  float gravity; //Dunno might need it?
   //I don't know what we need here
   /*OBDII*/
-  char name[20]; //Idea here being we only send one piece of OBDII data per packet and this tells which one
+  //char name[20]; //Idea here being we only send one piece of OBDII data per packet and this tells which one
+  String name;
   int obdval;
 };
   
@@ -38,7 +43,16 @@ struct packet{
 char rxData[20];
 int rxIndex=0;
 int vehicleRPM=0; //Used as an example until we decide on commands
+int command_index = 0 ; //For keeping track of iterations through loop
 SoftwareSerial obd2(OBDRX,OBDTX);
+
+//command format is MSByte = Mode LSByte = Device
+char commands [NUMCOMMANDS][5] = {"010C", "010D"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
+//This way we can use a case statement based on how many times through the command loop we have gone to get the name
+enum cmd_names{ //The names of the commands with the same ordering as the commands array
+  RPM,
+  Speed
+};
 
 //**********I2C**********
 // class default I2C address is 0x68
@@ -51,13 +65,11 @@ int16_t ax, ay, az;
 int16_t gx, gy, gz;
 int16_t mx, my, mz;
 
+//**********GPS************
+Adafruit_GPS GPS(&Serial);
 
-//command format is MSByte = Mode LSByte = Device
-char commands [NUMCOMMANDS][5] = {"010C"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
-//This way we can use a case statement based on how many times through the command loop we have gone to get the name
-enum cmd_names{ //The names of the commands with the same ordering as the commands array
-  RPM
-};
+
+packet spacket;
   
 void setup()
 { //9DOF
@@ -77,20 +89,45 @@ void setup()
     Serial.println("Testing device connections...");
     Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
   //OBDII
+  Serial.println("Initializing OBDII connection");
   obd2.begin(9600);
   delay(1500); //Have to give it a second to fire up, adapted value may be able to decrease
   obd2.println("ATZ"); //Get the bus ready
-  delay(2000); //Same as before 
+  delay(2000); //Same as before
+  //Temp GPS setup for clean viewing
+  Serial.println("Initializing GPS");
+  GPS.begin(9600);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
+  GPS.sendCommand(PGCMD_ANTENNA);
+  delay(1000);
+  Serial.println(PMTK_Q_RELEASE);
+  
+  /***Packet stuff, zero it out**/
+ 
+  spacket.latitude = 0;
+  spacket.longitude = 0;
+  spacket.fix = 0;
+  spacket.gravity = 9.8; //Mostly for testing purposes
+  for(int i = 0; i < 20; i++){
+    spacket.name[i] = 0;
+  }
+  spacket.obdval = 0;
+   
 }
 
+uint32_t timer = millis(); //Going to use this to only get GPS sometimes
 void loop()
 {
-  delay(100);
  /*This section is for reading in the UART/GPS data*/
  /*TODO: Figure out what information we need here */
-  //while(Serial2.available()){
-    //Serial.print((char)Serial2.read());
-  //}
+ char c = GPS.read();
+ if(timer > millis()) timer = millis(); //If something wraps around, fix it
+ if(millis() - timer > 2000) { //Do this ever 2 seconds
+   timer = millis();
+   //Serial.print("Fix: "); Serial.println((int)GPS.fix);
+   spacket.fix = (int)GPS.fix;
+ }
  
  /******This is for the I2C 9 degrees of freedom sensor******/
     // read raw accel/gyro measurements from device
@@ -101,13 +138,15 @@ void loop()
     //accelgyro.getRotation(&gx, &gy, &gz);
 
     // display tab-separated accel/gyro x/y/z values
-    Serial.print("a/g/m:\t");
-    Serial.print(double(ax)/16384); Serial.print("\t");
-    Serial.print(double(ay)/16384); Serial.print("\t");
-    Serial.print(double(az)/16384); Serial.print("\t");
-    Serial.print(double(gx)/131); Serial.print("\t");
-    Serial.print(double(gy)/131); Serial.print("\t");
-    Serial.print(double(gz)/131); Serial.print("\t");
+    /**************************************************
+    **** NEED to send parsed information to packet ****/
+    //Serial.print("a/g/m:\t");
+    //Serial.print(double(ax)/16384); Serial.print("\t");
+    //Serial.print(double(ay)/16384); Serial.print("\t");
+    //Serial.print(double(az)/16384); Serial.print("\t");
+    //Serial.print(double(gx)/131); Serial.print("\t");
+    //Serial.print(double(gy)/131); Serial.print("\t");
+    //Serial.print(double(gz)/131); Serial.print("\t");
 //    Serial.print(double(mx)); Serial.print("\t");
 //    Serial.print(my); Serial.print("\t");
 //    Serial.print(mz);
@@ -117,15 +156,32 @@ void loop()
 
 
   /*Need to add OBD2 decode data here*/
-/*  for(int i= 0; i < NUMCOMMANDS; i++){
-    obd2.flush(); //Just in case
-    obd2.println(commands[i]); //Vehicle speed command
-    getResponse(); //Responds first with the command you sent
-    getResponse(); //The actual information we want
-    Case statement depending on command assuming in loop
-    delay(100); //So we don't query the CANbus too fast and cause a buffer overflow
+
+  obd2.flush(); //Just in case
+  obd2.println(commands[command_index]); //Vehicle speed command
+  //getResponse(); //Responds first with the command you sent
+  //getResponse(); //The actual information we want
+  switch(command_index){
+    case RPM:
+      //Serial.println("Do RPM stuff here");
+      spacket.name = "RPM";
+      spacket.obdval = 42; //Need to actually do the math eventually
+      break;
+    case Speed:
+      //Serial.println("Do Speed stuff here");
+      spacket.name = "Speed";
+      spacket.obdval = 777; //Need to actually do the math eventually
+      break;
+    default:
+      Serial.println("This shoudln't happen");
+  }  
+  delay(100); //So we don't query the CANbus too fast and cause a buffer overflow
+  command_index++;
+  if(command_index >= NUMCOMMANDS){ //Just so we don't accidentally overflow the int if it was running for a long time
+    command_index = 0;
   }
-  */
+  int error = send_packet();
+  /*If there was an error do something*/
 }
 
    
@@ -161,3 +217,12 @@ void getResponse(void){
   }
 }
 
+int send_packet(){
+  Serial.print("Lat: "); Serial.println(spacket.latitude);
+  Serial.print("Lon: "); Serial.println(spacket.longitude);
+  Serial.print("Fix: "); Serial.println(spacket.fix);
+  Serial.print("Grv: "); Serial.println(spacket.gravity);
+  Serial.print("Nam: "); Serial.println(spacket.name);
+  Serial.print("Val: "); Serial.println(spacket.obdval);
+  return 0;
+}
