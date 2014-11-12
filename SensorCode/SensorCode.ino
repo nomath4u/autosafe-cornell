@@ -7,13 +7,38 @@
 #define OBDTX 11
 #define NUMCOMMANDS 1
 
+/*****Packet Def***/
+/*******************************************************
+** This is the definition of the packet struct that we
+** will be sending back to crash detection algorithms
+** and the like. The idea is to assign your values into
+** the global version of this packet so we can simply
+** manipulate the packet to send values. Ideally 
+** everything will be an int but feel free to add 
+** and changes types/fields as we decide we need more 
+** information
+*******************************************************/
+typedef struct packet packet;
+
+struct packet{
+  /*GPS*/
+  int latitude;
+  int longitude;
+  /*9DOF*/
+  //I don't know what we need here
+  /*OBDII*/
+  char name[20]; //Idea here being we only send one piece of OBDII data per packet and this tells which one
+  int obdval;
+};
+  
+
+
 /******GLOBALS*****/
 //OBDII
 char rxData[20];
 int rxIndex=0;
 int vehicleRPM=0; //Used as an example until we decide on commands
 SoftwareSerial obd2(OBDRX,OBDTX);
-//char commands [NUMCOMMANDS][4] = {"010C"}; //This could be done better,NUMCOMMANDS must be updated
 
 //**********I2C**********
 // class default I2C address is 0x68
@@ -27,6 +52,13 @@ int16_t gx, gy, gz;
 int16_t mx, my, mz;
 
 
+//command format is MSByte = Mode LSByte = Device
+char commands [NUMCOMMANDS][5] = {"010C"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
+//This way we can use a case statement based on how many times through the command loop we have gone to get the name
+enum cmd_names{ //The names of the commands with the same ordering as the commands array
+  RPM
+};
+  
 void setup()
 { //9DOF
     // join I2C bus (I2Cdev library doesn't do this automatically)
@@ -96,6 +128,36 @@ void loop()
   */
 }
 
-  
-  
-  
+   
+//The getResponse function collects incoming data from the UART into the rxData buffer
+// and only exits when a carriage return character is seen. Once the carriage return
+// string is detected, the rxData buffer is null terminated (so we can treat it as a string)
+// and the rxData index is reset to 0 so that the next string can be copied.
+void getResponse(void){
+  char inChar=0;
+  //Keep reading characters until we get a carriage return
+  while(inChar != '\r'){ 
+    //while(1){
+    //If a character comes in on the serial port, we need to act on it.
+    if(obd2.available() > 0){
+      //Start by checking if we've received the end of message character ('\r').
+      if(obd2.peek() == '\r'){
+        //Clear the Serial buffer
+        inChar=obd2.read();
+        //Put the end of string character on our data string
+        rxData[rxIndex]='\0';
+        //Reset the buffer index so that the next character goes back at the beginning of the string.
+        rxIndex=0;
+      }
+      //If we didn't get the end of message character, just add the new character to the string.
+      else{
+        //Get the new character from the Serial port.
+        inChar = obd2.read();
+        //Serial.print(inChar);
+        //Add the new character to the string, and increment the index variable.
+        rxData[rxIndex++]=inChar;
+      }
+    }
+  }
+}
+
