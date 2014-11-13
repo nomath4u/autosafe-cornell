@@ -27,6 +27,7 @@ struct packet{
   int latitude;
   int longitude;
   int fix;
+  int num_satellite;
   /*9DOF*/
   float gravity; //Dunno might need it?
   //I don't know what we need here
@@ -108,6 +109,7 @@ void setup()
   spacket.latitude = 0;
   spacket.longitude = 0;
   spacket.fix = 0;
+  spacket.num_satellite = 0;
   spacket.gravity = 9.8; //Mostly for testing purposes
   for(int i = 0; i < 20; i++){
     spacket.name[i] = 0;
@@ -127,6 +129,7 @@ void loop()
    timer = millis();
    //Serial.print("Fix: "); Serial.println((int)GPS.fix);
    spacket.fix = (int)GPS.fix;
+   spacket.num_satellite = GPS.satellites;
  }
  
  /******This is for the I2C 9 degrees of freedom sensor******/
@@ -221,6 +224,7 @@ int send_packet(){
   Serial.print("Lat: "); Serial.println(spacket.latitude);
   Serial.print("Lon: "); Serial.println(spacket.longitude);
   Serial.print("Fix: "); Serial.println(spacket.fix);
+  Serial.print("Sat: "); Serial.println(spacket.num_satellite);
   Serial.print("Grv: "); Serial.println(spacket.gravity);
   Serial.print("Nam: "); Serial.println(spacket.name);
   Serial.print("Val: "); Serial.println(spacket.obdval);
