@@ -1,0 +1,125 @@
+#include <Adafruit_GPS.h>
+#include <SoftwareSerial.h>
+
+/*****Packet Def***/
+/*******************************************************
+** This is the definition of the packet struct that we
+** will be sending back to crash detection algorithms
+** and the like. The idea is to assign your values into
+** the global version of this packet so we can simply
+** manipulate the packet to send values. Ideally 
+** everything will be an int but feel free to add 
+** and changes types/fields as we decide we need more 
+** information
+*******************************************************/
+typedef struct packet packet;
+
+struct date{
+  int month;
+  int day;
+  int year;
+};
+
+struct time{
+  int hour;
+  int minute;
+  int seconds;
+  int milliseconds;
+};
+
+struct packet{
+  /*GPS*/
+  int latitude;
+  int longitude;
+  int fix;
+  int num_satellite;
+  int knots;
+  int speed;
+  struct date day;
+  struct time time;
+};
+  
+
+
+/******GLOBALS*****/
+//**********GPS************
+Adafruit_GPS GPS(&Serial);
+
+packet spacket;
+  
+void setup()
+{ 
+  //initialize serial communication
+  Serial.begin(9600);
+  
+  //Temp GPS setup for clean viewing
+  Serial.println("Initializing GPS");
+  GPS.begin(9600);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
+  GPS.sendCommand(PGCMD_ANTENNA);
+  delay(1000);
+  Serial.println(PMTK_Q_RELEASE);
+  
+  /***Packet stuff, zero it out**/
+ 
+  spacket.latitude = 0;
+  spacket.longitude = 0;
+  spacket.fix = 0;
+  spacket.num_satellite = 0;
+  spacket.knots = 0;
+  spacket.speed = 0;
+  spacket.day.month = 0;
+  spacket.day.day = 0;
+  spacket.day.year = 0;
+  spacket.time.hour = 0;
+  spacket.time.minute = 0;
+  spacket.time.seconds = 0;
+  spacket.time.milliseconds = 0; 
+}
+
+uint32_t timer = millis(); //Going to use this to only get GPS sometimes
+void loop()
+{
+ /*This section is for reading in the UART/GPS data*/
+ /*TODO: Figure out what information we need here */
+ char c = GPS.read();
+ if(timer > millis()) timer = millis(); //If something wraps around, fix it
+ if(millis() - timer > 2000) { //Do this ever 2 seconds
+   timer = millis();
+   spacket.latitude = GPS.lat;
+   spacket.longitude = GPS.lon;
+   spacket.fix = (int)GPS.fix;
+   spacket.num_satellite = GPS.satellites;
+   spacket.knots = GPS.speed;
+   spacket.speed = (spacket.knots * 0.514444);
+   
+   spacket.day.month = GPS.month;
+   spacket.day.day = GPS.day;
+   spacket.day.year = GPS.year;
+   spacket.time.hour = GPS.hour;
+   spacket.time.minute = GPS.minute;
+   spacket.time.seconds = GPS.seconds;
+   spacket.time.milliseconds = GPS.milliseconds;
+   Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
+ }
+ delay(1000);
+ //int error = send_packet();
+}
+
+int send_packet(){
+  Serial.print("Lat: "); Serial.println(spacket.latitude);
+  Serial.print("Lon: "); Serial.println(spacket.longitude);
+  Serial.print("Fix: "); Serial.println(spacket.fix);
+  Serial.print("Sat: "); Serial.println(spacket.num_satellite);
+  Serial.print("Spd: "); Serial.print(spacket.speed);
+  Serial.println(" m/s");
+  Serial.print("Dat: "); Serial.print(spacket.day.month);
+  Serial.print("/"); Serial.print(spacket.day.day);
+  Serial.print("/"); Serial.println(spacket.day.year);
+  Serial.print("Tim: "); Serial.print(spacket.time.hour);
+  Serial.print(":"); Serial.print(spacket.time.minute);
+  Serial.print(":"); Serial.print(spacket.time.seconds);
+  Serial.print(":"); Serial.println(spacket.time.milliseconds); 
+  return 0;
+}
