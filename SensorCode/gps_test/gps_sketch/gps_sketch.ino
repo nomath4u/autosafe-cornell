@@ -31,6 +31,8 @@ struct packet{
   /*GPS*/
   int latitude;
   int longitude;
+  int lat_degrees;
+  int long_degrees;
   int fix;
   int num_satellite;
   int knots;
@@ -43,7 +45,16 @@ struct packet{
 
 /******GLOBALS*****/
 //**********GPS************
-Adafruit_GPS GPS(&Serial);
+HardwareSerial mySerial = Serial;  //This might have been the problem
+//SoftwareSerial mySerial(3, 2);
+Adafruit_GPS GPS(&mySerial);
+
+#define GPSECHO  true  //This might have been the problem
+
+// this keeps track of whether we're using the interrupt
+// off by default!
+boolean usingInterrupt = false;
+void useInterrupt(boolean); // Func prototype keeps Arduino 0023 happy
 
 packet spacket;
   
@@ -58,37 +69,83 @@ void setup()
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
   GPS.sendCommand(PGCMD_ANTENNA);
+  
+  useInterrupt(true);
+  
   delay(1000);
   Serial.println(PMTK_Q_RELEASE);
   
   /***Packet stuff, zero it out**/
  
-  spacket.latitude = 0;
-  spacket.longitude = 0;
-  spacket.fix = 0;
-  spacket.num_satellite = 0;
-  spacket.knots = 0;
-  spacket.speed = 0;
-  spacket.day.month = 0;
-  spacket.day.day = 0;
-  spacket.day.year = 0;
-  spacket.time.hour = 0;
-  spacket.time.minute = 0;
-  spacket.time.seconds = 0;
-  spacket.time.milliseconds = 0; 
+  //spacket.latitude = 0;
+  //spacket.longitude = 0;
+  //spacket.lat_degrees = 0;
+  //spacket.long_degrees = 0;
+  //spacket.fix = 0;
+  //spacket.num_satellite = 0;
+  //spacket.knots = 0;
+  //spacket.speed = 0;
+  //spacket.day.month = 0;
+  //spacket.day.day = 0;
+  //spacket.day.year = 0;
+  //spacket.time.hour = 0;
+  //spacket.time.minute = 0;
+  //spacket.time.seconds = 0;
+  //spacket.time.milliseconds = 0; 
+}
+
+// Interrupt is called once a millisecond, looks for any new GPS data, and stores it
+SIGNAL(TIMER0_COMPA_vect) {
+  char c = GPS.read();
+}
+void useInterrupt(boolean v) {
+  if (v) {
+    // Timer0 is already used for millis() - we'll just interrupt somewhere
+    // in the middle and call the "Compare A" function above
+    OCR0A = 0xAF;
+    TIMSK0 |= _BV(OCIE0A);
+    usingInterrupt = true;
+  } else {
+    // do not call the interrupt function COMPA anymore
+    TIMSK0 &= ~_BV(OCIE0A);
+    usingInterrupt = false;
+  }
 }
 
 uint32_t timer = millis(); //Going to use this to only get GPS sometimes
 void loop()
-{
+{  
+  //if (! usingInterrupt) {
+    // read data from the GPS in the 'main loop'
+    //char c = GPS.read();
+    // if you want to debug, this is a good time to do it!
+    //if (GPSECHO)
+      //if (c) Serial.print(c);
+  //}
+  
+  // if a sentence is received, we can check the checksum, parse it...
+  if (GPS.newNMEAreceived()) {
+    // a tricky thing here is if we print the NMEA sentence, or data
+    // we end up not listening and catching other sentences! 
+    // so be very wary if using OUTPUT_ALLDATA and trytng to print out data
+    //Serial.println(GPS.lastNMEA());   // this also sets the newNMEAreceived() flag to false
+  
+    if (!GPS.parse(GPS.lastNMEA()))   // this also sets the newNMEAreceived() flag to false
+      return;  // we can fail to parse a sentence in which case we should just wait for another
+  }
+  
+  
  /*This section is for reading in the UART/GPS data*/
  /*TODO: Figure out what information we need here */
- char c = GPS.read();
+ //char c = GPS.read();
  if(timer > millis()) timer = millis(); //If something wraps around, fix it
  if(millis() - timer > 2000) { //Do this ever 2 seconds
    timer = millis();
+   
    spacket.latitude = GPS.lat;
    spacket.longitude = GPS.lon;
+   spacket.lat_degrees = GPS.latitudeDegrees;
+   spacket.long_degrees = GPS.longitudeDegrees;
    spacket.fix = (int)GPS.fix;
    spacket.num_satellite = GPS.satellites;
    spacket.knots = GPS.speed;
@@ -101,15 +158,17 @@ void loop()
    spacket.time.minute = GPS.minute;
    spacket.time.seconds = GPS.seconds;
    spacket.time.milliseconds = GPS.milliseconds;
-   Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
+   //Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
  }
  delay(1000);
- //int error = send_packet();
+ int error = send_packet();
 }
 
 int send_packet(){
   Serial.print("Lat: "); Serial.println(spacket.latitude);
   Serial.print("Lon: "); Serial.println(spacket.longitude);
+  Serial.print("LaD: "); Serial.println(spacket.lat_degrees);
+  Serial.print("loD: "); Serial.println(spacket.long_degrees);
   Serial.print("Fix: "); Serial.println(spacket.fix);
   Serial.print("Sat: "); Serial.println(spacket.num_satellite);
   Serial.print("Spd: "); Serial.print(spacket.speed);
@@ -123,3 +182,7 @@ int send_packet(){
   Serial.print(":"); Serial.println(spacket.time.milliseconds); 
   return 0;
 }
+
+
+
+
