@@ -30,6 +30,7 @@ struct packet{
   int num_satellite;
   /*9DOF*/
   float gravity; //Dunno might need it?
+  String accel;
   //I don't know what we need here
   /*OBDII*/
   //char name[20]; //Idea here being we only send one piece of OBDII data per packet and this tells which one
@@ -111,6 +112,8 @@ void setup()
   spacket.fix = 0;
   spacket.num_satellite = 0;
   spacket.gravity = 9.8; //Mostly for testing purposes
+  spacket.accel = "BAD";
+  spacket.gyro = "BAD";
   for(int i = 0; i < 20; i++){
     spacket.name[i] = 0;
   }
@@ -147,9 +150,18 @@ void loop()
     //Serial.print(double(ax)/16384); Serial.print("\t");
     //Serial.print(double(ay)/16384); Serial.print("\t");
     //Serial.print(double(az)/16384); Serial.print("\t");
+      double acx = double(ax)/16384;
+      double acy = double(ay)/16384;
+      double acz = double(az)/16384;
+      spacket.accel = (String)acx + "," + (String)acy + "," + (String)acz;
     //Serial.print(double(gx)/131); Serial.print("\t");
     //Serial.print(double(gy)/131); Serial.print("\t");
     //Serial.print(double(gz)/131); Serial.print("\t");
+      double gyx = double(gx)/131);
+      double gyy = double(gy)/131);
+      double gyz = double(gz)/131);
+      spacket.accel = (String)gyx + "," + (String)gyy + "," + (String)gyz;
+      
 //    Serial.print(double(mx)); Serial.print("\t");
 //    Serial.print(my); Serial.print("\t");
 //    Serial.print(mz);
@@ -226,6 +238,8 @@ int send_packet(){
   Serial.print("Fix: "); Serial.println(spacket.fix);
   Serial.print("Sat: "); Serial.println(spacket.num_satellite);
   Serial.print("Grv: "); Serial.println(spacket.gravity);
+  Serial.print("ACL: "); Serial.println(spacket.accel);
+  Serial.print("GYR: "); Serial.println(spacket.gyro);
   Serial.print("Nam: "); Serial.println(spacket.name);
   Serial.print("Val: "); Serial.println(spacket.obdval);
   return 0;
