@@ -24,24 +24,18 @@ struct time{
   int hour;
   int minute;
   int seconds;
-  int milliseconds;
 };
 
 struct packet{
   /*GPS*/
-  int latitude;
-  int longitude;
-  int lat_degrees;
-  int long_degrees;
   int fix;
   int num_satellite;
-  int knots;
-  int speed;
-  struct date day;
   struct time time;
+  struct date day;
+  int lat_degrees;
+  int long_degrees;
+  int knots;
 };
-  
-
 
 /******GLOBALS*****/
 //**********GPS************
@@ -74,24 +68,6 @@ void setup()
   
   delay(1000);
   Serial.println(PMTK_Q_RELEASE);
-  
-  /***Packet stuff, zero it out**/
- 
-  //spacket.latitude = 0;
-  //spacket.longitude = 0;
-  //spacket.lat_degrees = 0;
-  //spacket.long_degrees = 0;
-  //spacket.fix = 0;
-  //spacket.num_satellite = 0;
-  //spacket.knots = 0;
-  //spacket.speed = 0;
-  //spacket.day.month = 0;
-  //spacket.day.day = 0;
-  //spacket.day.year = 0;
-  //spacket.time.hour = 0;
-  //spacket.time.minute = 0;
-  //spacket.time.seconds = 0;
-  //spacket.time.milliseconds = 0; 
 }
 
 // Interrupt is called once a millisecond, looks for any new GPS data, and stores it
@@ -142,14 +118,11 @@ void loop()
  if(millis() - timer > 2000) { //Do this ever 2 seconds
    timer = millis();
    
-   spacket.latitude = GPS.lat;
-   spacket.longitude = GPS.lon;
    spacket.lat_degrees = GPS.latitudeDegrees;
    spacket.long_degrees = GPS.longitudeDegrees;
-   spacket.fix = (int)GPS.fix;
+   spacket.fix = GPS.fix;
    spacket.num_satellite = GPS.satellites;
    spacket.knots = GPS.speed;
-   spacket.speed = (spacket.knots * 0.514444);
    
    spacket.day.month = GPS.month;
    spacket.day.day = GPS.day;
@@ -157,32 +130,22 @@ void loop()
    spacket.time.hour = GPS.hour;
    spacket.time.minute = GPS.minute;
    spacket.time.seconds = GPS.seconds;
-   spacket.time.milliseconds = GPS.milliseconds;
-   //Serial.print("Satellites: "); Serial.println((int)GPS.satellites);
  }
  delay(1000);
  int error = send_packet();
 }
 
 int send_packet(){
-  Serial.print("Lat: "); Serial.println(spacket.latitude);
-  Serial.print("Lon: "); Serial.println(spacket.longitude);
   Serial.print("LaD: "); Serial.println(spacket.lat_degrees);
   Serial.print("loD: "); Serial.println(spacket.long_degrees);
   Serial.print("Fix: "); Serial.println(spacket.fix);
   Serial.print("Sat: "); Serial.println(spacket.num_satellite);
-  Serial.print("Spd: "); Serial.print(spacket.speed);
-  Serial.println(" m/s");
+  Serial.print("Spd: "); Serial.println(spacket.knots);
   Serial.print("Dat: "); Serial.print(spacket.day.month);
   Serial.print("/"); Serial.print(spacket.day.day);
   Serial.print("/"); Serial.println(spacket.day.year);
   Serial.print("Tim: "); Serial.print(spacket.time.hour);
   Serial.print(":"); Serial.print(spacket.time.minute);
-  Serial.print(":"); Serial.print(spacket.time.seconds);
-  Serial.print(":"); Serial.println(spacket.time.milliseconds); 
+  Serial.print(":"); Serial.println(spacket.time.seconds);
   return 0;
 }
-
-
-
-
