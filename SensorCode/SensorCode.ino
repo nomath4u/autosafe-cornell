@@ -1,13 +1,13 @@
 #include <Wire.h>
 #include <SoftwareSerial.h>
-#include "I2Cdev.h"
-#include "MPU6050.h"
+#include <I2Cdev.h>
+#include <MPU6050.h>
 #include <Adafruit_GPS.h>
 
 #define OBDRX 10
 #define OBDTX 11
 #define NUMCOMMANDS 2
-#define GPSECHO true
+//#define GPSECHO true
 
 /*****Packet Def***/
 /*******************************************************
@@ -45,7 +45,14 @@ struct packet{
   int knots;
   /*9DOF*/
   float gravity; //Dunno might need it?
-  String accel;
+  //String accel;
+  //String gyro;
+  double accx;
+  double accy;
+  double accz;
+  double gyx;
+  double gyy;
+  double gyz;
   //I don't know what we need here
   /*OBDII*/
   //char name[20]; //Idea here being we only send one piece of OBDII data per packet and this tells which one
@@ -129,8 +136,8 @@ void setup()
   
   /***Packet stuff, zero it out**/
   spacket.gravity = 9.8; //Mostly for testing purposes
-  spacket.accel = "BAD";
-  spacket.gyro = "BAD";
+  //spacket.accel = "BAD";
+  //spacket.gyro = "BAD";
   for(int i = 0; i < 20; i++){
     spacket.name[i] = 0;
   }
@@ -202,17 +209,23 @@ void loop()
     //Serial.print(double(ax)/16384); Serial.print("\t");
     //Serial.print(double(ay)/16384); Serial.print("\t");
     //Serial.print(double(az)/16384); Serial.print("\t");
-      double acx = double(ax)/16384;
-      double acy = double(ay)/16384;
-      double acz = double(az)/16384;
-      spacket.accel = (String)acx + "," + (String)acy + "," + (String)acz;
+      //double acx = double(ax)/16384;
+      spacket.accx =double(ax)/16384;
+      //double acy = double(ay)/16384;
+      spacket.accy = double(ay)/16384;
+      //double acz = double(az)/16384;
+      spacket.accz = double(az)/16384;
+      //spacket.accel = (String)acx + "," + (String)acy + "," + (String)acz;
     //Serial.print(double(gx)/131); Serial.print("\t");
     //Serial.print(double(gy)/131); Serial.print("\t");
     //Serial.print(double(gz)/131); Serial.print("\t");
-      double gyx = double(gx)/131);
-      double gyy = double(gy)/131);
-      double gyz = double(gz)/131);
-      spacket.accel = (String)gyx + "," + (String)gyy + "," + (String)gyz;
+      //double gyx = double(gx)/131);
+      spacket.gyx = double(gx)/131;
+      //double gyy = double(gy)/131);
+      spacket.gyy = double(gy)/131;
+      //double gyz = double(gz)/131);
+      spacket.gyz = double(gz)/131;
+      //spacket.accel = (String)gyx + "," + (String)gyy + "," + (String)gyz;
       
 //    Serial.print(double(mx)); Serial.print("\t");
 //    Serial.print(my); Serial.print("\t");
@@ -226,23 +239,27 @@ void loop()
 
   obd2.flush(); //Just in case
   obd2.println(commands[command_index]); //Vehicle speed command
-  //getResponse(); //Responds first with the command you sent
-  //getResponse(); //The actual information we want
+  Serial.println(commands[command_index]); //Testing what I'm sending out
+  getResponse(); //Responds first with the command you sent
+  getResponse(); //The actual information we want
   switch(command_index){
     case RPM:
       //Serial.println("Do RPM stuff here");
       spacket.name = "RPM";
-      spacket.obdval = 42; //Need to actually do the math eventually
+      //spacket.obdval = 42; //Need to actually do the math eventually
+      spacket.obdval = ((strtol(&rxData[6],0,16)*256)+strtol(&rxData[9],0,16))/4;
       break;
     case Speed:
       //Serial.println("Do Speed stuff here");
       spacket.name = "Speed";
-      spacket.obdval = 777; //Need to actually do the math eventually
+      //spacket.obdval = 777; //Need to actually do the math eventually
+      spacket.obdval = strtol(&rxData[6],0,16);
       break;
     default:
       Serial.println("This shoudln't happen");
   }  
   delay(100); //So we don't query the CANbus too fast and cause a buffer overflow
+  obd2.flush();
   command_index++;
   if(command_index >= NUMCOMMANDS){ //Just so we don't accidentally overflow the int if it was running for a long time
     command_index = 0;
@@ -281,6 +298,7 @@ void getResponse(void){
         rxData[rxIndex++]=inChar;
       }
     }
+    //}
   }
 }
 
@@ -297,15 +315,19 @@ int send_packet(){
   Serial.print(":"); Serial.print(spacket.time.minute);
   Serial.print(":"); Serial.print(spacket.time.seconds);
   Serial.print("Grv: "); Serial.println(spacket.gravity);
-  Serial.print("ACL: "); Serial.println(spacket.accel);
-  Serial.print("GYR: "); Serial.println(spacket.gyro);
+  //Serial.print("ACL: "); Serial.println(spacket.accel);
+  //Serial.print("GYR: "); Serial.println(spacket.gyro);
   Serial.print("Nam: "); Serial.println(spacket.name);
   Serial.print("Val: "); Serial.println(spacket.obdval);
   
 
   
-  Serial.print(spacket.accel); Serial.print(",");
-  Serial.print(spacket.gyro); Serial.print(",");
+  Serial.print(spacket.accx); Serial.print(",");
+  Serial.print(spacket.accy); Serial.print(",");
+  Serial.print(spacket.accz); Serial.print(",");
+  Serial.print(spacket.gyx); Serial.print(",");
+  Serial.print(spacket.gyy); Serial.print(",");
+  Serial.print(spacket.gyz); Serial.print(",");
 //  Serial.print(spacket.); Serial.print(",");
   Serial.print(spacket.fix); Serial.print(",");
   Serial.print(spacket.num_satellite); Serial.print(",");
