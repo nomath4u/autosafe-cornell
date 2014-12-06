@@ -90,7 +90,7 @@ int16_t gx, gy, gz;
 int16_t mx, my, mz;
 
 //**********GPS************
-HardwareSerial mySerial = Serial; 
+HardwareSerial mySerial = Serial3; 
 Adafruit_GPS GPS(&mySerial);
 
 boolean usingInterrupt = false;

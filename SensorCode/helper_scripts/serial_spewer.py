@@ -16,6 +16,8 @@ print args.device
 ser = serial.Serial(args.device, 9600) # Establish the connection on a specific port
 data_file = open(args.filename, 'w') #Open the file, clobber existing
 while True:
- data_file.write(ser.readline()) # Read the newest output from the Arduino and send it to the file
+ out = ser.readline();
+ data_file.write(out) # Read the newest output from the Arduino and send it to the file
+ print out;
 # data_file.write("Test\n")
 
