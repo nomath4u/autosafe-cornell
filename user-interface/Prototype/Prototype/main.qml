@@ -9,6 +9,7 @@ ApplicationWindow {
     width: 800
     height: 600
 
+    //dark background
     Rectangle {
         color: "#212126"
         anchors.fill: parent
@@ -41,8 +42,6 @@ ApplicationWindow {
             color: "white"
             text: "43 out"
         }
-
-
     }
 
     Item {
@@ -51,27 +50,34 @@ ApplicationWindow {
 
         TabView {
             anchors.fill: parent
-            style: tabStyle
+            style: tabViewStyle
 
             Tab {
                 title: "Diagnostic Information"
+                DiagnosticPage{ visible: true }
             }
 
             Tab {
                 title: "Alerts"
+                AlertsPage{ visible: true }
             }
 
             Tab {
                 title: "Road Conditions"
+                ConditionsPage{ visible: true }
             }
         }
 
         Component {
-            id: tabStyle
+            id: tabViewStyle
             TabViewStyle {
                 tabsAlignment: Qt.AlignVCenter
                 tabOverlap: 0
-                frame: Item { }
+
+                /* this is where we need to change out the info display lists */
+                frame: Item {
+                }
+
                 tab: Item {
                     implicitWidth: control.width/control.count
                     implicitHeight: 50

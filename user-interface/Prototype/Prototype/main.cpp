@@ -1,5 +1,8 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QObject>
+#include <QQuickView>
+#include <QQmlContext>
 
 int main(int argc, char *argv[])
 {
