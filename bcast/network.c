@@ -1,7 +1,3 @@
-/*
-   Simple udp server
-   Silver Moon (m00n.silv3r@gmail.com)
-   */
 #include<stdio.h> //printf
 #include<string.h> //memset
 #include<stdlib.h> //exit(0);
@@ -98,6 +94,11 @@ int main(void)
 
 
         // Parse Message and do stuff
+        if (buf[0] == '!') {
+            printf("Crash!\n");
+            fflush(stdout);
+            exit(1);
+        }
 
         // Send message to others
         send_message(buf);
