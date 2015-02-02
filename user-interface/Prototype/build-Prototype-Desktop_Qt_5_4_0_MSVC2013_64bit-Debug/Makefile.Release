@@ -43,11 +43,28 @@ OBJECTS_DIR   = release
 
 ####### Files
 
-SOURCES       = ..\Prototype\main.cpp release\qrc_qml.cpp
+SOURCES       = ..\Prototype\main.cpp \
+		..\Prototype\uidata.cpp \
+		..\Prototype\networkthread.cpp \
+		..\Prototype\sensorthread.cpp release\qrc_qml.cpp \
+		release\moc_uidata.cpp \
+		release\moc_networkthread.cpp \
+		release\moc_sensorthread.cpp
 OBJECTS       = release\main.obj \
-		release\qrc_qml.obj
+		release\uidata.obj \
+		release\networkthread.obj \
+		release\sensorthread.obj \
+		release\qrc_qml.obj \
+		release\moc_uidata.obj \
+		release\moc_networkthread.obj \
+		release\moc_sensorthread.obj
 
-DIST          =   ..\Prototype\main.cpp
+DIST          =  ..\Prototype\uidata.h \
+		..\Prototype\networkthread.h \
+		..\Prototype\sensorthread.h ..\Prototype\main.cpp \
+		..\Prototype\uidata.cpp \
+		..\Prototype\networkthread.cpp \
+		..\Prototype\sensorthread.cpp
 QMAKE_TARGET  = Prototype
 DESTDIR        = release\ #avoid trailing-slash linebreak
 TARGET         = Prototype.exe
@@ -136,7 +153,7 @@ dist:
 	$(ZIP) Prototype.zip $(SOURCES) $(DIST) ..\Prototype\Prototype.pro C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\spec_pre.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\common\shell-win32.conf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\qconfig.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_axbase.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_axserver.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_core.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_declarative.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_enginio.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_help.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_location.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_location_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_network.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_nfc.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_positioning.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_script.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_script_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_sensors.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_serialport.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webengine.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webengine_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webenginecore.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webenginecore_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webenginewidgets.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webenginewidgets_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webkit.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_websockets.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webview.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_webview_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_winextras.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\qt_functions.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\qt_config.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\win32\qt_config.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\win32-msvc2013\qmake.conf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\spec_post.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\exclusive_builds.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\default_pre.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\win32\default_pre.prf ..\Prototype\deployment.pri C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\resolve_config.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\default_post.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\build_pass.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\qml_debug.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\declarative_debug.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\win32\rtti.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\precompile_header.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\warn_on.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\qt.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\resources.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\moc.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\win32\opengl.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\uic.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\win32\windows.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\testcase_targets.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\exceptions.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\yacc.prf C:\Qt\Qt5.4.0\5.4\msvc2013_64\mkspecs\features\lex.prf ..\Prototype\Prototype.pro ..\Prototype\qml.qrc C:/Qt/Qt5.4.0/5.4/msvc2013_64/lib/qtmain.prl C:/Qt/Qt5.4.0/5.4/msvc2013_64/lib/Qt5Core.prl C:/Qt/Qt5.4.0/5.4/msvc2013_64/lib/Qt5Quick.prl C:/Qt/Qt5.4.0/5.4/msvc2013_64/lib/Qt5Widgets.prl C:/Qt/Qt5.4.0/5.4/msvc2013_64/lib/Qt5Gui.prl C:/Qt/Qt5.4.0/5.4/msvc2013_64/lib/Qt5Qml.prl C:/Qt/Qt5.4.0/5.4/msvc2013_64/lib/Qt5Network.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\main.obj release\qrc_qml.obj
+	-$(DEL_FILE) release\main.obj release\uidata.obj release\networkthread.obj release\sensorthread.obj release\qrc_qml.obj release\moc_uidata.obj release\moc_networkthread.obj release\moc_sensorthread.obj
 	-$(DEL_FILE) release\Prototype.exp
 
 distclean: clean 
@@ -155,11 +172,180 @@ compiler_rcc_make_all: release\qrc_qml.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_qml.cpp
 release\qrc_qml.cpp: ..\Prototype\qml.qrc \
+		..\Prototype\tabs_standard.png \
+		..\Prototype\tab_selected.png \
+		..\Prototype\toolbar.png \
+		..\Prototype\DiagnosticPage.qml \
+		..\Prototype\AlertsPage.qml \
+		..\Prototype\ConditionsPage.qml \
 		..\Prototype\main.qml
 	C:\Qt\Qt5.4.0\5.4\msvc2013_64\bin\rcc.exe -name qml ..\Prototype\qml.qrc -o release\qrc_qml.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: release\moc_uidata.cpp release\moc_networkthread.cpp release\moc_sensorthread.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) release\moc_uidata.cpp release\moc_networkthread.cpp release\moc_sensorthread.cpp
+release\moc_uidata.cpp: C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QObject \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearraylist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QString \
+		..\Prototype\uidata.h
+	C:\Qt\Qt5.4.0\5.4\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/mkspecs/win32-msvc2013 -I"C:/Users/Faith Lynn/Documents/GitHub/SrDesign/autosafe-cornell/user-interface/Prototype/Prototype" -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtQuick -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtANGLE -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtQml -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtCore -I. ..\Prototype\uidata.h -o release\moc_uidata.cpp
+
+release\moc_networkthread.cpp: C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QThread \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearraylist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject_impl.h \
+		..\Prototype\networkthread.h
+	C:\Qt\Qt5.4.0\5.4\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/mkspecs/win32-msvc2013 -I"C:/Users/Faith Lynn/Documents/GitHub/SrDesign/autosafe-cornell/user-interface/Prototype/Prototype" -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtQuick -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtANGLE -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtQml -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtCore -I. ..\Prototype\networkthread.h -o release\moc_networkthread.cpp
+
+release\moc_sensorthread.cpp: C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QThread \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearraylist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject_impl.h \
+		..\Prototype\sensorthread.h
+	C:\Qt\Qt5.4.0\5.4\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/mkspecs/win32-msvc2013 -I"C:/Users/Faith Lynn/Documents/GitHub/SrDesign/autosafe-cornell/user-interface/Prototype/Prototype" -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtQuick -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtWidgets -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtGui -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtANGLE -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtQml -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtNetwork -IC:/Qt/Qt5.4.0/5.4/msvc2013_64/include/QtCore -I. ..\Prototype\sensorthread.h -o release\moc_sensorthread.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_uic_make_all:
@@ -170,7 +356,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean 
 
 
 
@@ -291,9 +477,209 @@ release\main.obj: ..\Prototype\main.cpp C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\Qt
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qjsvalue.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qtqmlglobal.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmlerror.h \
-		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmldebug.h
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmldebug.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQuick\QQuickView \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQuick\qquickview.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQuick\qquickwindow.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQuick\qtquickglobal.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtGui\qopengl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qt_windows.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtANGLE\GLES3\gl3.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtANGLE\GLES3\gl3platform.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtANGLE\KHR\khrplatform.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtANGLE\GLES2\gl2.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtANGLE\GLES2\gl2platform.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtGui\qopengles2ext.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtGui\qopenglext.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtGui\qwindow.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QObject \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QEvent \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QMargins \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QRect \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtGui\qsurface.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtGui\qsurfaceformat.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtGui\qicon.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqml.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmlprivate.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmlparserstatus.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmlpropertyvaluesource.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmllist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmetaobject.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\QQmlContext \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtQml\qqmlcontext.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QThread \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QString \
+		..\Prototype\uidata.h \
+		..\Prototype\sensorthread.h \
+		..\Prototype\networkthread.h
+
+release\uidata.obj: ..\Prototype\uidata.cpp ..\Prototype\uidata.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QObject \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearraylist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QString
+
+release\networkthread.obj: ..\Prototype\networkthread.cpp ..\Prototype\networkthread.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QThread \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearraylist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject_impl.h
+
+release\sensorthread.obj: ..\Prototype\sensorthread.cpp ..\Prototype\sensorthread.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\QThread \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qthread.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qbytearraylist.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64\include\QtCore\qobject_impl.h
 
 release\qrc_qml.obj: release\qrc_qml.cpp 
+
+release\moc_uidata.obj: release\moc_uidata.cpp 
+
+release\moc_networkthread.obj: release\moc_networkthread.cpp 
+
+release\moc_sensorthread.obj: release\moc_sensorthread.cpp 
 
 ####### Install
 

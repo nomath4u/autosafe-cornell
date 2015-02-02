@@ -3,8 +3,9 @@ TEMPLATE = app
 QT += qml quick widgets
 
 SOURCES += main.cpp \
-    packetdataobject.cpp \
-    crashdetectionalgorithm.cpp
+    uidata.cpp \
+    networkthread.cpp \
+    sensorthread.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,5 +16,6 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    packetdataobject.h \
-    crashdetectionalgorithm.h
+    uidata.h \
+    networkthread.h \
+    sensorthread.h
