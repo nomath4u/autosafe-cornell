@@ -15,10 +15,10 @@ protected:
     void run();
 
     public slots:
-         void sendMessage(); //this will be called by the crash detection code only
+
 
     signals:
-         void messageReceived();
+
 };
 
 #endif // NETWORKTHREAD_H

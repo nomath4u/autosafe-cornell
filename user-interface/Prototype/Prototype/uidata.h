@@ -34,12 +34,11 @@ class UIData : public QObject
         );
         ~UIData();
 
+    void updateData();
+
     signals:
-        void getData();
 
     public slots:
-        void updateUI(UIData *newData);
-        void updateConditions(QString conditions);
 
     private:
         double _AccelerometerX;

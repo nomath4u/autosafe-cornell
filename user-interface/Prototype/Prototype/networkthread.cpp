@@ -10,16 +10,6 @@ void NetworkThread::run()
 
 }
 
-void NetworkThread::sendMessage()
-{
-
-}
-
-void NetworkThread::messageReceived()
-{
-
-}
-
 NetworkThread::~NetworkThread()
 {
 

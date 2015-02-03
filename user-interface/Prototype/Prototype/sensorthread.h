@@ -15,10 +15,10 @@ protected:
     void run();
 
     public slots:
-        void getData();
+
 
     signals:
-        void dataReceived();
+
 
 };
 

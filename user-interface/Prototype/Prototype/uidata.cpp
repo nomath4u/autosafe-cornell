@@ -55,21 +55,6 @@ UIData::UIData(
         _ODBIIData.append(newCommand);
 }
 
-void UIData::getData()
-{
-
-}
-
-void UIData::updateUI(UIData *newData)
-{
-
-}
-
-void UIData::updateConditions(QString conditions)
-{
-
-}
-
 UIData::~UIData()
 {
 
