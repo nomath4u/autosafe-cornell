@@ -8,7 +8,7 @@ class NetworkThread : public QThread
     Q_OBJECT
 
 public:
-    NetworkThread(QObject * parent = 0 );
+    NetworkThread(QObject *parent = 0);
     ~NetworkThread();
 
 protected:

@@ -3,6 +3,10 @@
 #include <QQuickView>
 #include <QQmlContext>
 
+#include "networkthread.h"
+#include "sensorthread.h"
+#include "uidata.h"
+
 int main(int argc, char *argv[])
 {
 
@@ -10,7 +14,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));    
 
-    //Run threads
+    UIData appData;
+    appData.updateData();
 
     app.exec(); //main GUI thread
 

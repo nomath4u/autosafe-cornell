@@ -19,28 +19,17 @@ ApplicationWindow {
         border.bottom: 8
         source: "toolbar.png"
         width: parent.width
-        height: 50
-
-        /* need to update these with real data */
+        height: 75
 
         Text {
-            font.pixelSize: 24
+            font.pixelSize: 42
+            anchors.verticalCenter: parent.verticalCenter
             anchors.top: parent.top
             anchors.topMargin: 10
             anchors.left: parent.left
             anchors.leftMargin: 10
             color: "white"
-            text: "NE"
-        }
-
-        Text {
-            font.pixelSize: 24
-            anchors.top: parent.top
-            anchors.topMargin: 10
-            anchors.right: parent.right
-            anchors.rightMargin: 10
-            color: "white"
-            text: "43 out"
+            text: "Auto Safe"
         }
     }
 
@@ -91,14 +80,6 @@ ApplicationWindow {
                             color: "white"
                             text: styleData.title.toUpperCase()
                             font.pixelSize: 16
-                        }
-                        Rectangle {
-                            visible: index > 0
-                            anchors.top: parent.top
-                            anchors.bottom: parent.bottom
-                            anchors.margins: 10
-                            width:1
-                            color: "#3a3a3a"
                         }
                     }
                 }

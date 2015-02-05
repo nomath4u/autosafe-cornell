@@ -3,9 +3,7 @@ TEMPLATE = app
 QT += qml quick widgets
 
 SOURCES += main.cpp \
-    uidata.cpp \
-    networkthread.cpp \
-    sensorthread.cpp
+    uidata.cpp
 
 RESOURCES += qml.qrc
 
@@ -16,6 +14,4 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    uidata.h \
-    networkthread.h \
-    sensorthread.h
+    uidata.h

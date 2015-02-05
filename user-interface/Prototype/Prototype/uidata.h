@@ -15,30 +15,38 @@ class UIData : public QObject
 
     public:
         UIData(QObject * parent = 0);
-        UIData(
-                double accelerometer[3],
-                double gyroscope[3],
-                double magnetometer,
-                int satellites,
-                time_t time_h,
-                time_t time_m,
-                time_t time_s,
-                time_t date_d,
-                time_t date_m,
-                time_t date_y,
-                double coordinates[2],
-                int pos_fix,
-                double speed,
-                char obd_com[10],
-                int obd_val
+        UIData(double acc[3],
+                double gy[3],
+                double mag,
+                int sats,
+                time_t hour,
+                time_t min,
+                time_t sec,
+                time_t day,
+                time_t month,
+                time_t year,
+                double coords[2],
+                int fix,
+                double spd,
+                char com[10],
+                int val
         );
+
+        void updateData();
+
         ~UIData();
 
-    void updateData();
+    private:
+        double strict_str2double(char* str);
+        void copy_string(char *target, char *source);
+        void parse_data();
+        void dump_data();
 
     signals:
 
+
     public slots:
+
 
     private:
         double _AccelerometerX;
@@ -62,13 +70,15 @@ class UIData : public QObject
         double _CoordinatesLong;
 
         int _PositionFix;
-        double _Speed; /* is this really in knots? */
+        double _Speed;
 
-        //list of ODBII data in command & value pairs
-        QList<ODBIICommand> _ODBIIData;
+        char * _OBDIICommand;
+        int _OBDIIValue;
 
-        QList<QString> _Alerts;
-        QList<QString> _Conditions;
+//        QList<ODBIICommand> _OBDIIData;
+
+//        QList<QString> _Alerts;
+//        QList<QString> _Conditions;
 };
 
 
