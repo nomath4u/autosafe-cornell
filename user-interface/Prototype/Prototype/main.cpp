@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickView>
@@ -14,10 +16,15 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));    
 
-    UIData appData;
-    appData.updateData();
-
     app.exec(); //main GUI thread
+
+    UIData appData;
+
+    int count = 0;
+    while (count < 10){
+        appData.updateData();
+        count++;
+    }
 
     return 0;
 }

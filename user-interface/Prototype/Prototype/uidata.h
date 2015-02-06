@@ -1,6 +1,8 @@
 #ifndef UIDATA_H
 #define UIDATA_H
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <QObject>
 #include <QString>
 
