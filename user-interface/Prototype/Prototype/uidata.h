@@ -1,10 +1,13 @@
 #ifndef UIDATA_H
 #define UIDATA_H
 
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <QObject>
 #include <QString>
+#include <stdio.h>
+#include <strings.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 struct ODBIICommand{
     QString command;

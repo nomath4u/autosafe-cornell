@@ -66,18 +66,10 @@ double UIData::strict_str2double(char* str)
     return value;
 }
 
-void UIData::copy_string(char *target, char *source)
-{
-   while(*source)
-   {
-      *target = *source;
-      source++;
-      target++;
-   }
-   *target = '\0';
-}
-
 void UIData::parse_data(){
+
+    qDebug() << "Made it to parse_data()";
+
     char *token = (char *) malloc(10 * sizeof(char));
     int i;
 
@@ -85,6 +77,9 @@ void UIData::parse_data(){
 
     token = strtok(buf, ",");
     for (i=0; token != NULL; i++) {
+
+        qDebug() << "Parsing item " << i << " Token = " << token;
+
         if (i == 0) {
             _AccelerometerX = strict_str2double(token);
         }
@@ -137,37 +132,42 @@ void UIData::parse_data(){
             _Speed = atoi(token);
         }
         else if (i == 17) {
+            _OBDIICommand = "Get OBDII Command!";
 
-            strncpy(_OBDIICommand, token, 10);
+            qDebug() << "_OBDII Command = " << _OBDIICommand;
         }
         else if (i == 18) {
             _OBDIIValue = atoi(token);
         }
+
         token = strtok(NULL, ",");
     }
 }
 
 void UIData::dump_data(){
-    qDebug() << "Accelerometer X: "    << _AccelerometerX;
-    qDebug() << ", Accelerometer Y: "  << _AccelerometerY;
-    qDebug() << ", Accelerometer Z: "  << _AccelerometerZ;
-    qDebug() << ", Gyro X: "           << _GyroX;
-    qDebug() << ", Gyro Y: "           << _GyroY;
-    qDebug() << ", Gyro Z: "           << _GyroZ;
-    qDebug() << ", Magentometer: "     << _Magnetometer;
-    qDebug() << ", Position Fix: "     << _PositionFix;
-    qDebug() << ", Satellites: "       << _Satellites;
-    qDebug() << ", Time Hour: "        << _Hour;
-    qDebug() << ", Time Minutes: "     << _Minute;
-    qDebug() << ", Time Seconds: "     << _Second;
-    qDebug() << ", Date Month: "       << _Month;
-    qDebug() << ", Date Day: "         << _Day;
-    qDebug() << ", Date Year: "        << _Year;
-    qDebug() << ", Lattitude: "        << _CoordinatesLat;
-    qDebug() << ", Longitude: "        << _CoordinatesLong;
-    qDebug() << ", Speed: "            << _Speed;
-    qDebug() << ", OBDII Command: "    << _OBDIICommand;
-    qDebug() << ", OBDII Value: "      << _OBDIIValue;
+
+    qDebug() << "Dumping data!";
+
+    qDebug() << "Accelerometer X: "  << _AccelerometerX;
+    qDebug() << "Accelerometer Y: "  << _AccelerometerY;
+    qDebug() << "Accelerometer Z: "  << _AccelerometerZ;
+    qDebug() << "Gyro X: "           << _GyroX;
+    qDebug() << "Gyro Y: "           << _GyroY;
+    qDebug() << "Gyro Z: "           << _GyroZ;
+    qDebug() << "Magentometer: "     << _Magnetometer;
+    qDebug() << "Position Fix: "     << _PositionFix;
+    qDebug() << "Satellites: "       << _Satellites;
+    qDebug() << "Time Hour: "        << _Hour;
+    qDebug() << "Time Minutes: "     << _Minute;
+    qDebug() << "Time Seconds: "     << _Second;
+    qDebug() << "Date Month: "       << _Month;
+    qDebug() << "Date Day: "         << _Day;
+    qDebug() << "Date Year: "        << _Year;
+    qDebug() << "Lattitude: "        << _CoordinatesLat;
+    qDebug() << "Longitude: "        << _CoordinatesLong;
+    qDebug() << "Speed: "            << _Speed;
+    qDebug() << "OBDII Command: "    << _OBDIICommand;
+    qDebug() << "OBDII Value: "      << _OBDIIValue;
 
 //    for(int i; i < _OBDIIData.size(); ++i)
 //    {
