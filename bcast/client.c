@@ -8,7 +8,7 @@
 #include<arpa/inet.h>
 #include<sys/socket.h>
  
-#define SERVER "127.0.0.1"
+#define SERVER "10.0.0.1"
 #define BUFLEN 512  //Max length of buffer
 #define PORT 8888   //The port on which to send data
  
@@ -53,14 +53,14 @@ int main(void)
          
         //receive a reply and print it
         //clear the buffer by filling null, it might have previously received data
-        memset(buf,'\0', BUFLEN);
-        //try to receive some data, this is a blocking call
-        if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, &slen) == -1)
-        {
-            die("recvfrom()");
-        }
-         
-        puts(buf);
+        //memset(buf,'\0', BUFLEN);
+        ////try to receive some data, this is a blocking call
+        //if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, &slen) == -1)
+        //{
+        //    die("recvfrom()");
+        //}
+        // 
+        //puts(buf);
     }
  
     close(s);
