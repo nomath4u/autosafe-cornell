@@ -6,7 +6,7 @@
 
 #define BUFLEN 512  //Max length of buffer
 #define PORT 8888   //The port on which to listen for incoming data
-#define SERVER "127.0.0.1"
+#define SERVER "10.0.0.2"
 
 void die(char *s)
 {
@@ -75,6 +75,9 @@ int main(void)
     //keep listening for data
     while(1)
     {
+        //for (i=0; i < BUFLEN ; i++) {
+        //    buf[i] = "";
+        //}
         printf("Waiting for data...");
         fflush(stdout);
 
@@ -97,11 +100,12 @@ int main(void)
         if (buf[0] == '!') {
             printf("Crash!\n");
             fflush(stdout);
+            send_message("OH NO!");
             exit(1);
         }
 
         // Send message to others
-        send_message(buf);
+        //send_message(buf);
     }
 
     close(s);
