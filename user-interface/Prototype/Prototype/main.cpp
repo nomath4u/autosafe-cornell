@@ -13,12 +13,11 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     UIData appData;
-    appData.updateData();
+    appData.runSensorThread();
 
-    QStringListModel list;
-    list.setStringList(appData.getList());
-    engine.rootContext()->setContextProperty("dataModel", &list);
-
+//    QStringListModel list;
+//    list.setStringList(appData.getList());
+//    engine.rootContext()->setContextProperty("dataModel", &list);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     app.exec(); //main GUI thread

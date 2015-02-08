@@ -1,5 +1,7 @@
 #include "uidata.h"
 
+/* UI Data functions */
+
 UIData::UIData(QObject *parent)
 {
 
@@ -195,12 +197,23 @@ QStringList UIData::getList()
 {
     QStringList list;
     list.append("Accelerometer X: " + QString::number(_AccelerometerX));
-
     return list;
+}
+
+void UIData::handleResults(const QString &)
+{
+    qDebug() << "Handling results!";
+}
+
+void UIData::runSensorThread()
+{
+    SensorThread *sensorThread = new SensorThread(this);
+    connect(sensorThread, &SensorThread::resultReady, this, &UIData::handleResults);
+    connect(sensorThread, &SensorThread::finished, sensorThread, &UIData::deleteLater); //automatically handled
+    sensorThread->start();
 }
 
 UIData::~UIData()
 {
 
 }
-
