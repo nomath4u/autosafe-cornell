@@ -11,22 +11,22 @@ ScrollView {
 
     flickableItem.interactive: true
 
-    Item{
-        ListModel {
-            id: dataModel
+//    Item{
+//        ListModel {
+//            id: dataModel
 
-            ListElement {
-                label: "RPM"
-                value: "1000"
-            }
+//            ListElement {
+//                label: "RPM"
+//                value: "1000"
+//            }
 
-            ListElement {
-                label: "Speed"
-                value: "10 MPH"
-            }
+//            ListElement {
+//                label: "Speed"
+//                value: "10 MPH"
+//            }
 
-        }
-    }
+//        }
+//    }
 
     ListView {
         model: dataModel
@@ -39,19 +39,19 @@ ScrollView {
                 Text {
                     id: elementLabel
                     anchors.left: parent.left
-                    text: label
+                    text: edit
                     font.pointSize: 16
                     color: "white"
                 }
 
-                Text {
-                    id: elementValue
-                    anchors.left: elementLabel.right
-                    anchors.leftMargin: 400 - elementLabel.width
-                    text: value
-                    font.pointSize: 16
-                    color: "white"
-                }
+//                Text {
+//                    id: elementValue
+//                    anchors.left: elementLabel.right
+//                    anchors.leftMargin: 400 - elementLabel.width
+//                    text: value
+//                    font.pointSize: 16
+//                    color: "white"
+//                }
             }
         }
     }

@@ -3,16 +3,13 @@
 
 #include <QObject>
 #include <QString>
+#include <QDebug>
+
 #include <stdio.h>
 #include <strings.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-
-struct ODBIICommand{
-    QString command;
-    QString value;
-};
 
 class UIData : public QObject
 {
@@ -38,12 +35,12 @@ class UIData : public QObject
         );
 
         void updateData();
+        QStringList getList();
 
         ~UIData();
 
     private:
         double strict_str2double(char* str);
-        void copy_string(char *target, char *source);
         void parse_data();
         void dump_data();
 

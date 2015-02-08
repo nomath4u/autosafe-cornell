@@ -1,4 +1,3 @@
-#include <QDebug>
 #include "uidata.h"
 
 UIData::UIData(QObject *parent)
@@ -48,13 +47,6 @@ UIData::UIData(
 
     _OBDIICommand = com;
     _OBDIIValue = val;
-
-//    //list of ODBII data in command & value pair
-//    ODBIICommand newCommand;
-//    //will need to do this for each command at the end of the packet:
-//    newCommand.command = &com;
-//    newCommand.value = val;
-//    _OBDIIData.append(newCommand);
 }
 
 
@@ -197,6 +189,14 @@ void UIData::updateData()
     qDebug() << "Updating data!";
     parse_data();
     dump_data();
+}
+
+QStringList UIData::getList()
+{
+    QStringList list;
+    list.append("Accelerometer X: " + QString::number(_AccelerometerX));
+
+    return list;
 }
 
 UIData::~UIData()
