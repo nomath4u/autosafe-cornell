@@ -13,13 +13,13 @@
 
 #include "sensorthread.h"
 
-class UIData : public QObject
+class UIDataController : public QObject
 {
     Q_OBJECT
 
 public:
-    UIData(QObject * parent = 0);
-    UIData(double acc[3],
+    UIDataController(QObject * parent = 0);
+    void setValues(double acc[3],
             double gy[3],
             double mag,
             int sats,
@@ -40,7 +40,7 @@ public:
     QStringList getList();
     void runSensorThread();
 
-    ~UIData();
+    ~UIDataController();
 
 public slots:
     void handleResults(const QString &);

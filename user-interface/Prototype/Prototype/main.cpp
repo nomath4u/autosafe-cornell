@@ -4,7 +4,7 @@
 #include <QQmlContext>
 #include <QStringListModel>
 
-#include "uidata.h"
+#include "uidatacontroller.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,12 +12,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    UIData appData;
+    UIDataController appData;
     appData.runSensorThread();
 
-//    QStringListModel list;
-//    list.setStringList(appData.getList());
-//    engine.rootContext()->setContextProperty("dataModel", &list);
+    QStringListModel list;
+    list.setStringList(appData.getList());
+    engine.rootContext()->setContextProperty("dataModel", &list);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     app.exec(); //main GUI thread

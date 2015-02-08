@@ -1,13 +1,13 @@
-#include "uidata.h"
+#include "uidatacontroller.h"
 
 /* UI Data functions */
 
-UIData::UIData(QObject *parent)
+UIDataController::UIDataController(QObject *parent)
 {
 
 }
 
-UIData::UIData(
+void UIDataController::setValues(
         double acc[3],
         double gy[3],
         double mag,
@@ -52,7 +52,7 @@ UIData::UIData(
 }
 
 
-double UIData::strict_str2double(char* str)
+double UIDataController::strict_str2double(char* str)
 {
     char* endptr;
     double value = strtod(str, &endptr);
@@ -60,7 +60,7 @@ double UIData::strict_str2double(char* str)
     return value;
 }
 
-void UIData::parse_data(){
+void UIDataController::parse_data(){
 
     qDebug() << "Made it to parse_data()";
 
@@ -138,7 +138,7 @@ void UIData::parse_data(){
     }
 }
 
-void UIData::dump_data(){
+void UIDataController::dump_data(){
 
     qDebug() << "Dumping data!";
 
@@ -162,58 +162,37 @@ void UIData::dump_data(){
     qDebug() << "Speed: "            << _Speed;
     qDebug() << "OBDII Command: "    << _OBDIICommand;
     qDebug() << "OBDII Value: "      << _OBDIIValue;
-
-//    for(int i; i < _OBDIIData.size(); ++i)
-//    {
-//        qDebug() << ", OBDII Command: " << _OBDIIData[i].command;
-//        qDebug() << ", OBDII Value: "   << _OBDIIData[i].value;
-//    }
 }
 
-//int read_port(void)
-//{
-//    int fd = open("/dev/ttyS0", O_RDONLY | O_NOCTTY);
-//    if (fd == -1)
-//    {
-//        /* Could not open the port. */
-//        perror("open_port: Unable to open /dev/ttyS0 - ");
-//    }
 
-//    char buffer[128];
-//    int n = read(fd, buffer, sizeof(buffer));
-//    if (n < 0)
-//        fputs("read failed!\n", stderr);
-//    return (fd);
-//}
-
-void UIData::updateData()
+void UIDataController::updateData()
 {
     qDebug() << "Updating data!";
     parse_data();
     dump_data();
 }
 
-QStringList UIData::getList()
+QStringList UIDataController::getList()
 {
     QStringList list;
     list.append("Accelerometer X: " + QString::number(_AccelerometerX));
     return list;
 }
 
-void UIData::handleResults(const QString &)
+void UIDataController::handleResults(const QString &result)
 {
-    qDebug() << "Handling results!";
+    qDebug() << "Handling results!" << result;
 }
 
-void UIData::runSensorThread()
+void UIDataController::runSensorThread()
 {
     SensorThread *sensorThread = new SensorThread(this);
-    connect(sensorThread, &SensorThread::resultReady, this, &UIData::handleResults);
-    connect(sensorThread, &SensorThread::finished, sensorThread, &UIData::deleteLater); //automatically handled
+    connect(sensorThread, &SensorThread::resultReady, this, &UIDataController::handleResults);
+    connect(sensorThread, &SensorThread::finished, sensorThread, &UIDataController::deleteLater); //automatically handled
     sensorThread->start();
 }
 
-UIData::~UIData()
+UIDataController::~UIDataController()
 {
 
 }

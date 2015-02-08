@@ -49,12 +49,16 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Prototype/main.cpp \
-		../Prototype/uidata.cpp qrc_qml.cpp \
-		moc_uidata.cpp
+		../Prototype/sensorthread.cpp \
+		../Prototype/uidatacontroller.cpp qrc_qml.cpp \
+		moc_sensorthread.cpp \
+		moc_uidatacontroller.cpp
 OBJECTS       = main.o \
-		uidata.o \
+		sensorthread.o \
+		uidatacontroller.o \
 		qrc_qml.o \
-		moc_uidata.o
+		moc_sensorthread.o \
+		moc_uidatacontroller.o
 DIST          = /home/cornell/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/common/unix.conf \
@@ -177,8 +181,10 @@ DIST          = /home/cornell/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/features/yacc.prf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/features/lex.prf \
-		../Prototype/Prototype.pro ../Prototype/uidata.h ../Prototype/main.cpp \
-		../Prototype/uidata.cpp
+		../Prototype/Prototype.pro ../Prototype/sensorthread.h \
+		../Prototype/uidatacontroller.h ../Prototype/main.cpp \
+		../Prototype/sensorthread.cpp \
+		../Prototype/uidatacontroller.cpp
 QMAKE_TARGET  = Prototype
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Prototype
@@ -485,8 +491,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../Prototype/qml.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../Prototype/uidata.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Prototype/main.cpp ../Prototype/uidata.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Prototype/sensorthread.h ../Prototype/uidatacontroller.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Prototype/main.cpp ../Prototype/sensorthread.cpp ../Prototype/uidatacontroller.cpp $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -520,10 +526,10 @@ qrc_qml.cpp: ../Prototype/qml.qrc \
 		../Prototype/main.qml
 	/home/cornell/Qt/5.4/gcc_64/bin/rcc -name qml ../Prototype/qml.qrc -o qrc_qml.cpp
 
-compiler_moc_header_make_all: moc_uidata.cpp
+compiler_moc_header_make_all: moc_sensorthread.cpp moc_uidatacontroller.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_uidata.cpp
-moc_uidata.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
+	-$(DEL_FILE) moc_sensorthread.cpp moc_uidatacontroller.cpp
+moc_sensorthread.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
@@ -574,8 +580,103 @@ moc_uidata.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
-		../Prototype/uidata.h
-	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/uidata.h -o moc_uidata.cpp
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qset.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		../Prototype/sensorthread.h
+	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/sensorthread.h -o moc_sensorthread.cpp
+
+moc_uidatacontroller.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qset.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../Prototype/sensorthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		../Prototype/uidatacontroller.h
+	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/uidatacontroller.h -o moc_uidatacontroller.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -731,17 +832,22 @@ main.o: ../Prototype/main.cpp /home/cornell/Qt/5.4/gcc_64/include/QtWidgets/QApp
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmetaobject.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtQml/QQmlContext \
 		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmlcontext.h \
-		../Prototype/networkthread.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QStringListModel \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlistmodel.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../Prototype/uidatacontroller.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
 		../Prototype/sensorthread.h \
-		../Prototype/uidata.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Prototype/main.cpp
 
-uidata.o: ../Prototype/uidata.cpp /home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+sensorthread.o: ../Prototype/sensorthread.cpp ../Prototype/sensorthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qglobal.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qconfig.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
@@ -770,24 +876,17 @@ uidata.o: ../Prototype/uidata.cpp /home/cornell/Qt/5.4/gcc_64/include/QtCore/QDe
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmutex.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstring.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qchar.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstring.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpair.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
@@ -795,6 +894,14 @@ uidata.o: ../Prototype/uidata.cpp /home/cornell/Qt/5.4/gcc_64/include/QtCore/QDe
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
@@ -806,16 +913,93 @@ uidata.o: ../Prototype/uidata.cpp /home/cornell/Qt/5.4/gcc_64/include/QtCore/QDe
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qset.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
-		../Prototype/uidata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sensorthread.o ../Prototype/sensorthread.cpp
+
+uidatacontroller.o: ../Prototype/uidatacontroller.cpp ../Prototype/uidatacontroller.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uidata.o ../Prototype/uidata.cpp
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qset.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../Prototype/sensorthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uidatacontroller.o ../Prototype/uidatacontroller.cpp
 
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp
 
-moc_uidata.o: moc_uidata.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_uidata.o moc_uidata.cpp
+moc_sensorthread.o: moc_sensorthread.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_sensorthread.o moc_sensorthread.cpp
+
+moc_uidatacontroller.o: moc_uidatacontroller.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_uidatacontroller.o moc_uidatacontroller.cpp
 
 ####### Install
 

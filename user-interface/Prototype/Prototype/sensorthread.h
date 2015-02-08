@@ -5,20 +5,24 @@
 #include <QString>
 #include <QDebug>
 #include <QThread>
+#include <QtSerialPort/QSerialPort>
+
+#include <stdio.h>
+#include <strings.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 class SensorThread : public QThread
 {
     Q_OBJECT
-
-    void run() Q_DECL_OVERRIDE {
-        QString result;
-        qDebug() << "Sensor thread is running!";
-        result = "done!";
-        emit resultReady(result);
-    }
+    void run();
 
 public:
     SensorThread(QObject *parent = 0);
+    double StringToDouble(char* str);
+    int readPort();
+    int parseData();
     ~SensorThread();
 
 signals:
