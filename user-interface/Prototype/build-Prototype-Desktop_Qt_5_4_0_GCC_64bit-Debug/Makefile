@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -DQT_QUICK_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_QML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -DQT_QUICK_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_QML_LIB -DQT_NETWORK_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I../Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. -I.
+INCPATH       = -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I../Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. -I.
 QMAKE         = /home/cornell/Qt/5.4/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = Prototype1.0.0
 DISTDIR = /home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/.tmp/Prototype1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/cornell/Qt/5.4/gcc_64 -Wl,-rpath,/home/cornell/Qt/5.4/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/cornell/Qt/5.4/gcc_64/lib -lQt5Quick -lQt5Widgets -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/cornell/Qt/5.4/gcc_64/lib -lQt5Quick -lQt5Widgets -lQt5Gui -lQt5Qml -lQt5Network -lQt5SerialPort -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -344,7 +344,8 @@ Makefile: ../Prototype/Prototype.pro /home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g
 		/home/cornell/Qt/5.4/gcc_64/lib/libQt5Core.prl \
 		/home/cornell/Qt/5.4/gcc_64/lib/libQt5Qml.prl \
 		/home/cornell/Qt/5.4/gcc_64/lib/libQt5Network.prl \
-		/home/cornell/Qt/5.4/gcc_64/lib/libQt5Widgets.prl
+		/home/cornell/Qt/5.4/gcc_64/lib/libQt5Widgets.prl \
+		/home/cornell/Qt/5.4/gcc_64/lib/libQt5SerialPort.prl
 	$(QMAKE) -spec linux-g++ CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ../Prototype/Prototype.pro
 /home/cornell/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf:
 /home/cornell/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf:
@@ -476,6 +477,7 @@ Makefile: ../Prototype/Prototype.pro /home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g
 /home/cornell/Qt/5.4/gcc_64/lib/libQt5Qml.prl:
 /home/cornell/Qt/5.4/gcc_64/lib/libQt5Network.prl:
 /home/cornell/Qt/5.4/gcc_64/lib/libQt5Widgets.prl:
+/home/cornell/Qt/5.4/gcc_64/lib/libQt5SerialPort.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ CONFIG+=debug CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile ../Prototype/Prototype.pro
 
@@ -600,8 +602,13 @@ moc_sensorthread.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPort \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialport.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPortInfo \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h \
 		../Prototype/sensorthread.h
-	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/sensorthread.h -o moc_sensorthread.cpp
+	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/sensorthread.h -o moc_sensorthread.cpp
 
 moc_uidatacontroller.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject.h \
@@ -675,8 +682,13 @@ moc_uidatacontroller.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
 		../Prototype/sensorthread.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPort \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialport.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPortInfo \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h \
 		../Prototype/uidatacontroller.h
-	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/uidatacontroller.h -o moc_uidatacontroller.cpp
+	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/uidatacontroller.h -o moc_uidatacontroller.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -840,7 +852,12 @@ main.o: ../Prototype/main.cpp /home/cornell/Qt/5.4/gcc_64/include/QtWidgets/QApp
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
 		../Prototype/sensorthread.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPort \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialport.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPortInfo \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Prototype/main.cpp
 
 sensorthread.o: ../Prototype/sensorthread.cpp ../Prototype/sensorthread.h \
@@ -914,7 +931,12 @@ sensorthread.o: ../Prototype/sensorthread.cpp ../Prototype/sensorthread.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qset.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPort \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialport.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPortInfo \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sensorthread.o ../Prototype/sensorthread.cpp
 
 uidatacontroller.o: ../Prototype/uidatacontroller.cpp ../Prototype/uidatacontroller.h \
@@ -989,7 +1011,12 @@ uidatacontroller.o: ../Prototype/uidatacontroller.cpp ../Prototype/uidatacontrol
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
 		../Prototype/sensorthread.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPort \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialport.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPortInfo \
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uidatacontroller.o ../Prototype/uidatacontroller.cpp
 
 qrc_qml.o: qrc_qml.cpp 

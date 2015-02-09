@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 
 #include <stdio.h>
 #include <strings.h>
