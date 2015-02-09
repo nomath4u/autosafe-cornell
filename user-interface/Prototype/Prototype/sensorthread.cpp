@@ -9,16 +9,15 @@ SensorThread::SensorThread(QObject *)
 void SensorThread::run() Q_DECL_OVERRIDE
 {
     char data[128];
-    //QByteArray data;
     int numRead;
 
     QSerialPort serial;
     serial.setPortName("/dev/ttyACM0");
     if(!serial.setBaudRate(serial.Baud9600) ||
-       !serial.setParity(QSerialPort::NoParity) ||
-       !serial.setStopBits(QSerialPort::OneStop) ||
-       !serial.setDataBits(QSerialPort::Data8) ||
-       !serial.setFlowControl(QSerialPort::NoFlowControl))
+       !serial.setParity(QSerialPort::UnknownParity) ||
+       !serial.setStopBits(QSerialPort::UnknownStopBits) ||
+       !serial.setDataBits(QSerialPort::UnknownDataBits) ||
+       !serial.setFlowControl(QSerialPort::UnknownFlowControl))
     {
        qDebug() << "Unable to configure serial port!";
     }
