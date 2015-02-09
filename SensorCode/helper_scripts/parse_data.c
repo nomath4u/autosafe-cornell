@@ -30,15 +30,15 @@ int pos_fix;
 double speed;
 char obd_com[10];
 int obd_val;
-
+int gc = 0;
 
 int read_port(void)
 {
-    int fd = open("/dev/ttyACM1", O_RDONLY | O_NOCTTY);
+    int fd = open("/dev/ttyACM0", O_RDONLY | O_NOCTTY);
     if (fd == -1)
     {
         /* Could not open the port. */
-        perror("open_port: Unable to open /dev/ttyS0 - ");
+        perror("open_port: Unable to open Serial Port.");
     }
 
     char buffer[128];
@@ -98,10 +98,11 @@ int parse_data(){
     int fd = read_port();
     
     while(1){
-        n = read(fd, buf, sizeof(buf));
-        if (n < 0)
-            fputs("read failed!\n", stderr);
-        //char buf[] = "0.26,-0.17,1.17,-1.15,-5.50,0.31,0,0,0,0,0,0,0,0,0,0,0,RPM,694";
+        gc++;
+        //n = read(fd, buf, sizeof(buf));
+        //if (n < 0)
+        //    fputs("read failed!\n", stderr);
+        char buf[] = "-0.06,0.00,0.99,0.46,0.14,-0.57,0,0,0,10,6,0,0,0,0,0,0,,0";
 
         token = strtok(buf, ",");
         for (i=0; token != NULL; i++) {
@@ -164,7 +165,10 @@ int parse_data(){
             }
             token = strtok(NULL, ",");
         }
-        print_data();
+        if (gc % 1000 == 0){
+            print_data();
+            gc = 0;
+        }
     }
 }
 
