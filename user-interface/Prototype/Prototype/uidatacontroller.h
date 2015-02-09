@@ -1,17 +1,8 @@
-#ifndef UIDATA_H
-#define UIDATA_H
+#ifndef UIDATACONTROLLER_H
+#define UIDATACONTROLLER_H
 
 #include <QObject>
 #include <QString>
-#include <QDebug>
-
-#include <stdio.h>
-#include <strings.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-
-#include "sensorthread.h"
 
 class UIDataController : public QObject
 {
@@ -19,28 +10,15 @@ class UIDataController : public QObject
 
 public:
     UIDataController(QObject * parent = 0);
-    void setValues(double acc[3],
-            double gy[3],
-            double mag,
-            int sats,
-            time_t hour,
-            time_t min,
-            time_t sec,
-            time_t day,
-            time_t month,
-            time_t year,
-            double coords[2],
-            int fix,
-            double spd,
-            char com[10],
-            int val
-    );
+    ~UIDataController();
 
+    double strToDouble(char* str);
+    int openPort();
+    void parseData();
+    void dumpData();
     void updateData();
     QStringList getList();
     void runSensorThread();
-
-    ~UIDataController();
 
 public slots:
     void handleResults(const QString &);
@@ -67,15 +45,8 @@ private:
     double _CoordinatesLong;
     int _PositionFix;
     double _Speed;
-    char * _OBDIICommand;
+    char *_OBDIICommand;
     int _OBDIIValue;
-
-//    QList<QString> _Alerts;
-//    QList<QString> _Conditions;
-
-    double strict_str2double(char* str);
-    void parse_data();
-    void dump_data();
 };
 
 #endif // UIDATA_H

@@ -3,6 +3,7 @@ TEMPLATE = app
 QT += qml quick widgets serialport
 
 SOURCES += main.cpp \
+    parse_data.cpp \
     sensorthread.cpp \
     uidatacontroller.cpp
 
@@ -15,5 +16,6 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
+    parse_data.h \
     sensorthread.h \
     uidatacontroller.h

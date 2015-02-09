@@ -1,5 +1,5 @@
-#ifndef SENSORTHREAD
-#define SENSORTHREAD
+#ifndef SENSORTHREAD_H
+#define SENSORTHREAD_H
 
 #include <QObject>
 #include <QString>
@@ -8,12 +8,6 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
-#include <stdio.h>
-#include <strings.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-
 class SensorThread : public QThread
 {
     Q_OBJECT
@@ -21,9 +15,6 @@ class SensorThread : public QThread
 
 public:
     SensorThread(QObject *parent = 0);
-    double StringToDouble(char* str);
-    int readPort();
-    int parseData();
     ~SensorThread();
 
 signals:

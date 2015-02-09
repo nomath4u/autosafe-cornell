@@ -1,10 +1,22 @@
 #include "sensorthread.h"
+//#include "parse_data.h"
 
 /* Sensor Thread functions */
-SensorThread::SensorThread(QObject *)
-{
+SensorThread::SensorThread(QObject *){
 
 }
+
+SensorThread::~SensorThread(){
+
+}
+
+/*
+void SensorThread::run() Q_DECL_OVERRIDE //calling Sam's code
+{
+    //parse_data();
+
+}
+*/
 
 void SensorThread::run() Q_DECL_OVERRIDE
 {
@@ -27,7 +39,7 @@ void SensorThread::run() Q_DECL_OVERRIDE
       qDebug() << "Some error occurred with the serial port!";
     }
 
-    if (serial.open(serial.ReadOnly))
+    if(serial.open(serial.ReadOnly))
     {
         qDebug() << "Port opened successfully!";
 
@@ -50,15 +62,8 @@ void SensorThread::run() Q_DECL_OVERRIDE
        //emit signal to parsing code
 
     }
-
     else
     {
         qDebug() << "Port failed to open!";
     }
-
-}
-
-SensorThread::~SensorThread()
-{
-
 }
