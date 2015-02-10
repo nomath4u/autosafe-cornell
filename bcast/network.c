@@ -86,6 +86,7 @@ int main(void)
         {
             die("recvfrom()");
         }
+        buf[recv_len] = 0;
 
         si_other.sin_addr.s_addr = INADDR_BROADCAST; 
         si_other.sin_family = AF_INET;
