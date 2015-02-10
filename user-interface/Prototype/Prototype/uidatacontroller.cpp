@@ -32,7 +32,7 @@ double UIDataController::strToDouble(char* str)
 
 void UIDataController::parseData(char *buffer){
 
-    qDebug() << "UIDataController: Parsing data.";
+    //qDebug() << "UIDataController: Parsing data.";
 
     char *token = (char *)malloc(10*sizeof(char));
     token = strtok(buffer, ",");
@@ -127,7 +127,7 @@ void UIDataController::dumpData(){
 
 QStringList UIDataController::getList()
 {
-    qDebug() << "UIDataController: Updating data list.";
+    //qDebug() << "UIDataController: Updating data list.";
     _List.clear();
     _List.append("Accelerometer X: " + QString::number(_AccelerometerX));
     _List.append("Accelerometer Y: " + QString::number(_AccelerometerY));

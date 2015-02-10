@@ -13,7 +13,6 @@ ScrollView {
 
     ListView {
         id: listView
-        model: dataModel
         anchors.fill: parent
         spacing: 40
         delegate: Item {
