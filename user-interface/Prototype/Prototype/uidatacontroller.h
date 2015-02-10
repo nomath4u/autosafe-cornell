@@ -6,6 +6,8 @@
 #include <QQmlApplicationEngine>
 #include <QQmlListProperty>
 
+#define BAUDRATE B9600
+
 class UIDataController : public QObject
 {
     Q_OBJECT
@@ -34,7 +36,6 @@ private:
     double _GyroX;
     double _GyroY;
     double _GyroZ;
-    double _Magnetometer;
     int    _Satellites;
     time_t _Hour;
     time_t _Minute;

@@ -10,6 +10,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <termios.h>
+
 
 UIDataController::UIDataController(QObject *parent)
 {
@@ -32,12 +34,22 @@ double UIDataController::strToDouble(char* str)
 int UIDataController::openPort()
 {
     int fd;
+    struct termios oldtio,newtio;
 
     fd = open("/dev/ttyACM0", O_RDONLY | O_NOCTTY);
     if (fd == -1)
     {
         qDebug() << "Failed to open port.";
     }
+
+    tcgetattr(fd,&oldtio); /* save current serial port settings */
+    bzero(&newtio, sizeof(newtio)); /* clear struct for new port settings */
+    newtio.c_cflag = BAUDRATE | CRTSCTS | CS8 | CLOCAL | CREAD;
+    newtio.c_iflag = IGNPAR | ICRNL;
+    newtio.c_oflag = 0;
+    newtio.c_lflag = ICANON;
+    tcflush(fd, TCIFLUSH);
+    tcsetattr(fd,TCSANOW,&newtio);
 
     return (fd);
 }
@@ -54,12 +66,14 @@ void UIDataController::parseData(){
     fd = openPort();
 
     forever{
-        n = read(fd, buffer, sizeof(buffer));
+        n = read(fd, &buffer, sizeof(buffer));
         if (n == -1)
         {
             e = errno;
             qDebug() << "Read error: " << e;
         }
+
+        //qDebug() << "MESSAGE " << buffer;
 
         token = strtok(buffer, ",");
         for (i=0; token != NULL; i++) {
@@ -116,9 +130,10 @@ void UIDataController::parseData(){
             }
             else if (i == 17) {
                 //strncpy(_OBDIICommand, token, 10);
+                _OBDIICommand = "None";
             }
             else if (i == 18) {
-                //_OBDIIValue = atoi(token);
+                _OBDIIValue = atoi(token);
             }
             token = strtok(NULL, ",");
         }
@@ -135,20 +150,20 @@ void UIDataController::dumpData(){
     qDebug() << "Gyro X: "           << _GyroX;
     qDebug() << "Gyro Y: "           << _GyroY;
     qDebug() << "Gyro Z: "           << _GyroZ;
-    //qDebug() << "Magentometer: "     << _Magnetometer;
     qDebug() << "Position Fix: "     << _PositionFix;
     qDebug() << "Satellites: "       << _Satellites;
-    qDebug() << "Time Hour: "        << _Hour;
-    qDebug() << "Time Minutes: "     << _Minute;
-    qDebug() << "Time Seconds: "     << _Second;
-    qDebug() << "Date Month: "       << _Month;
-    qDebug() << "Date Day: "         << _Day;
-    qDebug() << "Date Year: "        << _Year;
+    qDebug() << "Time Hour: "        << (int)_Hour;
+    qDebug() << "Time Minutes: "     << (int)_Minute;
+    qDebug() << "Time Seconds: "     << (int)_Second;
+    qDebug() << "Date Month: "       << (int)_Month;
+    qDebug() << "Date Day: "         << (int)_Day;
+    qDebug() << "Date Year: "        << (int)_Year;
     qDebug() << "Lattitude: "        << _CoordinatesLat;
     qDebug() << "Longitude: "        << _CoordinatesLong;
     qDebug() << "Speed: "            << _Speed;
-    //qDebug() << "OBDII Command: "    << _OBDIICommand;
-    //qDebug() << "OBDII Value: "      << _OBDIIValue;
+    qDebug() << "OBDII Command: "    << _OBDIICommand;
+    qDebug() << "OBDII Value: "      << _OBDIIValue;
+    qDebug() << "-------------------------------------------------";
 }
 
 
