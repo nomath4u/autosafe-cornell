@@ -14,7 +14,7 @@ void die(char *s)
     exit(1);
 }
 
-int send_message(char message[BUFLEN])
+int send_message(char* who, char message[BUFLEN])
 {
     struct sockaddr_in si_other;
     int s, i, slen=sizeof(si_other);
@@ -29,7 +29,8 @@ int send_message(char message[BUFLEN])
     si_other.sin_family = AF_INET;
     si_other.sin_port = htons(PORT);
 
-    if (inet_aton(SERVER , &si_other.sin_addr) == 0) 
+
+    if (inet_aton(who , &si_other.sin_addr) == 0) 
     {
         die("inet_aton() failed\n");
     }
@@ -101,8 +102,9 @@ int main(void)
         if (buf[0] == '!') {
             printf("Crash!\n");
             fflush(stdout);
-            send_message("OH NO!");
-            exit(1);
+            send_message("10.0.0.2", "OH NO!");
+            send_message("10.0.0.3", "OH NO!");
+            //exit(1);
         }
 
         // Send message to others
