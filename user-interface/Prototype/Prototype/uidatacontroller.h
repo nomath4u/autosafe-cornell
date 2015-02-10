@@ -6,8 +6,6 @@
 #include <QQmlApplicationEngine>
 #include <QQmlListProperty>
 
-#define BAUDRATE B9600
-
 class UIDataController : public QObject
 {
     Q_OBJECT
@@ -16,20 +14,23 @@ public:
     UIDataController(QObject * parent = 0);
     ~UIDataController();
 
-    double strToDouble(char* str);
-    int openPort();
-    void parseData();
-    void dumpData();
-    void updateData();
-    QStringList getList();
     void runSensorThread();
 
+    double strToDouble(char* str);
+    int openPort();
+    void dumpData();
+
+    Q_INVOKABLE QStringList getList();
+
 public slots:
+    void parseData(char* buffer);
 
 signals:
-    void sendToQml(QString &string);
+    void sendToQml();
 
 private:
+    QQmlApplicationEngine _Engine;
+    QList<QString> _List;
     double _AccelerometerX;
     double _AccelerometerY;
     double _AccelerometerZ;

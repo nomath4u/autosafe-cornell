@@ -8,6 +8,8 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
+#define BAUDRATE B9600
+
 class SensorThread : public QThread
 {
     Q_OBJECT
@@ -22,7 +24,7 @@ public:
     void parseData();
 
 signals:
-    void resultReady(const QString &s);
+    void bufferReady(char* buffer);
 };
 
 #endif // SENSORTHREAD

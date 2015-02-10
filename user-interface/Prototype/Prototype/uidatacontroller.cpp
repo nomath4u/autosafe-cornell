@@ -12,7 +12,6 @@
 #include <errno.h>
 #include <termios.h>
 
-
 UIDataController::UIDataController(QObject *parent)
 {
 
@@ -31,115 +30,75 @@ double UIDataController::strToDouble(char* str)
     return value;
 }
 
-int UIDataController::openPort()
-{
-    int fd;
-    struct termios oldtio,newtio;
+void UIDataController::parseData(char *buffer){
 
-    fd = open("/dev/ttyACM0", O_RDONLY | O_NOCTTY);
-    if (fd == -1)
-    {
-        qDebug() << "Failed to open port.";
-    }
+    qDebug() << "UIDataController: Parsing data.";
 
-    tcgetattr(fd,&oldtio); /* save current serial port settings */
-    bzero(&newtio, sizeof(newtio)); /* clear struct for new port settings */
-    newtio.c_cflag = BAUDRATE | CRTSCTS | CS8 | CLOCAL | CREAD;
-    newtio.c_iflag = IGNPAR | ICRNL;
-    newtio.c_oflag = 0;
-    newtio.c_lflag = ICANON;
-    tcflush(fd, TCIFLUSH);
-    tcsetattr(fd,TCSANOW,&newtio);
-
-    return (fd);
-}
-
-void UIDataController::parseData(){
-
-    qDebug() << "Made it to parseData()";
-
-    int fd, i, n, e;
-
-    char buffer[128];
     char *token = (char *)malloc(10*sizeof(char));
-
-    fd = openPort();
-
-    forever{
-        n = read(fd, &buffer, sizeof(buffer));
-        if (n == -1)
-        {
-            e = errno;
-            qDebug() << "Read error: " << e;
+    token = strtok(buffer, ",");
+    for (int i=0; token != NULL; i++) {
+        if (i == 0) {
+            _AccelerometerX = strToDouble(token);
         }
-
-        //qDebug() << "MESSAGE " << buffer;
-
-        token = strtok(buffer, ",");
-        for (i=0; token != NULL; i++) {
-            if (i == 0) {
-                _AccelerometerX = strToDouble(token);
-            }
-            else if (i == 1) {
-                _AccelerometerY = strToDouble(token);
-            }
-            else if (i == 2) {
-                _AccelerometerZ = strToDouble(token);
-            }
-            else if (i == 3) {
-                _GyroX = strToDouble(token);
-            }
-            else if (i == 4) {
-                _GyroY = strToDouble(token);
-            }
-            else if (i == 5) {
-                _GyroZ = strToDouble(token);
-            }
-            else if (i == 6) {
-                _PositionFix = atoi(token);
-            }
-            else if (i == 7) {
-                _Satellites = atoi(token);
-            }
-            else if (i == 8) {
-                _Hour = (time_t)atoi(token);
-            }
-            else if (i == 9) {
-                _Minute = (time_t)atoi(token);
-            }
-            else if (i == 10) {
-                _Second = (time_t)atoi(token);
-            }
-            else if (i == 11) {
-                _Month = (time_t)atoi(token);
-            }
-            else if (i == 12) {
-                _Day = (time_t)atoi(token);
-            }
-            else if (i == 13) {
-                _Year = (time_t)atoi(token);
-            }
-            else if (i == 14) {
-                _CoordinatesLat = strToDouble(token);
-            }
-            else if (i == 15) {
-                _CoordinatesLong = strToDouble(token);
-            }
-            else if (i == 16) {
-                _Speed = atoi(token);
-            }
-            else if (i == 17) {
-                //strncpy(_OBDIICommand, token, 10);
-                _OBDIICommand = "None";
-            }
-            else if (i == 18) {
-                _OBDIIValue = atoi(token);
-            }
-            token = strtok(NULL, ",");
+        else if (i == 1) {
+            _AccelerometerY = strToDouble(token);
         }
-
-        dumpData();
+        else if (i == 2) {
+            _AccelerometerZ = strToDouble(token);
+        }
+        else if (i == 3) {
+            _GyroX = strToDouble(token);
+        }
+        else if (i == 4) {
+            _GyroY = strToDouble(token);
+        }
+        else if (i == 5) {
+            _GyroZ = strToDouble(token);
+        }
+        else if (i == 6) {
+            _PositionFix = atoi(token);
+        }
+        else if (i == 7) {
+            _Satellites = atoi(token);
+        }
+        else if (i == 8) {
+            _Hour = (time_t)atoi(token);
+        }
+        else if (i == 9) {
+            _Minute = (time_t)atoi(token);
+        }
+        else if (i == 10) {
+            _Second = (time_t)atoi(token);
+        }
+        else if (i == 11) {
+            _Month = (time_t)atoi(token);
+        }
+        else if (i == 12) {
+            _Day = (time_t)atoi(token);
+        }
+        else if (i == 13) {
+            _Year = (time_t)atoi(token);
+        }
+        else if (i == 14) {
+            _CoordinatesLat = strToDouble(token);
+        }
+        else if (i == 15) {
+            _CoordinatesLong = strToDouble(token);
+        }
+        else if (i == 16) {
+            _Speed = atoi(token);
+        }
+        else if (i == 17) {
+            _OBDIICommand = "None";
+        }
+        else if (i == 18) {
+            _OBDIIValue = atoi(token);
+        }
+        token = strtok(NULL, ",");
     }
+
+    emit sendToQml();
+    dumpData();
 }
 
 void UIDataController::dumpData(){
@@ -166,27 +125,21 @@ void UIDataController::dumpData(){
     qDebug() << "-------------------------------------------------";
 }
 
-
-void UIDataController::updateData()
-{
-    qDebug() << "Updating data!";
-}
-
 QStringList UIDataController::getList()
 {
-    QStringList list;
-    list.append("Accelerometer X: " + QString::number(_AccelerometerX));
-    list.append("Accelerometer Y: " + QString::number(_AccelerometerY));
-    list.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
-    return list;
+    qDebug() << "UIDataController: Updating data list.";
+    _List.clear();
+    _List.append("Accelerometer X: " + QString::number(_AccelerometerX));
+    _List.append("Accelerometer Y: " + QString::number(_AccelerometerY));
+    _List.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
+    return _List;
 }
 
 void UIDataController::runSensorThread()
 {
+    qDebug() << "UIDataController: Running sensor thread.";
     SensorThread *sensorThread = new SensorThread(this);
-    //connect read signal to parse slot
-
+    connect(sensorThread, SIGNAL(bufferReady(char*)), this, SLOT(parseData(char*)));
     connect(sensorThread, &SensorThread::finished, this, &UIDataController::deleteLater);
     sensorThread->start();
 }
-

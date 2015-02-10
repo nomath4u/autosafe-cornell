@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_SensorThread_t {
-    QByteArrayData data[4];
-    char stringdata[28];
+    QByteArrayData data[5];
+    char stringdata[39];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,12 +30,13 @@ struct qt_meta_stringdata_SensorThread_t {
 static const qt_meta_stringdata_SensorThread_t qt_meta_stringdata_SensorThread = {
     {
 QT_MOC_LITERAL(0, 0, 12), // "SensorThread"
-QT_MOC_LITERAL(1, 13, 11), // "resultReady"
+QT_MOC_LITERAL(1, 13, 11), // "bufferReady"
 QT_MOC_LITERAL(2, 25, 0), // ""
-QT_MOC_LITERAL(3, 26, 1) // "s"
+QT_MOC_LITERAL(3, 26, 5), // "char*"
+QT_MOC_LITERAL(4, 32, 6) // "buffer"
 
     },
-    "SensorThread\0resultReady\0\0s"
+    "SensorThread\0bufferReady\0\0char*\0buffer"
 };
 #undef QT_MOC_LITERAL
 
@@ -56,7 +57,7 @@ static const uint qt_meta_data_SensorThread[] = {
        1,    1,   19,    2, 0x06 /* Public */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::QString,    3,
+    QMetaType::Void, 0x80000000 | 3,    4,
 
        0        // eod
 };
@@ -66,15 +67,15 @@ void SensorThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
     if (_c == QMetaObject::InvokeMetaMethod) {
         SensorThread *_t = static_cast<SensorThread *>(_o);
         switch (_id) {
-        case 0: _t->resultReady((*reinterpret_cast< const QString(*)>(_a[1]))); break;
+        case 0: _t->bufferReady((*reinterpret_cast< char*(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef void (SensorThread::*_t)(const QString & );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&SensorThread::resultReady)) {
+            typedef void (SensorThread::*_t)(char * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&SensorThread::bufferReady)) {
                 *result = 0;
             }
         }
@@ -118,7 +119,7 @@ int SensorThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void SensorThread::resultReady(const QString & _t1)
+void SensorThread::bufferReady(char * _t1)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

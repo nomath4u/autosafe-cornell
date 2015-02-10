@@ -12,16 +12,9 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     UIDataController appData;
-    //appData.runSensorThread();
-    appData.parseData();
+    appData.runSensorThread(); //this is working fine
 
-    QQmlContext* ctx = engine.rootContext();
-    ctx->setContextProperty("appData", &appData);
-
-
-    QStringListModel list;
-    list.setStringList(appData.getList());
-    //engine.rootContext()->setContextProperty("dataModel", &list);
+    engine.rootContext()->setContextProperty("appData", &appData);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     app.exec();

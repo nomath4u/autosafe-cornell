@@ -12,27 +12,27 @@ ScrollView {
     flickableItem.interactive: true
 
     ListView {
+        id: listView
         model: dataModel
         anchors.fill: parent
         spacing: 40
-
         delegate: Item {
             Rectangle {
                 color: "#404040"
                 Text {
                     id: elementLabel
                     anchors.left: parent.left
-                    text: edit
+                    text: appData.getList()[index]
                     font.pointSize: 16
                     color: "white"
                 }
             }
         }
 
-       Connections {
-            target: receiver
-            onSendToQml: {
-                console.log("Received in QML from C++: " + string)
+        Connections{
+            target: appData
+            onSendToQml : {
+                listView.model = appData.getList()
             }
         }
     }
