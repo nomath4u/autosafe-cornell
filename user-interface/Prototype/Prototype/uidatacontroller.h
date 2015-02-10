@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QString>
+#include <QQmlApplicationEngine>
+#include <QQmlListProperty>
 
 class UIDataController : public QObject
 {
@@ -21,10 +23,9 @@ public:
     void runSensorThread();
 
 public slots:
-    void handleResults(const QString &);
 
 signals:
-    //signal UI new data is ready?
+    void sendToQml(QString &string);
 
 private:
     double _AccelerometerX;

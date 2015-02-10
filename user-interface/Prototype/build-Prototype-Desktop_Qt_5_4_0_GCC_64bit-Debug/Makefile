@@ -49,13 +49,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../Prototype/main.cpp \
-		../Prototype/parse_data.cpp \
 		../Prototype/sensorthread.cpp \
 		../Prototype/uidatacontroller.cpp qrc_qml.cpp \
 		moc_sensorthread.cpp \
 		moc_uidatacontroller.cpp
 OBJECTS       = main.o \
-		parse_data.o \
 		sensorthread.o \
 		uidatacontroller.o \
 		qrc_qml.o \
@@ -183,10 +181,8 @@ DIST          = /home/cornell/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/features/exceptions.prf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/features/yacc.prf \
 		/home/cornell/Qt/5.4/gcc_64/mkspecs/features/lex.prf \
-		../Prototype/Prototype.pro ../Prototype/parse_data.h \
-		../Prototype/sensorthread.h \
+		../Prototype/Prototype.pro ../Prototype/sensorthread.h \
 		../Prototype/uidatacontroller.h ../Prototype/main.cpp \
-		../Prototype/parse_data.cpp \
 		../Prototype/sensorthread.cpp \
 		../Prototype/uidatacontroller.cpp
 QMAKE_TARGET  = Prototype
@@ -497,8 +493,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../Prototype/qml.qrc $(DISTDIR)/
-	$(COPY_FILE) --parents ../Prototype/parse_data.h ../Prototype/sensorthread.h ../Prototype/uidatacontroller.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Prototype/main.cpp ../Prototype/parse_data.cpp ../Prototype/sensorthread.cpp ../Prototype/uidatacontroller.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Prototype/sensorthread.h ../Prototype/uidatacontroller.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Prototype/main.cpp ../Prototype/sensorthread.cpp ../Prototype/uidatacontroller.cpp $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -665,24 +661,37 @@ moc_uidatacontroller.cpp: /home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/QQmlApplicationEngine \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmlapplicationengine.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmlengine.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qurl.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpair.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvector.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qset.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qjsengine.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qjsvalue.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qtqmlglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmlerror.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmldebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/QQmlListProperty \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmllist.h \
 		../Prototype/uidatacontroller.h
 	/home/cornell/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/cornell/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype -I/home/cornell/Qt/5.4/gcc_64/include -I/home/cornell/Qt/5.4/gcc_64/include/QtQuick -I/home/cornell/Qt/5.4/gcc_64/include/QtWidgets -I/home/cornell/Qt/5.4/gcc_64/include/QtGui -I/home/cornell/Qt/5.4/gcc_64/include/QtQml -I/home/cornell/Qt/5.4/gcc_64/include/QtNetwork -I/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort -I/home/cornell/Qt/5.4/gcc_64/include/QtCore -I. ../Prototype/uidatacontroller.h -o moc_uidatacontroller.cpp
 
@@ -845,11 +854,8 @@ main.o: ../Prototype/main.cpp /home/cornell/Qt/5.4/gcc_64/include/QtWidgets/QApp
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
 		../Prototype/uidatacontroller.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/QQmlListProperty
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Prototype/main.cpp
-
-parse_data.o: ../Prototype/parse_data.cpp ../Prototype/parse_data.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o parse_data.o ../Prototype/parse_data.cpp
 
 sensorthread.o: ../Prototype/sensorthread.cpp ../Prototype/sensorthread.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QObject \
@@ -927,8 +933,7 @@ sensorthread.o: ../Prototype/sensorthread.cpp ../Prototype/sensorthread.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialport.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportglobal.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPortInfo \
-		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h \
-		../Prototype/parse_data.h
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sensorthread.o ../Prototype/sensorthread.cpp
 
 uidatacontroller.o: ../Prototype/uidatacontroller.cpp ../Prototype/uidatacontroller.h \
@@ -983,32 +988,49 @@ uidatacontroller.o: ../Prototype/uidatacontroller.cpp ../Prototype/uidatacontrol
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QString \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/QQmlApplicationEngine \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmlapplicationengine.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmlengine.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qurl.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpair.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qhash.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
-		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvariant.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qvector.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qpoint.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qset.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qjsengine.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qjsvalue.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qtqmlglobal.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmlerror.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmldebug.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/QQmlListProperty \
+		/home/cornell/Qt/5.4/gcc_64/include/QtQml/qqmllist.h \
 		../Prototype/sensorthread.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QDebug \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QThread \
 		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qthread.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPort \
 		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialport.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportglobal.h \
 		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/QSerialPortInfo \
-		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h
+		/home/cornell/Qt/5.4/gcc_64/include/QtSerialPort/qserialportinfo.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/QStringListModel \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qstringlistmodel.h \
+		/home/cornell/Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uidatacontroller.o ../Prototype/uidatacontroller.cpp
 
 qrc_qml.o: qrc_qml.cpp 

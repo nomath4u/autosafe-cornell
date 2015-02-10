@@ -2,6 +2,8 @@
 #include "sensorthread.h"
 
 #include <QDebug>
+#include <QStringListModel>
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -120,6 +122,7 @@ void UIDataController::parseData(){
             }
             token = strtok(NULL, ",");
         }
+
         dumpData();
     }
 }
@@ -158,19 +161,17 @@ QStringList UIDataController::getList()
 {
     QStringList list;
     list.append("Accelerometer X: " + QString::number(_AccelerometerX));
+    list.append("Accelerometer Y: " + QString::number(_AccelerometerY));
+    list.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
     return list;
-}
-
-void UIDataController::handleResults(const QString &result)
-{
-    qDebug() << "Handling results!" << result;
 }
 
 void UIDataController::runSensorThread()
 {
     SensorThread *sensorThread = new SensorThread(this);
-    connect(sensorThread, &SensorThread::resultReady, this, &UIDataController::handleResults);
-    connect(sensorThread, &SensorThread::finished, sensorThread, &UIDataController::deleteLater);
+    //connect read signal to parse slot
+
+    connect(sensorThread, &SensorThread::finished, this, &UIDataController::deleteLater);
     sensorThread->start();
 }
 

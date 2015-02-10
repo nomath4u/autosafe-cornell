@@ -17,6 +17,10 @@ public:
     SensorThread(QObject *parent = 0);
     ~SensorThread();
 
+    double strToDouble(char* str);
+    int openPort();
+    void parseData();
+
 signals:
     void resultReady(const QString &s);
 };

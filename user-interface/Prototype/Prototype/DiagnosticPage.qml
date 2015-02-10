@@ -11,23 +11,6 @@ ScrollView {
 
     flickableItem.interactive: true
 
-//    Item{
-//        ListModel {
-//            id: dataModel
-
-//            ListElement {
-//                label: "RPM"
-//                value: "1000"
-//            }
-
-//            ListElement {
-//                label: "Speed"
-//                value: "10 MPH"
-//            }
-
-//        }
-//    }
-
     ListView {
         model: dataModel
         anchors.fill: parent
@@ -43,36 +26,34 @@ ScrollView {
                     font.pointSize: 16
                     color: "white"
                 }
+            }
+        }
 
-//                Text {
-//                    id: elementValue
-//                    anchors.left: elementLabel.right
-//                    anchors.leftMargin: 400 - elementLabel.width
-//                    text: value
-//                    font.pointSize: 16
-//                    color: "white"
-//                }
+       Connections {
+            target: receiver
+            onSendToQml: {
+                console.log("Received in QML from C++: " + string)
             }
         }
     }
 
-//    style: ScrollViewStyle {
-//            transientScrollBars: true
-//            handle: Item {
-//                implicitWidth: 14
-//                implicitHeight: 26
-//                Rectangle {
-//                    color: "#424246"
-//                    anchors.fill: parent
-//                    anchors.topMargin: 6
-//                    anchors.leftMargin: 4
-//                    anchors.rightMargin: 4
-//                    anchors.bottomMargin: 6
-//                }
-//            }
-//            scrollBarBackground: Item {
-//                implicitWidth: 14
-//                implicitHeight: 26
-//            }
-//        }
+    style: ScrollViewStyle {
+            transientScrollBars: true
+            handle: Item {
+                implicitWidth: 14
+                implicitHeight: 26
+                Rectangle {
+                    color: "#424246"
+                    anchors.fill: parent
+                    anchors.topMargin: 6
+                    anchors.leftMargin: 4
+                    anchors.rightMargin: 4
+                    anchors.bottomMargin: 6
+                }
+            }
+            scrollBarBackground: Item {
+                implicitWidth: 14
+                implicitHeight: 26
+            }
+        }
 }
