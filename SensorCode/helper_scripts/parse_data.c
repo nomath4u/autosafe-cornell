@@ -3,17 +3,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-
+#include <termios.h>
 
 
 //[{accelerometer xyz},{gyroscope xyz},{magnetometer}, {satellites},{time HMS}, {date MDY},{latitude},{longitude}, {position fix}, {speed knots}, {OBDII command}, {OBDII value}]
 //
 
-#define X 0;
-#define Y 1;
-#define Z 2;
+#define X 0
+#define Y 1
+#define Z 2
 #define LAT 0;
 #define LONG 1;
+#define BAUDRATE B9600
 
 double accelormeter[3];
 double gyro[3];
@@ -28,12 +29,13 @@ time_t date_y;
 double cordnates[2];
 int pos_fix;
 double speed;
-char obd_com[10];
+char *obd_com;
 int obd_val;
 int gc = 0;
 
 int read_port(void)
 {
+    struct termios oldtio,newtio;
     int fd = open("/dev/ttyACM0", O_RDONLY | O_NOCTTY);
     if (fd == -1)
     {
@@ -41,11 +43,15 @@ int read_port(void)
         perror("open_port: Unable to open Serial Port.");
     }
 
-    char buffer[128];
-    int n = read(fd, buffer, sizeof(buffer));
-    if (n < 0)
-        fputs("read failed!\n", stderr);
-    //printf("Rec: %s\n", buffer);
+    tcgetattr(fd,&oldtio); /* save current serial port settings */
+    bzero(&newtio, sizeof(newtio)); /* clear struct for new port settings */
+    newtio.c_cflag = BAUDRATE | CRTSCTS | CS8 | CLOCAL | CREAD;
+    newtio.c_iflag = IGNPAR | ICRNL;
+    newtio.c_oflag = 0;
+    newtio.c_lflag = ICANON;
+    tcflush(fd, TCIFLUSH);
+    tcsetattr(fd,TCSANOW,&newtio);
+
     return (fd);
 }
 
@@ -58,12 +64,12 @@ double strict_str2double(char* str)
 }
 
 int print_data(){
-    printf("Accelerometer X: %lf\n", accelormeter[1]);
-    printf("Accelerometer Y: %lf\n", accelormeter[2]);
-    printf("Accelerometer Z: %lf\n", accelormeter[3]);
-    printf("Gyro X: %lf\n", gyro[1]);
-    printf("Gyro Y: %lf\n", gyro[2]);
-    printf("Gyro Z: %lf\n", gyro[3]);
+    printf("Accelerometer X: %.2f\n", accelormeter[X]);
+    printf("Accelerometer Y: %.2f\n", accelormeter[Y]);
+    printf("Accelerometer Z: %.2f\n", accelormeter[Z]);
+    printf("Gyro X: %.2f\n", gyro[X]);
+    printf("Gyro Y: %.2f\n", gyro[Y]);
+    printf("Gyro Z: %.2f\n", gyro[Z]);
     printf("Position Fix: %d\n", pos_fix);
     printf("Satellites: %d\n", satellites);
     printf("Time Hour: %d\n", (int)time_h);
@@ -96,33 +102,37 @@ int parse_data(){
     char * set;
     char buf[128];
     int fd = read_port();
-    
+
     while(1){
         gc++;
-        //n = read(fd, buf, sizeof(buf));
-        //if (n < 0)
-        //    fputs("read failed!\n", stderr);
-        char buf[] = "-0.06,0.00,0.99,0.46,0.14,-0.57,0,0,0,10,6,0,0,0,0,0,0,,0";
+        n = read(fd, &buf, sizeof(buf));
+        if (n < 0)
+            fputs("read failed!\n", stderr);
+        //char bufP[128] = "-0.06,0.00,0.98,0.50,-0.05,-0.40,0,0,0,27,31,1,6,80,0,0,0,None,0\n";
+        
+        //buf[n] = 0; 
 
         token = strtok(buf, ",");
+        //printf("TOK %s\n", token);
         for (i=0; token != NULL; i++) {
             if (i == 0) { 
-                accelormeter[1] = strict_str2double(token);
+                //printf("X %s\n", token);
+                accelormeter[X] = strict_str2double(token);
             }
             else if (i == 1) {
-                accelormeter[2] = strict_str2double(token);
+                accelormeter[Y] = strict_str2double(token);
             }
             else if (i == 2) {
-                accelormeter[3] = strict_str2double(token);
+                accelormeter[Z] = strict_str2double(token);
             }
             else if (i == 3) {
-                gyro[1] = strict_str2double(token);
+                gyro[X] = strict_str2double(token);
             }
             else if (i == 4) {
-                gyro[2] = strict_str2double(token);
+                gyro[Y] = strict_str2double(token);
             }
             else if (i == 5) {
-                gyro[3] = strict_str2double(token);
+                gyro[Z] = strict_str2double(token);
             }
             else if (i == 6) {
                 pos_fix = atoi(token);
@@ -158,25 +168,23 @@ int parse_data(){
                 speed = atoi(token);
             }
             else if (i == 17) {
-                strncpy(obd_com, token, 10);
+                obd_com = "None";
+                //strncpy(obd_com, token, 5);
             }
             else if (i == 18) {
                 obd_val = atoi(token);
             }
             token = strtok(NULL, ",");
         }
-        if (gc % 1000 == 0){
-            print_data();
-            gc = 0;
-        }
+        printf("--------------------------------------------------------------------------------\n");
+        print_data();
+        fflush(stdout);
     }
 }
 
 
 
 int main() {
-    //read_port();
     parse_data();
-    //print_data();
     return 0;
 }
