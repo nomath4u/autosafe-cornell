@@ -5,14 +5,20 @@
 #include <QStringListModel>
 
 #include "uidatacontroller.h"
+#include "networkthread.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
     UIDataController appData;
-    appData.runSensorThread(); //this is working fine
+    //appData.runSensorThread(); //this is working fine
+
+    qDebug() << "MAIN: Running Network thread.";
+    NetworkThread networkThread;
+    networkThread.start();
+    networkThread.wait();
 
     engine.rootContext()->setContextProperty("appData", &appData);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
