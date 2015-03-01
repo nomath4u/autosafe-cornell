@@ -48,6 +48,7 @@ int NetworkThread::send_message(char* who, char message[BUFLEN])
     int s, slen=sizeof(si_other);
     QString send;
     send = crypt((unsigned char*)message);
+    send.replace(1,1,'v');
     send.append(":");
     send.append(message);
     //send.append(QString(":%1").arg(time(NULL)));
@@ -71,7 +72,7 @@ int NetworkThread::send_message(char* who, char message[BUFLEN])
     }
 
     //send the message
-    if (sendto(s, message, strlen(message) , 0 , (struct sockaddr *) &si_other, slen)==-1)
+    if (sendto(s, send.toStdString().c_str(), send.length() , 0 , (struct sockaddr *) &si_other, slen)==-1)
     {
         die("sendto() failed: Send Message");
     }
@@ -109,10 +110,11 @@ void NetworkThread::run(){
     QString Wes = "Hello this is my message";
     Wes.append(QString(":%1").arg(time(NULL)));
     send_message("10.0.0.2", (char*)qstrdup(Wes.toLocal8Bit()));
+    //send_message("10.0.0.2", "Hello this is my message:14250228");
 
 
 
-
+        /*
 
         struct sockaddr_in si_me, si_other;
         QString recv;
@@ -153,7 +155,13 @@ void NetworkThread::run(){
             {
                 die("recvfrom()");
             }
-            buf[recv_len] = 0;
+
+            recv.clear();
+            for (int i = 0; i < recv_len; ++i){
+                 recv += buf[i];
+            }
+
+            //recv.fromLocal8Bit(buf);
 
             si_other.sin_addr.s_addr = INADDR_BROADCAST;
             si_other.sin_family = AF_INET;
@@ -193,5 +201,6 @@ void NetworkThread::run(){
         }
 
         shutdown(s, SHUT_RDWR);
+        */
 
 }
