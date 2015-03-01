@@ -5,6 +5,9 @@
 #include<arpa/inet.h>
 #include<sys/socket.h>
 #include<openssl/hmac.h>
+#include<time.h>
+#include <QStringList>
+#include <QString>
 
 char cryptkey[] = "cornellcup2015";
 
@@ -47,12 +50,10 @@ int NetworkThread::send_message(char* who, char message[BUFLEN])
     send = crypt((unsigned char*)message);
     send.append(":");
     send.append(message);
+    //send.append(QString(":%1").arg(time(NULL)));
     qDebug() << "SEND:" << send;
 
-    QRegExp sep(":");
-    qDebug() << "REG:" << send.section(sep,0,0);
-    if(QString::compare(send.section(sep,0,0), crypt((unsigned char*)message)) == 0)
-        qDebug() << "VERIFIED";
+
 
     if ( (s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
@@ -76,18 +77,45 @@ int NetworkThread::send_message(char* who, char message[BUFLEN])
     }
 
     shutdown(s, SHUT_RDWR);
-
     return 0;
+}
 
+void NetworkThread::message_data(QString s, QStringList* l)
+{
+    l->append(s);
+    if (l->length() > 40){
+        l->removeFirst();
+    }
+}
+
+bool NetworkThread::check_recv(QString s, QStringList* l){
+    qDebug() << "IN CHECK " << s << *l;
+    return l->contains(s);
+}
+
+bool NetworkThread::verify_hash(QString s, QString h){
+    if(QString::compare(h, crypt((unsigned char*)qstrdup(s.toLocal8Bit()))) == 0){
+        qDebug() << "VERIFIED";
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void NetworkThread::run(){
     qDebug() << "IN NETWORK";
+    QStringList* ds=new QStringList;
+    QString hash, mess;
+    QString Wes = "Hello this is my message";
+    Wes.append(QString(":%1").arg(time(NULL)));
+    send_message("10.0.0.2", (char*)qstrdup(Wes.toLocal8Bit()));
 
-    send_message("10.0.0.2", "!This is my message");
-        /*
+
+
+
+
         struct sockaddr_in si_me, si_other;
-
+        QString recv;
         int s, i, slen = sizeof(si_other) , recv_len;
         char buf[BUFLEN];
 
@@ -121,7 +149,7 @@ void NetworkThread::run(){
             fflush(stdout);
 
             //try to receive some data, this is a blocking call
-            if ((recv_len = recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, &slen)) == -1)
+            if ((recv_len = recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, (socklen_t*)&slen)) == -1)
             {
                 die("recvfrom()");
             }
@@ -134,6 +162,21 @@ void NetworkThread::run(){
             //print details of the client/peer and the data received
             printf("Received packet from %s:%d\n", inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port));
             printf("Data: %s\n" , buf);
+            recv = buf[1];
+
+            QRegExp sep(":");
+            qDebug() << "REG:" << recv.section(sep,0,0);
+            hash = recv.section(sep,0,0);
+            mess = recv.section(sep,1,2);
+            if(verify_hash(mess, hash)){
+                if ( ! check_recv(hash, ds)){
+                    qDebug() << "UINQE message";
+                    message_data(hash, ds);
+                } else {
+                    qDebug() << "NON message";
+                }
+            }
+            qDebug() << *ds;
 
 
             // Parse Message and do stuff
@@ -149,6 +192,6 @@ void NetworkThread::run(){
             //send_message(buf);
         }
 
-        close(s);
-        */
+        shutdown(s, SHUT_RDWR);
+
 }
