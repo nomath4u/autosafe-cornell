@@ -42,7 +42,7 @@ QString NetworkThread::crypt (unsigned char* message)
 int NetworkThread::send_message(char* who, char message[BUFLEN])
 {
     struct sockaddr_in si_other;
-    int s, i, slen=sizeof(si_other);
+    int s, slen=sizeof(si_other);
     QString send;
     send = crypt((unsigned char*)message);
     send.append(":");
@@ -54,7 +54,6 @@ int NetworkThread::send_message(char* who, char message[BUFLEN])
     if(QString::compare(send.section(sep,0,0), crypt((unsigned char*)message)) == 0)
         qDebug() << "VERIFIED";
 
-    /*
     if ( (s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
         die("Socket creation failed: Send Message");
@@ -76,8 +75,8 @@ int NetworkThread::send_message(char* who, char message[BUFLEN])
         die("sendto() failed: Send Message");
     }
 
-    close(s);
-    */
+    shutdown(s, SHUT_RDWR);
+
     return 0;
 
 }
@@ -85,7 +84,7 @@ int NetworkThread::send_message(char* who, char message[BUFLEN])
 void NetworkThread::run(){
     qDebug() << "IN NETWORK";
 
-    send_message("Nobody", "This dfsffis my message");
+    send_message("10.0.0.2", "!This is my message");
         /*
         struct sockaddr_in si_me, si_other;
 
