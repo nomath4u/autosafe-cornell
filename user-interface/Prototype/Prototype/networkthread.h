@@ -19,9 +19,9 @@ public:
     NetworkThread(QObject *parent = 0);
     ~NetworkThread();
 
-    void die(char *s);
+    void die(const char *s);
     QString crypt (unsigned char* message);
-    int send_message(char* who, char message[BUFLEN]);
+    int send_message(const char *who, QString send);
     void message_data(QString s, QStringList* l);
     bool check_recv(QString s, QStringList* l);
     bool verify_hash(QString s, QString h);
