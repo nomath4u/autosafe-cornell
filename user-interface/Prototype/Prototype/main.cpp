@@ -4,7 +4,7 @@
 #include <QQmlContext>
 #include <QStringListModel>
 
-#include "uidatacontroller.h"
+#include "datacontroller.h"
 #include "networkthread.h"
 
 int main(int argc, char* argv[])
@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    UIDataController appData;
+    DataController appData;
     //appData.runSensorThread();
     appData.runCrashDetectionThread();
 

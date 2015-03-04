@@ -22,13 +22,13 @@ struct SensorData {
     double speed;
 };
 
-class UIDataController : public QObject
+class DataController : public QObject
 {
     Q_OBJECT
 
 public:
-    UIDataController(QObject * parent = 0);
-    ~UIDataController();
+    DataController(QObject * parent = 0);
+    ~DataController();
 
     void runSensorThread();
     void runCrashDetectionThread();

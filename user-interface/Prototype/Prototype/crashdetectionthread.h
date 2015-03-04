@@ -5,7 +5,7 @@
 #include <QString>
 #include <QDebug>
 #include <QThread>
-#include <uidatacontroller.h>
+#include <datacontroller.h>
 
 class CrashDetectionThread : public QThread
 {

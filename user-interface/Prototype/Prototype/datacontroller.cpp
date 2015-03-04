@@ -1,4 +1,4 @@
-#include <uidatacontroller.h>
+#include <datacontroller.h>
 #include <sensorthread.h>
 #include <crashdetectionthread.h>
 
@@ -13,17 +13,17 @@
 #include <errno.h>
 #include <termios.h>
 
-UIDataController::UIDataController(QObject *)
+DataController::DataController(QObject *)
 {
 
 }
 
-UIDataController::~UIDataController()
+DataController::~DataController()
 {
 
 }
 
-double UIDataController::strToDouble(char* str)
+double DataController::strToDouble(char* str)
 {
     char* endptr;
     double value = strtod(str, &endptr);
@@ -31,7 +31,7 @@ double UIDataController::strToDouble(char* str)
     return value;
 }
 
-void UIDataController::parseData(char *buffer){
+void DataController::parseData(char *buffer){
 
     //qDebug() << "UIDataController: Parsing data.";
 
@@ -106,7 +106,7 @@ void UIDataController::parseData(char *buffer){
     dumpData();
 }
 
-void UIDataController::dumpData(){
+void DataController::dumpData(){
 
     qDebug() << "Accelerometer X: "  << _AccelerometerX;
     qDebug() << "Accelerometer Y: "  << _AccelerometerY;
@@ -130,7 +130,7 @@ void UIDataController::dumpData(){
     qDebug() << "-------------------------------------------------";
 }
 
-QStringList UIDataController::getList()
+QStringList DataController::getList()
 {
     //qDebug() << "UIDataController: Updating data list.";
     _List.clear();
@@ -140,7 +140,7 @@ QStringList UIDataController::getList()
     return _List;
 }
 
-SensorData UIDataController::getDataPacket(){
+SensorData DataController::getDataPacket(){
     SensorData data;
 
     data.accelerometerX = _AccelerometerX;
@@ -160,7 +160,7 @@ SensorData UIDataController::getDataPacket(){
     return data;
 }
 
-void UIDataController::runSensorThread()
+void DataController::runSensorThread()
 {
     qDebug() << "UIDataController: Running sensor thread.";
     SensorThread *sensorThread = new SensorThread(this);
@@ -168,7 +168,7 @@ void UIDataController::runSensorThread()
     sensorThread->start();
 }
 
-void UIDataController::runCrashDetectionThread()
+void DataController::runCrashDetectionThread()
 {
     qDebug() << "UIDataController: Running crash detection thread.";
     CrashDetectionThread *crashDetectionThread = new CrashDetectionThread(this);

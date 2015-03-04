@@ -4,8 +4,9 @@ QT += qml quick widgets serialport
 
 SOURCES += main.cpp \
     sensorthread.cpp \
-    uidatacontroller.cpp \
-    networkthread.cpp
+    networkthread.cpp \
+    crashdetectionthread.cpp \
+    datacontroller.cpp
 
 RESOURCES += qml.qrc
 
@@ -17,8 +18,9 @@ include(deployment.pri)
 
 HEADERS += \
     sensorthread.h \
-    uidatacontroller.h \
-    networkthread.h
+    networkthread.h \
+    crashdetectionthread.h \
+    datacontroller.h
 
 
 LIBS += -L/usr/include/openssl -lcrypto
