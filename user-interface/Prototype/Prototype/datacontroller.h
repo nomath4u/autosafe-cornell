@@ -1,5 +1,5 @@
-#ifndef UIDATACONTROLLER_H
-#define UIDATACONTROLLER_H
+#ifndef DATACONTROLLER_H
+#define DATACONTROLLER_H
 
 #include <QObject>
 #include <QString>
@@ -32,6 +32,7 @@ public:
 
     void runSensorThread();
     void runCrashDetectionThread();
+    void runNetworkThread();
 
     double strToDouble(char* str);
     int openPort();
@@ -40,17 +41,20 @@ public:
     SensorData getDataPacket();
 
     Q_INVOKABLE QStringList getList();
+    Q_INVOKABLE QStringList getMessageList();
 
 public slots:
     void parseData(char* buffer);
+    void getMessage(const QString &msg);
 
 signals:
-    void sendToQml();
+    void updateDiagnosticInfo();
+    void updateMessages();
     void sendToCrashDetection(const SensorData &data);
 
 protected:
     QQmlApplicationEngine _Engine;
-    QList<QString> _List;
+    QList<QString> _DiagnosticDataList;
     double _AccelerometerX;
     double _AccelerometerY;
     double _AccelerometerZ;
@@ -70,6 +74,8 @@ protected:
     double _Speed;
     char *_OBDIICommand;
     int _OBDIIValue;
+
+    QList<QString> _Messages;
 };
 
-#endif // UIDATA_H
+#endif // DATA_H

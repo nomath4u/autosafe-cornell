@@ -14,12 +14,8 @@ int main(int argc, char* argv[])
 
     DataController appData;
     //appData.runSensorThread();
-    appData.runCrashDetectionThread();
-
-    qDebug() << "MAIN: Running Network thread.";
-    NetworkThread networkThread;
-    networkThread.start();
-    networkThread.wait();
+    //appData.runCrashDetectionThread();
+    appData.runNetworkThread();
 
     engine.rootContext()->setContextProperty("appData", &appData);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

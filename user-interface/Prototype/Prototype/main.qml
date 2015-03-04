@@ -59,14 +59,6 @@ ApplicationWindow {
                 title: "Road Conditions"
                 ConditionsPage{ visible: true }
             }
-
-            Connections{
-                target: appData
-                onSendToQml : {
-                    //change tab here
-                }
-            }
-
         }
 
         Component {
@@ -91,6 +83,7 @@ ApplicationWindow {
                         }
                     }
                 }
+
             }
         }
     }

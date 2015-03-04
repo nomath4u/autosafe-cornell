@@ -29,6 +29,7 @@ public:
 
 signals:
     void bufferReady(char* buffer);
+    void messageReceived(const QString &msg);
 };
 
 #endif // NETWORKTHREAD_H

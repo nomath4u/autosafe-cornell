@@ -30,7 +30,7 @@ ScrollView {
 
         Connections{
             target: appData
-            onSendToQml : {
+            onUpdateDiagnosticInfo : { /* must have "on" and camel case signal name! - slot registers automatically */
                 listView.model = appData.getList()
             }
         }

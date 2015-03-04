@@ -186,6 +186,7 @@ void NetworkThread::run(){
         qDebug() << "REG:" << recv.section(sep,0,0);
         hash = recv.section(sep,0,0);
         mess = recv.section(sep,1,2);
+
         if(verify_hash(mess, hash)){
             if ( ! check_recv(hash, ds)){
                 qDebug() << "UINQE message";
@@ -204,6 +205,9 @@ void NetworkThread::run(){
             send_message("10.0.0.2", "OH NO!");
             send_message("10.0.0.3", "OH NO!");
             //exit(1);
+
+            emit messageReceived("Warning: crash ahead!");
+
         }
 
         // Send message to others

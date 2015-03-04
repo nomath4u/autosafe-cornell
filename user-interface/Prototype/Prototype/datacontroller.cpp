@@ -1,6 +1,7 @@
 #include <datacontroller.h>
 #include <sensorthread.h>
 #include <crashdetectionthread.h>
+#include "networkthread.h"
 
 #include <QDebug>
 #include <QStringListModel>
@@ -98,7 +99,7 @@ void DataController::parseData(char *buffer){
         token = strtok(NULL, ",");
     }
 
-    emit sendToQml();
+    emit updateDiagnosticInfo();
 
     SensorData data = getDataPacket();
     emit sendToCrashDetection(data);
@@ -133,11 +134,15 @@ void DataController::dumpData(){
 QStringList DataController::getList()
 {
     //qDebug() << "UIDataController: Updating data list.";
-    _List.clear();
-    _List.append("Accelerometer X: " + QString::number(_AccelerometerX));
-    _List.append("Accelerometer Y: " + QString::number(_AccelerometerY));
-    _List.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
-    return _List;
+    _DiagnosticDataList.clear();
+    _DiagnosticDataList.append("Accelerometer X: " + QString::number(_AccelerometerX));
+    _DiagnosticDataList.append("Accelerometer Y: " + QString::number(_AccelerometerY));
+    _DiagnosticDataList.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
+    return _DiagnosticDataList;
+}
+
+QStringList DataController::getMessageList(){
+    return _Messages;
 }
 
 SensorData DataController::getDataPacket(){
@@ -160,6 +165,12 @@ SensorData DataController::getDataPacket(){
     return data;
 }
 
+void DataController::getMessage(const QString &msg){
+    _Messages.append(msg);
+    qDebug() << "Made it to getMessage" << _Messages;
+    emit updateMessages();
+}
+
 void DataController::runSensorThread()
 {
     qDebug() << "UIDataController: Running sensor thread.";
@@ -170,8 +181,16 @@ void DataController::runSensorThread()
 
 void DataController::runCrashDetectionThread()
 {
-    qDebug() << "UIDataController: Running crash detection thread.";
+    qDebug() << "DataController: Running crash detection thread.";
     CrashDetectionThread *crashDetectionThread = new CrashDetectionThread(this);
     connect(this, SIGNAL(sendToCrashDetection(SensorData)), crashDetectionThread, SLOT(analyzeData(SensorData)));
     crashDetectionThread->start();
+}
+
+void DataController::runNetworkThread()
+{
+    qDebug() << "Running Network thread.";
+    NetworkThread *networkThread = new NetworkThread(this);
+    connect(networkThread, SIGNAL(messageReceived(QString)), this, SLOT(getMessage(QString)));
+    networkThread->start();
 }
