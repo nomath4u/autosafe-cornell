@@ -1,0 +1,11 @@
+Federal Motor Vehicle Safety Standards Overview: http://www.nhtsa.gov/cars/rules/import/FMVSS/
+
+FMVSS Full Text: http://www.ecfr.gov/cgi-bin/retrieveECFR?gp=&SID=a2c9a22e0bf41133c6566f44daf0e106&n=pt49.6.571&r=PART&ty=HTML
+
+Acceleration Conversion Calculator: http://www.procato.com/convert/
+
+Types of Acceleration: http://quest.nasa.gov/saturn/qa/new/Effects_of_speed_and_acceleration_on_the_body.txt
+
+Classic Article on Human Tolerance to Abrupt Accelerations: 
+http://www.dtic.mil/dtic/tr/fulltext/u2/708916.pdf
+
