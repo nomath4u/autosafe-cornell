@@ -3,10 +3,11 @@
 #include<stdlib.h> //exit(0);
 #include<arpa/inet.h>
 #include<sys/socket.h>
+#include<openssl/hmac.h>
 
 #define BUFLEN 512  //Max length of buffer
 #define PORT 8888   //The port on which to listen for incoming data
-#define SERVER "10.0.0.2"
+char key[] = "cornellcup2015";
 
 void die(char *s)
 {
@@ -14,12 +15,41 @@ void die(char *s)
     exit(1);
 }
 
+char* concat (char* first, char* second){
+    int len1 = strlen(first);
+    int len2 = strlen(second);
+    printf("%s, %s, %d, %d\n", first, second, len1, len2);
+    char* s = (char*)malloc((sizeof(char) * (len1 + len2 + 2)));
+    //memcpy(s, &first, len1);
+    sprintf(s, "%s:%s", first, second);
+    //s[len1] = ':';
+    //memcpy(s + len1 + 1, &second, len2 + 1); // includes terminating null
+    return s;
+}
+
+char* crypt (unsigned char* message){
+    unsigned char* digest;
+    unsigned int md_len;
+    char* s;
+    digest = HMAC(EVP_sha1(), key, strlen(key), message, strlen(message), NULL, &md_len);
+    printf("Len: %d ", md_len);
+    char mdString[md_len*2+5];
+    for(int i = 0; i < md_len; i++)
+        sprintf(&mdString[i*2], "%02x", (unsigned int)digest[i]);
+    printf("Digest: %s, Message:%s\n", mdString, message);
+    sprintf(s, "%s", mdString);
+    return s;
+}
+
 int send_message(char* who, char message[BUFLEN])
 {
     struct sockaddr_in si_other;
     int s, i, slen=sizeof(si_other);
-    char buf[BUFLEN];
-
+    char* send;
+    send = crypt((unsigned char*)message);
+    printf("Send = %s\n", concat(send, (char *)message));
+    
+    /*
     if ( (s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     {
         die("Socket creation failed: Send Message");
@@ -42,12 +72,15 @@ int send_message(char* who, char message[BUFLEN])
     }
 
     close(s);
+    */
     return 0;
 
 }
 
 int main(void)
 {
+    send_message("Nobody", "This is my message");
+    /*
     struct sockaddr_in si_me, si_other;
 
     int s, i, slen = sizeof(si_other) , recv_len;
@@ -112,5 +145,6 @@ int main(void)
     }
 
     close(s);
+    */
     return 0;
 }

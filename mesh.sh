@@ -7,12 +7,13 @@ if [ "$(id -u)" != "0" ]; then
      exit 1
 fi
 
-while getopts cs option
+while getopts csx option
  do
      case "${option}"
      in
          s) ip=1;;
          c) ip=2;;
+         x) start network-manager
      esac
  done
 
