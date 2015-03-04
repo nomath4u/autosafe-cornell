@@ -5,8 +5,6 @@
 #include <QString>
 #include <QDebug>
 #include <QThread>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
 
 #define BAUDRATE B9600
 

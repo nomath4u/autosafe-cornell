@@ -1,5 +1,6 @@
-#include "uidatacontroller.h"
-#include "sensorthread.h"
+#include <uidatacontroller.h>
+#include <sensorthread.h>
+#include <crashdetectionthread.h>
 
 #include <QDebug>
 #include <QStringListModel>
@@ -12,7 +13,7 @@
 #include <errno.h>
 #include <termios.h>
 
-UIDataController::UIDataController(QObject *parent)
+UIDataController::UIDataController(QObject *)
 {
 
 }
@@ -89,7 +90,7 @@ void UIDataController::parseData(char *buffer){
             _Speed = atoi(token);
         }
         else if (i == 17) {
-            _OBDIICommand = "None";
+            strcpy(_OBDIICommand, token);
         }
         else if (i == 18) {
             _OBDIIValue = atoi(token);
@@ -98,6 +99,10 @@ void UIDataController::parseData(char *buffer){
     }
 
     emit sendToQml();
+
+    SensorData data = getDataPacket();
+    emit sendToCrashDetection(data);
+
     dumpData();
 }
 
@@ -135,11 +140,38 @@ QStringList UIDataController::getList()
     return _List;
 }
 
+SensorData UIDataController::getDataPacket(){
+    SensorData data;
+
+    data.accelerometerX = _AccelerometerX;
+    data.accelerometerY = _AccelerometerY;
+    data.accelerometerZ = _AccelerometerZ;
+    data.gyroX = _GyroX;
+    data.gyroY = _GyroY;
+    data.gyroZ = _GyroZ;
+    data.hour = _Hour;
+    data.minute = _Minute;
+    data.second = _Second;
+    data.day = _Day;
+    data.month = _Month;
+    data.year = _Year;
+    data.speed = _Speed;
+
+    return data;
+}
+
 void UIDataController::runSensorThread()
 {
     qDebug() << "UIDataController: Running sensor thread.";
     SensorThread *sensorThread = new SensorThread(this);
     connect(sensorThread, SIGNAL(bufferReady(char*)), this, SLOT(parseData(char*)));
-    connect(sensorThread, &SensorThread::finished, this, &UIDataController::deleteLater);
     sensorThread->start();
+}
+
+void UIDataController::runCrashDetectionThread()
+{
+    qDebug() << "UIDataController: Running crash detection thread.";
+    CrashDetectionThread *crashDetectionThread = new CrashDetectionThread(this);
+    connect(this, SIGNAL(sendToCrashDetection(SensorData)), crashDetectionThread, SLOT(analyzeData(SensorData)));
+    crashDetectionThread->start();
 }

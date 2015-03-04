@@ -38,23 +38,35 @@ ApplicationWindow {
         height: parent.height
 
         TabView {
+            id: navigationTabView
             anchors.fill: parent
             style: tabViewStyle
 
             Tab {
+                id: diagnosticTab
                 title: "Diagnostic Information"
                 DiagnosticPage{ visible: true }
             }
 
             Tab {
+                id: alertTab
                 title: "Alerts"
                 AlertsPage{ visible: true }
             }
 
             Tab {
+                id: conditionTab
                 title: "Road Conditions"
                 ConditionsPage{ visible: true }
             }
+
+            Connections{
+                target: appData
+                onSendToQml : {
+                    //change tab here
+                }
+            }
+
         }
 
         Component {
@@ -62,10 +74,6 @@ ApplicationWindow {
             TabViewStyle {
                 tabsAlignment: Qt.AlignVCenter
                 tabOverlap: 0
-
-                /* this is where we need to change out the info display lists */
-                frame: Item {
-                }
 
                 tab: Item {
                     implicitWidth: control.width/control.count

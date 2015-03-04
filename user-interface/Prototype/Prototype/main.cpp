@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     UIDataController appData;
-    appData.runSensorThread(); //this is working fine
+    //appData.runSensorThread();
+    appData.runCrashDetectionThread();
 
     engine.rootContext()->setContextProperty("appData", &appData);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

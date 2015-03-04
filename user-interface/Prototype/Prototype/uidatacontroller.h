@@ -6,6 +6,22 @@
 #include <QQmlApplicationEngine>
 #include <QQmlListProperty>
 
+struct SensorData {
+    double accelerometerX;
+    double accelerometerY;
+    double accelerometerZ;
+    double gyroX;
+    double gyroY;
+    double gyroZ;
+    time_t hour;
+    time_t minute;
+    time_t second;
+    time_t day;
+    time_t month;
+    time_t year;
+    double speed;
+};
+
 class UIDataController : public QObject
 {
     Q_OBJECT
@@ -15,10 +31,13 @@ public:
     ~UIDataController();
 
     void runSensorThread();
+    void runCrashDetectionThread();
 
     double strToDouble(char* str);
     int openPort();
     void dumpData();
+
+    SensorData getDataPacket();
 
     Q_INVOKABLE QStringList getList();
 
@@ -27,8 +46,9 @@ public slots:
 
 signals:
     void sendToQml();
+    void sendToCrashDetection(const SensorData &data);
 
-private:
+protected:
     QQmlApplicationEngine _Engine;
     QList<QString> _List;
     double _AccelerometerX;

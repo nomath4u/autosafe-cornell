@@ -1,6 +1,6 @@
 #include "crashdetectionthread.h"
 
-CrashDetectionThread::CrashDetectionThread()
+CrashDetectionThread::CrashDetectionThread(QObject *)
 {
 
 }
@@ -8,5 +8,16 @@ CrashDetectionThread::CrashDetectionThread()
 CrashDetectionThread::~CrashDetectionThread()
 {
 
+}
+
+void CrashDetectionThread::analyzeData(const SensorData &data)
+{
+
+}
+
+void CrashDetectionThread::run(){
+    forever{
+        //do stuff
+    }
 }
 
