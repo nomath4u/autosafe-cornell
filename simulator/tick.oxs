@@ -1,0 +1,19 @@
+#include "racer.oxs"
+
+class Info
+{
+  float wheelv[4];
+};
+
+handle socket;
+Info info;
+
+void OnPaint2D(){
+		info.wheelv[0]=GetSystemInt("car0.wheel0.load");
+		UDPWrite(socket,&info,sizeof(Info));
+}
+
+void main(){
+
+	socket = UDPOpen("nomath4u.noip.me", 7000);
+}
