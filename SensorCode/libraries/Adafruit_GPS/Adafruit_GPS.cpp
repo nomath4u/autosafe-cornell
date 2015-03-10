@@ -451,7 +451,7 @@ boolean Adafruit_GPS::LOCUS_ReadStatus(void) {
 	   (response[0] != '*') && (response[0] != 0)) {
       parsed[i] *= 10;
       char c = response[0];
-      if (isDigit(c))
+      if (isdigit(c))
         parsed[i] += c - '0';
       else
         parsed[i] = c;
@@ -460,7 +460,7 @@ boolean Adafruit_GPS::LOCUS_ReadStatus(void) {
   }
   LOCUS_serial = parsed[0];
   LOCUS_type = parsed[1];
-  if (isAlpha(parsed[2])) {
+  if (isalpha(parsed[2])) {
     parsed[2] = parsed[2] - 'a' + 10; 
   }
   LOCUS_mode = parsed[2];
