@@ -97,16 +97,24 @@ void loop() // run over and over again
     spacket.gyy = double(gy)/131;
     spacket.gyz = double(gz)/131; 
   
-    char c = GPS.read();
+    /*char c = GPS.read();
     if (GPS.newNMEAreceived()) {
       if (!GPS.parse(GPS.lastNMEA())) // this also sets the newNMEAreceived() flag to false
         return; // we can fail to parse a sentence in which case we should just wait for another
+    }*/
+    char c;
+    while(c = GPS.read()){
+      //if(GPS.newNMEAreceived()){
+        if(!GPS.parse(GPS.lastNMEA())){
+          //Serial.println("Dangit");
+        }
+      //}
     }
     // if millis() or timer wraps around, we'll just reset it
-    if (timer > millis()) timer = millis();
+    //if (timer > millis()) timer = millis();
      
     // approximately every 2 seconds or so, print out the current stats
-    if (millis() - timer > 2000) {
+    //if (millis() - timer > 2000) {
       timer = millis(); // reset the timer
       spacket.lat_degrees = GPS.latitudeDegrees;
       spacket.long_degrees = GPS.longitudeDegrees;
@@ -120,8 +128,9 @@ void loop() // run over and over again
       spacket.time.minute = GPS.minute;
       spacket.time.seconds = GPS.seconds;
   
-      delay(1000);
-    }
+      
+    //}
+      delay(1000);      
       int error = send_packet();
       //send_packet();
 }
