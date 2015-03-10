@@ -2,18 +2,33 @@
 
 class Info
 {
-  float wheelv[4];
+  float acc_x;
+  float acc_y;
+  float acc_z;
+  float rot_acc_x;
+  float rot_acc_y;
+  float rot_acc_z;
+  //float vel;
 };
 
 handle socket;
 Info info;
+string bleh;
+
 
 void OnPaint2D(){
-		info.wheelv[0]=GetSystemInt("car0.wheel0.load");
-		UDPWrite(socket,&info,sizeof(Info));
+		info.acc_x=GetSystemFloat("car0.telemetry.acc_x");
+		info.acc_y=GetSystemFloat("car0.telemetry.acc_y");
+		info.acc_z=GetSystemFloat("car0.telemetry.acc_z");
+		info.rot_acc_x=GetSystemFloat("car0.telemetry.rot_acc_x");
+		info.rot_acc_y=GetSystemFloat("car0.telemetry.rot_acc_y");
+		info.rot_acc_z=GetSystemFloat("car0.telemetry.rot_acc_z"); 
+		UDPWrite(socket,&info, sizeof(Info));
 }
 
 void main(){
 
 	socket = UDPOpen("nomath4u.noip.me", 7000);
+	//echo("In Onyx");
+	//echo(GetSharedString("shared"));
 }
