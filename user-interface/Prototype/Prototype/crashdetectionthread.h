@@ -18,15 +18,18 @@ class CrashDetectionThread : public QThread
     Q_OBJECT
     void run();
 
+private:
+    SensorData prevData;
+
 public:
     CrashDetectionThread(QObject *parent = 0);
     ~CrashDetectionThread();
 
 public slots:
-    void analyzeData(const SensorData &prev_data, const SensorData &data);
+    void analyzeData(const SensorData &data);
 
 signals:
-
+    void situationDetected(const QString msg);
 };
 
 #endif // CRASHDETECTIONTHREAD_H

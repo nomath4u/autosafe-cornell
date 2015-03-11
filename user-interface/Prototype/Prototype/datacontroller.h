@@ -8,8 +8,11 @@
 
 struct SensorData {
     double accelerometerX;
+    int roll;
     double accelerometerY;
+    int pitch;
     double accelerometerZ;
+    int yaw;
     double gyroX;
     double gyroY;
     double gyroZ;
@@ -37,6 +40,9 @@ public:
     double strToDouble(char* str);
     int openPort();
     void dumpData();
+    void getRoll();
+    void getPitch();
+    void getYaw();
 
     SensorData getDataPacket();
 
@@ -56,8 +62,11 @@ protected:
     QQmlApplicationEngine _Engine;
     QList<QString> _DiagnosticDataList;
     double _AccelerometerX;
+    int _Roll;
     double _AccelerometerY;
+    int _Pitch;
     double _AccelerometerZ;
+    int _Yaw;
     double _GyroX;
     double _GyroY;
     double _GyroZ;
@@ -75,7 +84,7 @@ protected:
     char *_OBDIICommand;
     int _OBDIIValue;
 
-    QList<QString> _Messages;
+    QList<QString> _MessageList;
 };
 
 #endif // DATA_H
