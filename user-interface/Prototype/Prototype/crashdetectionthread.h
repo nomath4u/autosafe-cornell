@@ -7,6 +7,12 @@
 #include <QThread>
 #include <datacontroller.h>
 
+#define ROLLOVER_MAX 90
+#define SPIN_MAX 100
+#define STOP_FORCE -3
+#define TBONE_FORCE 3
+
+
 class CrashDetectionThread : public QThread
 {
     Q_OBJECT
@@ -17,7 +23,7 @@ public:
     ~CrashDetectionThread();
 
 public slots:
-    void analyzeData(const SensorData &data);
+    void analyzeData(const SensorData &prev_data, const SensorData &data);
 
 signals:
 
