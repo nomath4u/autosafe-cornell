@@ -26,8 +26,8 @@ struct packet{
   int num_satellite;
   struct time time;
   struct date day;
-  int lat_degrees;
-  int long_degrees;
+  float lat_degrees;
+  float long_degrees;
   int knots;
   
   //String accel;
@@ -54,8 +54,9 @@ void setup()
      
     GPS.begin(9600);
   
-    GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
-    GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ); // 1 Hz update rate
+    GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
+    GPS.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ); // 1 Hz update rate
+    GPS.sendCommand(PMTK_API_SET_FIX_CTL_5HZ);
     GPS.sendCommand(PGCMD_ANTENNA);
 
     delay(1000);
@@ -103,34 +104,43 @@ void loop() // run over and over again
         return; // we can fail to parse a sentence in which case we should just wait for another
     }*/
     char c;
-    while(c = GPS.read()){
-      //if(GPS.newNMEAreceived()){
-        if(!GPS.parse(GPS.lastNMEA())){
+    while(1){
+      c = GPS.read();
+      if(c == '\n'){
+        if(GPS.newNMEAreceived()){
+        // Only want to do this at the end of the line.
+          if(!GPS.parse(GPS.lastNMEA())){
           //Serial.println("Dangit");
+          break;
+          }
+          else{ //Success
+            update_gps();
+            break;
+          }
         }
-      //}
+      }
     }
     // if millis() or timer wraps around, we'll just reset it
     //if (timer > millis()) timer = millis();
      
     // approximately every 2 seconds or so, print out the current stats
     //if (millis() - timer > 2000) {
-      timer = millis(); // reset the timer
-      spacket.lat_degrees = GPS.latitudeDegrees;
-      spacket.long_degrees = GPS.longitudeDegrees;
-      spacket.fix = GPS.fix;
-      spacket.num_satellite = GPS.satellites;
-      spacket.knots = GPS.speed;   
-      spacket.day.month = GPS.month;
-      spacket.day.day = GPS.day;
-      spacket.day.year = GPS.year;
-      spacket.time.hour = GPS.hour;
-      spacket.time.minute = GPS.minute;
-      spacket.time.seconds = GPS.seconds;
+//      timer = millis(); // reset the timer
+//      spacket.lat_degrees = GPS.latitudeDegrees;
+//      spacket.long_degrees = GPS.longitudeDegrees;
+//      spacket.fix = GPS.fix;
+//      spacket.num_satellite = GPS.satellites;
+//      spacket.knots = GPS.speed;   
+//      spacket.day.month = GPS.month;
+//      spacket.day.day = GPS.day;
+//      spacket.day.year = GPS.year;
+//      spacket.time.hour = GPS.hour;
+//      spacket.time.minute = GPS.minute;
+//      spacket.time.seconds = GPS.seconds;
   
       
     //}
-      delay(1000);      
+      delay(100);      
       int error = send_packet();
       //send_packet();
 }
@@ -154,6 +164,21 @@ int send_packet(){
   Serial.print(spacket.gyy); Serial.print(",");
   Serial.println(spacket.gyz);
   return 0;
+}
+
+void update_gps(){
+      spacket.lat_degrees = GPS.latitudeDegrees;
+      spacket.long_degrees = GPS.longitudeDegrees;
+      spacket.fix = GPS.fix;
+      spacket.num_satellite = GPS.satellites;
+      spacket.knots = GPS.speed;   
+      spacket.day.month = GPS.month;
+      spacket.day.day = GPS.day;
+      spacket.day.year = GPS.year;
+      spacket.time.hour = GPS.hour;
+      spacket.time.minute = GPS.minute;
+      spacket.time.seconds = GPS.seconds;
+
 }
 
 
