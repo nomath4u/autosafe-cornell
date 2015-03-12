@@ -8,6 +8,7 @@
 import sys
 from socket import *
 import struct
+import time
 
 ECHO_PORT = 50000 + 7
 BUFSIZE = 1024
@@ -59,10 +60,15 @@ def server():
 	s = socket(AF_INET, SOCK_DGRAM)
 	s.bind(('', port))
 	print 'udp logger server ready'
+	old_time = time.time()
+	new_time = time.time()
 	while 1:
 		data, addr = s.recvfrom(BUFSIZE)
-		packet = Packet(struct.unpack('ffffff', data))
-		packet.print_packet()
-		packet.write_packet()
+		new_time = time.time()
+		if(new_time - old_time >= .1): #It has been as close to 1 second as we can get
+			packet = Packet(struct.unpack('ffffff', data))
+			packet.print_packet()
+			packet.write_packet()
+			old_time = new_time
 
 main()
