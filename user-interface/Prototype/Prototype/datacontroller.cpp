@@ -112,11 +112,13 @@ void DataController::parseData(char *buffer){
 }
 
 void DataController::getRoll(){
-    _Roll = (atan(_AccelerometerX/(sqrt((_AccelerometerY*_AccelerometerY) + (_AccelerometerZ*_AccelerometerZ)))) * 180) / M_PI;
+    _Roll = atan2(_AccelerometerY, _AccelerometerX) * 180 / M_PI;
+    //_Roll = (atan(_AccelerometerX/(sqrt((_AccelerometerY*_AccelerometerY) + (_AccelerometerZ*_AccelerometerZ)))) * 180) / M_PI;
 }
 
 void DataController::getPitch(){
-   _Pitch = (atan(_AccelerometerY/(sqrt((_AccelerometerX*_AccelerometerX) + (_AccelerometerZ*_AccelerometerZ)))) * 180) / M_PI;
+    _Pitch = atan2(_AccelerometerX, sqrt((_AccelerometerY * _AccelerometerY) + (_AccelerometerZ * _AccelerometerZ))) * 180 / M_PI;
+    //_Pitch = (atan(_AccelerometerY/(sqrt((_AccelerometerX*_AccelerometerX) + (_AccelerometerZ*_AccelerometerZ)))) * 180) / M_PI;
 }
 
 void DataController::getYaw(){
