@@ -15,8 +15,8 @@
 #define one_zero 2
 #define one_one 3
 
-#define OBDRX 10
-#define OBDTX 11
+#define OBDRX 7
+#define OBDTX 8
 #define NUMCOMMANDS 2
 
 typedef struct packet packet;
@@ -154,16 +154,16 @@ int concatenate(int x, int y){
 //previous value to compare to the new value 
 //***********************************************************************
 int deal_with_encoder(void){
+  int pin_one = 0;
   int pin_two = 0;
-  int pin_three = 0;
   int encoder = 0;
   int spin = NONE;
   static int old_encoder = 0;
     
+  pin_one = digitalRead(1);
   pin_two = digitalRead(2);
-  pin_three = digitalRead(3);
     
-  encoder = concatenate(pin_two,pin_three); 
+  encoder = concatenate(pin_one,pin_two); 
 
   switch(encoder){
     case 0:
@@ -218,7 +218,7 @@ void loop()
   //Serial.println(spacket.spin);
   //Serial.print("Switch: ");
   if(depressed == 1);{
-    Serial.println("Not Pressed");
+    //Serial.println("Not Pressed");
     spacket.pressed = 0;
   }
   if (depressed != lastButtonState) {    
@@ -229,7 +229,7 @@ void loop()
     if (depressed != buttonState) {  // if the button state has changed:
       buttonState = depressed;
       if(depressed == 0){
-        Serial.println("Pressed");
+        //Serial.println("Pressed");
         spacket.pressed = 1;
       }
     }
@@ -251,10 +251,11 @@ void loop()
   spacket.gyz = double(gz)/131; 
  
   char c;
+  if(GPS.newNMEAreceived()){
   while(1){
     c = GPS.read();
     if(c == '\n'){
-      if(GPS.newNMEAreceived()){
+      //if(GPS.newNMEAreceived()){
       // Only want to do this at the end of the line.
         if(!GPS.parse(GPS.lastNMEA())){
         //Serial.println("Dangit");
@@ -269,7 +270,7 @@ void loop()
   }
   
   //OBD-II
-  /*obd2.flush(); //Just in case
+  obd2.flush(); //Just in case
   obd2.println(commands[command_index]); //Vehicle speed command
   //Serial.println(commands[command_index]); //Testing what I'm sending out
   getResponse(); //Responds first with the command you sent
@@ -296,7 +297,7 @@ void loop()
   if(command_index >= NUMCOMMANDS){ //Just so we don't accidentally overflow the int if it was running for a long time
     command_index = 0;
   }
-  */
+  
   delay(100);      
   int error = send_packet();
 }
