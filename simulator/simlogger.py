@@ -12,6 +12,7 @@ import struct
 ECHO_PORT = 50000 + 7
 BUFSIZE = 1024
 filehandle = sys.argv[2]
+gravity = 9.8 #because it comes out in m/s^2 and we want G's
 
 class Packet():
 	acc_x = 0.0
@@ -22,9 +23,9 @@ class Packet():
 	ret_acc_z = 0.0
 	
 	def __init__(self, tup):
-		self.acc_x = tup[0]
-		self.acc_y = tup[1]
-		self.acc_z = tup[2]
+		self.acc_x = tup[0]/gravity
+		self.acc_y = tup[1]/gravity
+		self.acc_z = tup[2]/gravity
 		self.ret_acc_x = tup[3]
 		self.ret_acc_y = tup[4]
 		self.ret_acc_z = tup[5]
