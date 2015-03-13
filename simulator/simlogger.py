@@ -45,7 +45,8 @@ class Packet():
 		out_socket = socket(AF_INET, SOCK_DGRAM)
 		out_port = 7001
 		out_socket.bind(('', out_port))
-		out_socket.sendto("HI!", (options.host_address,int(options.out_port)))
+		#out_socket.sendto("HI!", (options.host_address,int(options.out_port)))
+		out_socket.sendto(("{0},{1},{2},{3},{4},{5}".format(self.acc_x, self.acc_y, self.acc_z, self.ret_acc_x, self.ret_acc_y, self.ret_acc_z)),(options.host_address,int(options.out_port)))
 
 def main():
 	parser = OptionParser()
@@ -80,11 +81,11 @@ def server(options):
 	old_time = time.time()
 	new_time = time.time()
 	while 1:
-		#data, addr = s.recvfrom(BUFSIZE)
+		data, addr = s.recvfrom(BUFSIZE)
 		new_time = time.time()
 		if(new_time - old_time >= .1): #It has been as close to 1 second as we can get
-			#packet = Packet(struct.unpack('ffffff', data))
-			packet = Packet((44,44,44,44,44,44))
+			packet = Packet(struct.unpack('ffffff', data))
+			#packet = Packet((44,44,44,44,44,44))
 			#packet.print_packet()
 			packet.write_packet(options)
 			packet.send_packet(options)
