@@ -7,7 +7,7 @@
 #include <QThread>
 #include <datacontroller.h>
 
-#define ROLLOVER_MAX 1
+#define ROLLOVER_MAX 7
 #define SPIN_MAX 100
 #define STOP_FORCE -3
 #define TBONE_FORCE 3
@@ -20,7 +20,8 @@ class CrashDetectionThread : public QThread
     SensorData parseData(char *buffer);
 
 private:
-    SensorData prevData;
+    //QList prevData;
+
     void complementaryFilter(SensorData data);
 
 public:
