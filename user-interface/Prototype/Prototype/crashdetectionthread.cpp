@@ -46,7 +46,7 @@ void CrashDetectionThread::complementaryFilter(SensorData data)
 
 void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot called once we've parsed the data from the sensors*/
 {
-    complementaryFilter(data);
+    //complementaryFilter(data);
 
     /* check for rollover */
 
@@ -54,12 +54,13 @@ void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot 
     /* check for spinout */
 
 
-//    if (data.roll > ROLLOVER_MAX){
-//        qDebug() << "Looks like the vehicle is rolling";
-//    }
-//    if (data.pitch > ROLLOVER_MAX){
-//        qDebug() << "Looks like the vehicle is flipping";
-//    }
+    if ((data.accelerometerX * 10) >= ROLLOVER_MAX){
+        qDebug() << "Looks like the vehicle is rolling";
+    }
+    qDebug() << abs((data.accelerometerY * 10));
+    if (abs((data.accelerometerY * 10)) >= ROLLOVER_MAX){
+        qDebug() << "Looks like the vehicle is flipping";
+    }
 
 //    if (data.gyroZ < STOP_FORCE){
 //        qDebug() << "Looks like the vehical has colidded";
@@ -71,7 +72,7 @@ void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot 
     //do some comparisons to the previous data?
 
     //save the data
-    prevData = data;
+    //prevData.append(data;
 }
 
 void CrashDetectionThread::run(){
