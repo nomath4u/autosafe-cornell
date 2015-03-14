@@ -19,6 +19,12 @@
 #define OBDTX 8
 #define NUMCOMMANDS 2
 
+//Buffer for UART
+#define RX_BUFFER_SIZE 255
+static volatile uint8_t rx_buffer[RX_BUFFER_SIZE];
+static volatile uint8_t rx_buffer_head = 0;
+static volatile uint8_t rx_buffer_tail = 0;
+
 typedef struct packet packet;
 
 struct date{
@@ -53,7 +59,7 @@ struct packet{
   double gyz;
   /*OBD-II*/
   String name;
-  int obdval;
+  long obdval;
   //encoder
   int spin;
   int pressed;
@@ -81,8 +87,9 @@ char rxData[20];
 int rxIndex=0;
 int vehicleRPM=0; //Used as an example until we decide on commands
 int command_index = 0 ; //For keeping track of iterations through loop
-//HardwareSerial obd2(OBDRX,OBDTX);
-SoftwareSerial obd2(OBDRX,OBDTX);
+//HardwareSerial obd2(Serial3);
+//SoftwareSerial obd2(OBDRX,OBDTX);
+HardwareSerial *obd2 = &Serial3;
 //command format is MSByte = Mode LSByte = Device
 char commands [NUMCOMMANDS][5] = {"010C", "010D"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
 //This way we can use a case statement based on how many times through the command loop we have gone to get the name
@@ -111,9 +118,10 @@ void setup(){
   Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
   //OBDII
   Serial.println("Initializing OBDII connection");
-  obd2.begin(9600);
+  obd2->begin(9600);
   delay(1500); //Have to give it a second to fire up, adapted value may be able to decrease
-  obd2.println("ATZ"); //Get the bus ready
+  obd2->println("ATZ"); //Get the bus ready
+ 
   delay(2000); //Same as before
   
   //GPS
@@ -121,8 +129,9 @@ void setup(){
   Serial.println("Initializing GPS!");
      
   GPS.begin(9600);  
-  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
-  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ); // 1 Hz update rate
+  //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
+  GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
+  GPS.sendCommand(PMTK_SET_NMEA_UPDATE_5HZ); // 1 Hz update rate
   GPS.sendCommand(PMTK_API_SET_FIX_CTL_5HZ);
   GPS.sendCommand(PGCMD_ANTENNA);
 
@@ -251,12 +260,15 @@ void loop()
   spacket.gyz = double(gz)/131; 
  
   char c;
-  if(GPS.newNMEAreceived()){
+  //if(GPS.newNMEAreceived()){
   while(1){
+    //delay(1);
+    if(Serial2.available()){
     c = GPS.read();
-    if(c == '\n'){
-      //if(GPS.newNMEAreceived()){
+    if(GPS.newNMEAreceived()){
+    //if(c == '\n'){
       // Only want to do this at the end of the line.
+        //Serial.println(GPS.lastNMEA());
         if(!GPS.parse(GPS.lastNMEA())){
         //Serial.println("Dangit");
         break;
@@ -267,14 +279,18 @@ void loop()
         }
       }
     }
-  }
+    }
+  //}
   
   //OBD-II
-  obd2.flush(); //Just in case
-  obd2.println(commands[command_index]); //Vehicle speed command
+  obd2->flush(); //Just in case
+  obd2->println(commands[command_index]); //Vehicle speed command
   //Serial.println(commands[command_index]); //Testing what I'm sending out
-  getResponse(); //Responds first with the command you sent
-  getResponse(); //The actual information we want
+  
+  //getResponse(); //Responds first with the command you sent
+  //getResponse(); //The actual information we want
+  //Serial.println(rxData);
+  
   switch(command_index){
     case RPM:
       //Serial.println("Do RPM stuff here");
@@ -292,7 +308,8 @@ void loop()
       Serial.println("This shoudln't happen");
   }  
   //delay(100); //So we don't query the CANbus too fast and cause a buffer overflow
-  //obd2.flush();
+  obd2->flush();
+  clear_rx();
   command_index++;
   if(command_index >= NUMCOMMANDS){ //Just so we don't accidentally overflow the int if it was running for a long time
     command_index = 0;
@@ -312,11 +329,11 @@ void getResponse(void){
   while(inChar != '\r'){ 
     //while(1){
     //If a character comes in on the serial port, we need to act on it.
-    if(obd2.available() > 0){
+    if(obd2->available() > 0){
       //Start by checking if we've received the end of message character ('\r').
-      if(obd2.peek() == '\r'){
+      if(obd2->peek() == '\r'){
         //Clear the Serial buffer
-        inChar=obd2.read();
+        inChar=obd2->read();
         //Put the end of string character on our data string
         rxData[rxIndex]='\0';
         //Reset the buffer index so that the next character goes back at the beginning of the string.
@@ -325,7 +342,7 @@ void getResponse(void){
       //If we didn't get the end of message character, just add the new character to the string.
       else{
         //Get the new character from the Serial port.
-        inChar = obd2.read();
+        inChar = obd2->read();
         //Serial.print(inChar);
         //Add the new character to the string, and increment the index variable.
         rxData[rxIndex++]=inChar;
@@ -372,5 +389,11 @@ void update_gps(){
   spacket.time.hour = GPS.hour;
   spacket.time.minute = GPS.minute;
   spacket.time.seconds = GPS.seconds;
-}
+}  
 
+void clear_rx(){
+  int i = 0;
+  for(i = 0; i < 20; i++){
+    rxData[i] = 0;
+  }
+}
