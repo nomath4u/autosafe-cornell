@@ -1,3 +1,6 @@
 galileo-debian/loopback.img
 galileo-debian/SD_LINUX_INTEL/image-full-clanton.ext3
 *.o
+user-interface/Prototype/build-Prototype-Desktop_Qt_5_4_0_GCC_64bit-Debug/
+*.user.*
+*.user
