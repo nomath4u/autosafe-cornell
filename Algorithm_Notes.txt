@@ -9,3 +9,16 @@ Types of Acceleration: http://quest.nasa.gov/saturn/qa/new/Effects_of_speed_and_
 Classic Article on Human Tolerance to Abrupt Accelerations: 
 http://www.dtic.mil/dtic/tr/fulltext/u2/708916.pdf
 
+Sensor fusion topics:
+
+--this is what I tried to use in our code: http://www.pieter-jan.com/node/11
+
+this may be really helpful: http://diydrones.com/profiles/blogs/705844%3ABlogPost:23188
+
+http://www.pieter-jan.com/node/7
+
+http://tutorial.cytron.com.my/2012/01/10/measuring-tilt-angle-with-gyro-and-accelerometer/
+
+http://theboredengineers.com/2012/09/the-quadcopter-get-its-orientation-from-sensors/
+
+http://stackoverflow.com/questions/1586658/combine-gyroscope-and-accelerometer-data

@@ -42,15 +42,12 @@ void DataController::parseData(char *buffer){
     for (int i=0; token != NULL; i++) {
         if (i == 0) {
             _AccelerometerX = strToDouble(token);
-            getRoll();
         }
         else if (i == 1) {
             _AccelerometerY = strToDouble(token);
-            getPitch();
         }
         else if (i == 2) {
             _AccelerometerZ = strToDouble(token);
-            getYaw();
         }
         else if (i == 3) {
             _GyroX = strToDouble(token);
@@ -95,7 +92,7 @@ void DataController::parseData(char *buffer){
             _Speed = atoi(token);
         }
         else if (i == 17) {
-            strcpy(_OBDIICommand, token);
+            //strcpy(_OBDIICommand, token);
         }
         else if (i == 18) {
             _OBDIIValue = atoi(token);
@@ -108,31 +105,14 @@ void DataController::parseData(char *buffer){
     SensorData data = getDataPacket();
     emit sendToCrashDetection(data);
 
-    dumpData();
-}
-
-void DataController::getRoll(){
-    _Roll = atan2(_AccelerometerY, _AccelerometerX) * 180 / M_PI;
-    //_Roll = (atan(_AccelerometerX/(sqrt((_AccelerometerY*_AccelerometerY) + (_AccelerometerZ*_AccelerometerZ)))) * 180) / M_PI;
-}
-
-void DataController::getPitch(){
-    _Pitch = atan2(_AccelerometerX, sqrt((_AccelerometerY * _AccelerometerY) + (_AccelerometerZ * _AccelerometerZ))) * 180 / M_PI;
-    //_Pitch = (atan(_AccelerometerY/(sqrt((_AccelerometerX*_AccelerometerX) + (_AccelerometerZ*_AccelerometerZ)))) * 180) / M_PI;
-}
-
-void DataController::getYaw(){
-    _Yaw = (atan(sqrt((_AccelerometerX*_AccelerometerX) + (_AccelerometerY*_AccelerometerY))/ _AccelerometerZ) * 180) / M_PI;
+    //dumpData();
 }
 
 void DataController::dumpData(){
 
     qDebug() << "Accelerometer X: "  << _AccelerometerX;
-    qDebug() << "Roll: "             << _Roll;
     qDebug() << "Accelerometer Y: "  << _AccelerometerY;
-    qDebug() << "Pitch: "            << _Pitch;
     qDebug() << "Accelerometer Z: "  << _AccelerometerZ;
-    qDebug() << "Yaw: "              << _Yaw;
     qDebug() << "Gyro X: "           << _GyroX;
     qDebug() << "Gyro Y: "           << _GyroY;
     qDebug() << "Gyro Z: "           << _GyroZ;
@@ -159,6 +139,11 @@ QStringList DataController::getList()
     _DiagnosticDataList.append("Accelerometer X: " + QString::number(_AccelerometerX));
     _DiagnosticDataList.append("Accelerometer Y: " + QString::number(_AccelerometerY));
     _DiagnosticDataList.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
+    _DiagnosticDataList.append("Gyro X: " + QString::number(_GyroX));
+    _DiagnosticDataList.append("Gyro Y: " + QString::number(_GyroY));
+    _DiagnosticDataList.append("Gyro Z: " + QString::number(_GyroZ));
+
+
     return _DiagnosticDataList;
 }
 
@@ -170,11 +155,8 @@ SensorData DataController::getDataPacket(){
     SensorData data;
 
     data.accelerometerX = _AccelerometerX;
-    data.roll = _Roll;
     data.accelerometerY = _AccelerometerY;
-    data.pitch = _Pitch;
     data.accelerometerZ = _AccelerometerZ;
-    data.yaw = _Yaw;
     data.gyroX = _GyroX;
     data.gyroY = _GyroY;
     data.gyroZ = _GyroZ;

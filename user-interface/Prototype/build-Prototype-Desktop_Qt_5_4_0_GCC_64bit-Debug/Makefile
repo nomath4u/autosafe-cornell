@@ -67,7 +67,8 @@ OBJECTS       = main.o \
 		moc_networkthread.o \
 		moc_crashdetectionthread.o \
 		moc_datacontroller.o
-DIST          = /home/fs/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
+DIST          = ../Prototype/incidentData.txt \
+		/home/fs/Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/fs/Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf \
 		/home/fs/Qt/5.4/gcc_64/mkspecs/common/unix.conf \
 		/home/fs/Qt/5.4/gcc_64/mkspecs/common/linux.conf \
@@ -1266,7 +1267,10 @@ crashdetectionthread.o: ../Prototype/crashdetectionthread.cpp ../Prototype/crash
 		/home/fs/Qt/5.4/gcc_64/include/QtQml/qqmlerror.h \
 		/home/fs/Qt/5.4/gcc_64/include/QtQml/qqmldebug.h \
 		/home/fs/Qt/5.4/gcc_64/include/QtQml/QQmlListProperty \
-		/home/fs/Qt/5.4/gcc_64/include/QtQml/qqmllist.h
+		/home/fs/Qt/5.4/gcc_64/include/QtQml/qqmllist.h \
+		/home/fs/Qt/5.4/gcc_64/include/QtCore/QFile \
+		/home/fs/Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		/home/fs/Qt/5.4/gcc_64/include/QtCore/qfiledevice.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o crashdetectionthread.o ../Prototype/crashdetectionthread.cpp
 
 datacontroller.o: ../Prototype/datacontroller.cpp ../Prototype/datacontroller.h \

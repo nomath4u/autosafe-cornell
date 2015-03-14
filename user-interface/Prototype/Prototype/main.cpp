@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 
     DataController appData;
     appData.runSensorThread();
-    //appData.runCrashDetectionThread();
+    appData.runCrashDetectionThread();
     //appData.runNetworkThread();
 
     engine.rootContext()->setContextProperty("appData", &appData);

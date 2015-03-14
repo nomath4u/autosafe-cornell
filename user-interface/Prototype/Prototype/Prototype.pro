@@ -24,3 +24,6 @@ HEADERS += \
 
 
 LIBS += -L/usr/include/openssl -lcrypto
+
+DISTFILES += \
+    incidentData.txt
