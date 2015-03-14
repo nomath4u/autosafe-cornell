@@ -13,7 +13,7 @@ while getopts csx option
      in
          s) ip=1;;
          c) ip=2;;
-         x) start network-manager
+         x) start network-manager; exit 0;
      esac
  done
 
