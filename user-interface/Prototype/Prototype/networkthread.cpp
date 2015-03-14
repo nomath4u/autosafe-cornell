@@ -206,11 +206,11 @@ void NetworkThread::run(){
 
 
         // Parse Message and do stuff
-        if (buf[0] == '!') {
+        if (mess.at(0) == '!') {
             printf("Crash!\n");
             fflush(stdout);
-            send_message("10.0.0.2", "OH NO!");
-            send_message("10.0.0.3", "OH NO!");
+            //send_message("10.0.0.2", "OH NO!");
+            //send_message("10.0.0.3", "OH NO!");
             //exit(1);
 
             emit messageReceived("Warning: crash ahead!");
