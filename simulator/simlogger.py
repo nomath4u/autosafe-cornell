@@ -43,7 +43,8 @@ class Packet():
 		f = open(options.filename, 'a+')
 		f.write("{0},{1},{2},{3},{4},{5}".format(self.acc_x, self.acc_y, self.acc_z, self.ret_acc_x, self.ret_acc_y, self.ret_acc_z))
 		#Need to put the velocity and rpm in the right spots.
-		f.write(",0,0,0,0,0,0,0,0,0,0,0,0,0\n")
+		f.write(",0,0,0,0,0,0,0,0,0,0,")
+		f.write("{0},RPM,{1}\n".format(self.velocity, self.rpm))
 		f.close()
 	
 	def send_packet(self, options):
@@ -51,7 +52,7 @@ class Packet():
 		out_port = 7001
 		out_socket.bind(('', out_port))
 		#out_socket.sendto("HI!", (options.host_address,int(options.out_port)))
-		out_socket.sendto(("{0},{1},{2},{3},{4},{5}".format(self.acc_x, self.acc_y, self.acc_z, self.ret_acc_x, self.ret_acc_y, self.ret_acc_z)),(options.host_address,int(options.out_port)))
+		out_socket.sendto(("{0},{1},{2},{3},{4},{5},0,0,0,0,0,0,0,0,0,0,{6},RPM,{7}\n".format(self.acc_x, self.acc_y, self.acc_z, self.ret_acc_x, self.ret_acc_y, self.ret_acc_z, self.velocity, self.rpm)),(options.host_address,int(options.out_port)))
 
 def main():
 	parser = OptionParser()
