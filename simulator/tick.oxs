@@ -8,12 +8,17 @@ class Info
   float rot_acc_x;
   float rot_acc_y;
   float rot_acc_z;
-  //float vel;
+  float velocity;
+  float rpm;
 };
 
 handle socket;
 Info info;
 string bleh;
+
+
+
+
 
 
 void OnPaint2D(){
@@ -23,6 +28,9 @@ void OnPaint2D(){
 		info.rot_acc_x=GetSystemFloat("car0.telemetry.rot_acc_x");
 		info.rot_acc_y=GetSystemFloat("car0.telemetry.rot_acc_y");
 		info.rot_acc_z=GetSystemFloat("car0.telemetry.rot_acc_z"); 
+		info.velocity = GetSystemFloat("car0.audio.velocity");
+		//info.velocity = 7.3;
+		info.rpm = GetSystemFloat("car0.audio.engine_rpm");
 		UDPWrite(socket,&info, sizeof(Info));
 }
 
