@@ -75,42 +75,45 @@ void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot 
     //prevData.append(data;
 }
 
-void CrashDetectionThread::run(){
-    forever {
-        //run thread
-    }
-}
-
-
 //void CrashDetectionThread::run(){
-
-//    //hacky code for week 10 checkoffs - reading from simulation output
-//    qDebug() << "in CrashDetectionThread::run()";
-
-//    SensorData data;
-//    char buf[128];
-//    int n;
-//    int fd;
-//    int lineCount;
-
-//    fd = open("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
-
-//    n = 1;
-//    lineCount = 0;
-
-//    while(n > 0){
-//        n = read(fd, &buf, sizeof(buf));
-//        lineCount++;
-//        if(lineCount % 20 == 0){
-//            qDebug() << "\n<----- 2 SECONDS PASSED------>\n";
-//        }
-//        data = parseData(buf);
-//        dumpData(data);
-//        //analyze data
+//    forever {
+//        //run thread
 //    }
-
-//    close(fd);
 //}
+
+//hacky code for week 10 checkoffs
+void CrashDetectionThread::run(){
+
+    //reading from simulation output
+    qDebug() << "in CrashDetectionThread::run()";
+
+    SensorData data;
+    char buf[128];
+    int n;
+    int fd;
+    int lineCount;
+
+    fd = open("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
+    if(fd == -1){
+        qDebug() << "failed to open file!";
+    }
+
+    n = 1;
+    lineCount = 0;
+
+    while(n > 0){
+        n = read(fd, &buf, sizeof(buf));
+        lineCount++;
+        if(lineCount % 20 == 0){
+            qDebug() << "\n<----- 2 SECONDS PASSED------>\n";
+        }
+        data = parseData(buf);
+        dumpData(data);
+        //analyze data
+    }
+
+    close(fd);
+}
 
 //hacky code for week 10 checkoffs
 double CrashDetectionThread::strToDouble(char* str)

@@ -18,6 +18,8 @@ class CrashDetectionThread : public QThread
     Q_OBJECT
     void run();
     SensorData parseData(char *buffer);
+    void dumpData(SensorData data);
+    double strToDouble(char* token);
 
 private:
     //QList prevData;
