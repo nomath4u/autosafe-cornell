@@ -79,3 +79,131 @@ void CrashDetectionThread::run(){
         //run thread
     }
 }
+
+
+//void CrashDetectionThread::run(){
+
+//    //hacky code for week 10 checkoffs - reading from simulation output
+//    qDebug() << "in CrashDetectionThread::run()";
+
+//    SensorData data;
+//    char buf[128];
+//    int n;
+//    int fd;
+//    int lineCount;
+
+//    fd = open("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
+
+//    n = 1;
+//    lineCount = 0;
+
+//    while(n > 0){
+//        n = read(fd, &buf, sizeof(buf));
+//        lineCount++;
+//        if(lineCount % 20 == 0){
+//            qDebug() << "\n<----- 2 SECONDS PASSED------>\n";
+//        }
+//        data = parseData(buf);
+//        dumpData(data);
+//        //analyze data
+//    }
+
+//    close(fd);
+//}
+
+//hacky code for week 10 checkoffs
+double CrashDetectionThread::strToDouble(char* str)
+{
+    char* endptr;
+    double value = strtod(str, &endptr);
+    if (*endptr) return 0;
+    return value;
+}
+
+//hacky code for week 10 checkoffs
+SensorData CrashDetectionThread::parseData(char *buffer){
+
+    SensorData data;
+    char *token = (char *)malloc(10*sizeof(char));
+    token = strtok(buffer, ",");
+    for (int i=0; token != NULL; i++) {
+        if (i == 0) {
+            data.accelerometerX = strToDouble(token);
+        }
+        else if (i == 1) {
+            data.accelerometerY = strToDouble(token);
+        }
+        else if (i == 2) {
+            data.accelerometerZ = strToDouble(token);
+        }
+        else if (i == 3) {
+            data.gyroX = strToDouble(token);
+        }
+        else if (i == 4) {
+            data.gyroY = strToDouble(token);
+        }
+        else if (i == 5) {
+            data.gyroZ = strToDouble(token);
+        }
+        else if (i == 6) {
+            data.fix = atoi(token);
+        }
+        else if (i == 7) {
+            data.satellites = atoi(token);
+        }
+        else if (i == 8) {
+            data.hour = (time_t)atoi(token);
+        }
+        else if (i == 9) {
+            data.minute = (time_t)atoi(token);
+        }
+        else if (i == 10) {
+            data.second = (time_t)atoi(token);
+        }
+        else if (i == 11) {
+            data.month = (time_t)atoi(token);
+        }
+        else if (i == 12) {
+            data.day = (time_t)atoi(token);
+        }
+        else if (i == 13) {
+            data.year = (time_t)atoi(token);
+        }
+        else if (i == 14) {
+            data.lattitude = strToDouble(token);
+        }
+        else if (i == 15) {
+            data.longitude = strToDouble(token);
+        }
+        else if (i == 16) {
+            data.speed = atoi(token);
+        }
+        else if (i == 17) {
+            //strcpy(data.command, token);
+        }
+        else if (i == 18) {
+            //data.value = atoi(token);
+        }
+
+        token = strtok(NULL, ",");
+    }
+
+    return data;
+}
+
+//hacky code for week 10 checkoffs
+void CrashDetectionThread::dumpData(SensorData data){
+
+    qDebug() << "Accelerometer X: "  << data.accelerometerX;
+    qDebug() << "Accelerometer Y: "  << data.accelerometerY;
+    qDebug() << "Accelerometer Z: "  << data.accelerometerZ;
+    qDebug() << "Gyro X: "           << data.gyroX;
+    qDebug() << "Gyro Y: "           << data.gyroY;
+    qDebug() << "Gyro Z: "           << data.gyroZ;
+//    qDebug() << "Time Hour: "        << (int)data.hour;
+//    qDebug() << "Time Minutes: "     << (int)data.minute;
+//    qDebug() << "Time Seconds: "     << (int)data.second;
+//    qDebug() << "Date Month: "       << (int)data.month;
+//    qDebug() << "Date Day: "         << (int)data.day;
+//    qDebug() << "Date Year: "        << (int)data.year;
+}
