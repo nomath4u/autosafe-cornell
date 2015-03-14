@@ -22,8 +22,12 @@ CrashDetectionThread::~CrashDetectionThread()
 //source: http://www.pieter-jan.com/node/11
 void CrashDetectionThread::complementaryFilter(SensorData data)
 {
-    float rollAcc, pitchAcc, rotationX = 0, rotationY = 0;
+    float rollAcc = 0;
+    float pitchAcc = 0;
+    float rotationX = 0;
+    float rotationY = 0;
 
+    //angle of rotation determined from accelerometer values
     rollAcc = atan2(data.accelerometerY, data.accelerometerZ) * 180 / M_PI;
     pitchAcc = atan2(data.accelerometerX, data.accelerometerY)  * 180 / M_PI;
 
@@ -33,15 +37,16 @@ void CrashDetectionThread::complementaryFilter(SensorData data)
     //take the integral of the gyro data: int(angularSpeed) = angle, combine with acceleration angle
     //dt assumes packets are sent every 100ms --is this accurate?
     //131 is our gyro sensitivit?? need to confirm this...
-    rotationX = 0.98 * ((data.gyroX / 131) * 0.001) + 0.02(roll);
-    rotationY = 0.98 * ((data.gyroY / 131) * 0.001) + 0.02(pitch);
+    rotationX = 0.98 * (data.gyroX / 131) * 0.001 + (0.02 * rollAcc);
+    rotationY = 0.98 * (data.gyroY / 131) * 0.001 + (0.02 * pitchAcc);
+
+    qDebug() << "Rotation x: " << rotationX;
+    qDebug() << "Rotation y: " << rotationY;
 }
 
 void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot called once we've parsed the data from the sensors*/
 {
     complementaryFilter(data);
-    qDebug() << "Roll: " << roll;
-    qDebug() << "Pitch: " << pitch;
 
     /* check for rollover */
 
