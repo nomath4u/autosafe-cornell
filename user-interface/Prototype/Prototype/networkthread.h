@@ -26,6 +26,8 @@ public:
     bool check_recv(QString s, QStringList* l);
     bool verify_hash(QString s, QString h);
 
+public slots:
+    void sendMessage(const QString &msg);
 
 signals:
     void bufferReady(char* buffer);

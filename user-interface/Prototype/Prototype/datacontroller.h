@@ -53,11 +53,13 @@ public:
 public slots:
     void parseData(char* buffer);
     void getMessage(const QString &msg);
+    void handleSituation(const QString &msg);
 
 signals:
     void updateDiagnosticInfo();
     void updateMessages();
     void sendToCrashDetection(const SensorData &data);
+    void sendMessageOverNetwork(const QString &msg);
 
 protected:
     QQmlApplicationEngine _Engine;

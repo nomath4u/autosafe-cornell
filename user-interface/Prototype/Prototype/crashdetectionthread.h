@@ -22,8 +22,6 @@ class CrashDetectionThread : public QThread
     double strToDouble(char* token);
 
 private:
-    //QList prevData;
-
     void complementaryFilter(SensorData data);
 
 public:
@@ -34,7 +32,7 @@ public slots:
     void analyzeData(const SensorData &data);
 
 signals:
-    void situationDetected(const QString msg);
+    void situationDetected(const QString &msg);
 };
 
 #endif // CRASHDETECTIONTHREAD_H

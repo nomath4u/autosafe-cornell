@@ -177,6 +177,16 @@ void DataController::getMessage(const QString &msg){
     emit updateMessages();
 }
 
+void DataController::handleSituation(const QString &msg){
+    _MessageList.append(msg);
+    emit updateMessages();
+
+    //confirm with driver that situation happened
+
+    //send out over network
+    emit sendMessageOverNetwork("!" + msg);
+}
+
 void DataController::runSensorThread()
 {
     qDebug() << "UIDataController: Running sensor thread.";
@@ -190,6 +200,7 @@ void DataController::runCrashDetectionThread()
     qDebug() << "DataController: Running crash detection thread.";
     CrashDetectionThread *crashDetectionThread = new CrashDetectionThread(this);
     connect(this, SIGNAL(sendToCrashDetection(SensorData)), crashDetectionThread, SLOT(analyzeData(SensorData)));
+    connect(crashDetectionThread, SIGNAL(situationDetected(QString)), this, SLOT(handleSituation(QString)));
     crashDetectionThread->start();
 }
 
@@ -198,5 +209,7 @@ void DataController::runNetworkThread()
     qDebug() << "Running Network thread.";
     NetworkThread *networkThread = new NetworkThread(this);
     connect(networkThread, SIGNAL(messageReceived(QString)), this, SLOT(getMessage(QString)));
+    connect(this, SIGNAL(sendMessageOverNetwork(QString)), networkThread, SLOT(sendMessage(QString)));
+
     networkThread->start();
 }

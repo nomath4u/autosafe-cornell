@@ -48,18 +48,19 @@ void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot 
 {
     //complementaryFilter(data);
 
-    /* check for rollover */
-
-
-    /* check for spinout */
-
-
     if ((data.accelerometerX * 10) >= ROLLOVER_MAX){
         qDebug() << "Looks like the vehicle is rolling";
     }
-    qDebug() << abs((data.accelerometerY * 10));
+
+    /* check for spinout */
     if (abs((data.accelerometerY * 10)) >= ROLLOVER_MAX){
         qDebug() << "Looks like the vehicle is flipping";
+    }
+
+    /* check for rollover */
+    if(data.accelerometerZ*10 <= -8 && data.accelerometerZ*10 >= -10){
+        qDebug() << "Vehicle has flipped!";
+        emit situationDetected("Vehicle has flipped!");
     }
 
 //    if (data.gyroZ < STOP_FORCE){
@@ -75,45 +76,46 @@ void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot 
     //prevData.append(data;
 }
 
-//void CrashDetectionThread::run(){
-//    forever {
-//        //run thread
-//    }
-//}
-
-//hacky code for week 10 checkoffs
 void CrashDetectionThread::run(){
-
-    //reading from simulation output
-    qDebug() << "in CrashDetectionThread::run()";
-
-    SensorData data;
-    char buf[128];
-    int n;
-    int fd;
-    int lineCount;
-
-    fd = open("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
-    if(fd == -1){
-        qDebug() << "failed to open file!";
+    forever {
+        //run thread
     }
-
-    n = 1;
-    lineCount = 0;
-
-    while(n > 0){
-        n = read(fd, &buf, sizeof(buf));
-        lineCount++;
-        if(lineCount % 20 == 0){
-            qDebug() << "\n<----- 2 SECONDS PASSED------>\n";
-        }
-        data = parseData(buf);
-        dumpData(data);
-        //analyze data
-    }
-
-    close(fd);
 }
+
+////hacky code for week 10 checkoffs
+//void CrashDetectionThread::run(){
+
+//    //reading from simulation output
+//    qDebug() << "in CrashDetectionThread::run()";
+
+//    SensorData data;
+//    char buf[128];
+//    int n;
+//    int fd;
+//    int lineCount;
+
+//    fd = open("/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
+//    //fd = open("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
+//    if(fd == -1){
+//        qDebug() << "failed to open file!";
+//    }
+
+//    n = 1;
+//    lineCount = 0;
+
+//    while(n > 0){
+//        n = read(fd, &buf, sizeof(buf));
+//        lineCount++;
+//        if(lineCount % 20 == 0){
+//            qDebug() << "\n<----- 2 SECONDS PASSED------>\n";
+//        }
+//        data = parseData(buf);
+//        dumpData(data);
+//        //analyze data
+//    }
+
+//    close(fd);
+//}
 
 //hacky code for week 10 checkoffs
 double CrashDetectionThread::strToDouble(char* str)
