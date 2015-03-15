@@ -5,10 +5,12 @@
 #include <QString>
 #include <QDebug>
 #include <QThread>
+#include <QList>
+
 #include <datacontroller.h>
 
 #define ROLLOVER_MAX 7
-#define SPIN_MAX 100
+#define SPIN_MAX 35
 #define STOP_FORCE -3
 #define TBONE_FORCE 3
 
@@ -20,6 +22,7 @@ class CrashDetectionThread : public QThread
     SensorData parseData(char *buffer);
     void dumpData(SensorData data);
     double strToDouble(char* token);
+    QList<SensorData> prevData;
 
 private:
     void complementaryFilter(SensorData data);

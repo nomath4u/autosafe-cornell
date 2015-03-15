@@ -13,6 +13,9 @@ struct SensorData {
     double gyroX;
     double gyroY;
     double gyroZ;
+    double magX;
+    double magY;
+    double magZ;
     time_t hour;
     time_t minute;
     time_t second;
@@ -27,6 +30,8 @@ struct SensorData {
     char *command;
     int value;
 
+    double roll;
+    double pitch;
 };
 
 class DataController : public QObject
@@ -70,6 +75,9 @@ protected:
     double _GyroX;
     double _GyroY;
     double _GyroZ;
+    double _MagX;
+    double _MagY;
+    double _MagZ;
     int    _Satellites;
     time_t _Hour;
     time_t _Minute;

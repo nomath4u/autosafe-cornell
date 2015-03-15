@@ -58,43 +58,52 @@ void DataController::parseData(char *buffer){
         else if (i == 5) {
             _GyroZ = strToDouble(token);
         }
-        else if (i == 6) {
-            _PositionFix = atoi(token);
+        else if (i == 6){
+            _MagX = strToDouble(token);
         }
         else if (i == 7) {
-            _Satellites = atoi(token);
+            _MagY = strToDouble(token);
         }
         else if (i == 8) {
-            _Hour = (time_t)atoi(token);
+            _MagZ = strToDouble(token);
         }
         else if (i == 9) {
-            _Minute = (time_t)atoi(token);
+            _PositionFix = atoi(token);
         }
         else if (i == 10) {
-            _Second = (time_t)atoi(token);
+            _Satellites = atoi(token);
         }
         else if (i == 11) {
-            _Month = (time_t)atoi(token);
+            _Hour = (time_t)atoi(token);
         }
         else if (i == 12) {
-            _Day = (time_t)atoi(token);
+            _Minute = (time_t)atoi(token);
         }
         else if (i == 13) {
-            _Year = (time_t)atoi(token);
+            _Second = (time_t)atoi(token);
         }
         else if (i == 14) {
-            _CoordinatesLat = strToDouble(token);
+            _Month = (time_t)atoi(token);
         }
         else if (i == 15) {
-            _CoordinatesLong = strToDouble(token);
+            _Day = (time_t)atoi(token);
         }
         else if (i == 16) {
-            _Speed = atoi(token);
+            _Year = (time_t)atoi(token);
         }
         else if (i == 17) {
-            //strcpy(_OBDIICommand, token);
+            _CoordinatesLat = strToDouble(token);
         }
         else if (i == 18) {
+            _CoordinatesLong = strToDouble(token);
+        }
+        else if (i == 19) {
+            _Speed = atoi(token);
+        }
+        else if (i == 20) {
+            //strcpy(_OBDIICommand, token);
+        }
+        else if (i == 21) {
             _OBDIIValue = atoi(token);
         }
         token = strtok(NULL, ",");
@@ -116,6 +125,9 @@ void DataController::dumpData(){
     qDebug() << "Gyro X: "           << _GyroX;
     qDebug() << "Gyro Y: "           << _GyroY;
     qDebug() << "Gyro Z: "           << _GyroZ;
+    qDebug() << "Mag X: "            << _MagX;
+    qDebug() << "Mag Y: "            << _MagY;
+    qDebug() << "Mag Z: "            << _MagZ;
     qDebug() << "Position Fix: "     << _PositionFix;
     qDebug() << "Satellites: "       << _Satellites;
     qDebug() << "Time Hour: "        << (int)_Hour;
@@ -127,8 +139,8 @@ void DataController::dumpData(){
     qDebug() << "Lattitude: "        << _CoordinatesLat;
     qDebug() << "Longitude: "        << _CoordinatesLong;
     qDebug() << "Speed: "            << _Speed;
-    qDebug() << "OBDII Command: "    << _OBDIICommand;
-    qDebug() << "OBDII Value: "      << _OBDIIValue;
+    //qDebug() << "OBDII Command: "    << _OBDIICommand;
+    //qDebug() << "OBDII Value: "      << _OBDIIValue;
     qDebug() << "-------------------------------------------------";
 }
 
@@ -142,7 +154,9 @@ QStringList DataController::getList()
     _DiagnosticDataList.append("Gyro X: " + QString::number(_GyroX));
     _DiagnosticDataList.append("Gyro Y: " + QString::number(_GyroY));
     _DiagnosticDataList.append("Gyro Z: " + QString::number(_GyroZ));
-
+    _DiagnosticDataList.append("Mag X: " + QString::number(_MagX));
+    _DiagnosticDataList.append("Mag Y: " + QString::number(_MagY));
+    _DiagnosticDataList.append("Mag Z: " + QString::number(_MagZ));
 
     return _DiagnosticDataList;
 }
@@ -160,6 +174,9 @@ SensorData DataController::getDataPacket(){
     data.gyroX = _GyroX;
     data.gyroY = _GyroY;
     data.gyroZ = _GyroZ;
+    data.magX = _MagX;
+    data.magY = _MagY;
+    data.magZ = _MagZ;
     data.hour = _Hour;
     data.minute = _Minute;
     data.second = _Second;

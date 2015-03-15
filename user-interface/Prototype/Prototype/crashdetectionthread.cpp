@@ -24,56 +24,77 @@ void CrashDetectionThread::complementaryFilter(SensorData data)
 {
     float rollAcc = 0;
     float pitchAcc = 0;
-    float rotationX = 0;
-    float rotationY = 0;
 
-    //angle of rotation determined from accelerometer values
-    rollAcc = atan2(data.accelerometerY, data.accelerometerZ) * 180 / M_PI;
-    pitchAcc = atan2(data.accelerometerX, data.accelerometerY)  * 180 / M_PI;
+    if(prevData.isEmpty()){
+        data.roll = atan2(data.accelerometerY, data.accelerometerZ) * 180 / M_PI;
+        data.pitch  = atan2(data.accelerometerX, data.accelerometerY)  * 180 / M_PI;
+    }
 
     //complementary filter approximation - to account for drift over longer period of time...
-    //this should be outputting the angle of rotation about x and y in degrees...
-
     //take the integral of the gyro data: int(angularSpeed) = angle, combine with acceleration angle
-    //dt assumes packets are sent every 100ms --is this accurate?
-    //131 is our gyro sensitivit?? need to confirm this...
-    rotationX = 0.98 * (data.gyroX / 131) * 0.001 + (0.02 * rollAcc);
-    rotationY = 0.98 * (data.gyroY / 131) * 0.001 + (0.02 * pitchAcc);
+    if(!prevData.isEmpty()){
+        //angle of rotation determined from accelerometer values
+        rollAcc = atan2(data.accelerometerY, data.accelerometerZ) * 180 / M_PI;
+        pitchAcc = atan2(data.accelerometerX, data.accelerometerY)  * 180 / M_PI;
 
-    qDebug() << "Rotation x: " << rotationX;
-    qDebug() << "Rotation y: " << rotationY;
+        //dt assumes packets sent every 100ms
+        data.roll = (0.98 * (prevData.last().roll + data.gyroX * 0.001)) + (0.02 * rollAcc);
+        data.pitch = (0.98 * (prevData.last().pitch + data.gyroY * 0.001)) + (0.02 * pitchAcc);
+    }
+
+    /* only save last 100 data packets */
+    if(prevData.size() >= 100){
+        prevData.removeFirst();
+    }
+
+    prevData.append(data);
+
+//    qDebug() << "Roll: " << data.roll;
+//    qDebug() << "Pitch: " << data.pitch;
 }
 
 void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot called once we've parsed the data from the sensors*/
 {
-    //complementaryFilter(data);
-
+    /* naive checks for rollover */
     if ((data.accelerometerX * 10) >= ROLLOVER_MAX){
         qDebug() << "Looks like the vehicle is rolling";
     }
 
-    /* check for spinout */
     if (abs((data.accelerometerY * 10)) >= ROLLOVER_MAX){
         qDebug() << "Looks like the vehicle is flipping";
     }
 
-    /* check for rollover */
     if(data.accelerometerZ*10 <= -8 && data.accelerometerZ*10 >= -10){
         qDebug() << "Vehicle has flipped!";
         emit situationDetected("Vehicle has flipped!");
     }
 
-//    if (data.gyroZ < STOP_FORCE){
-//        qDebug() << "Looks like the vehical has colidded";
-//    }
-//    if (data.gyroX > abs(TBONE_FORCE)){
-//        qDebug() << "Looks like the vehical had been Tboned";
-//    }
+    /* check for spinout */
+    //normal driving - x: 20 y: 15 z: 25
+    //spinout test - x:20 y:20 z:50
 
-    //do some comparisons to the previous data?
+    if(data.gyroZ >= 35){
+       qDebug() << "You might be having a bad time.";
+    }
 
-    //save the data
-    //prevData.append(data;
+    if(!prevData.isEmpty()){
+        //average acceleration angle x/y
+        //average gyro angle
+
+        //we suspect spinning when the gyro is high
+            //if current acceleration angle is different the average --> we're turning
+                //not spinning
+            //if current acceleration angle is the same --> we're not turning
+                //spinning
+    }
+
+    //save last 3 packet data
+    if(prevData.size() >= 3){
+        prevData.removeFirst();
+    }
+
+    prevData.append(data);
+
 }
 
 void CrashDetectionThread::run(){
