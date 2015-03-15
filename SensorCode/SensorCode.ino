@@ -89,7 +89,7 @@ int vehicleRPM=0; //Used as an example until we decide on commands
 int command_index = 0 ; //For keeping track of iterations through loop
 //HardwareSerial obd2(Serial3);
 //SoftwareSerial obd2(OBDRX,OBDTX);
-HardwareSerial *obd2 = &Serial3;
+HardwareSerial *obd2 = &Serial1;
 //command format is MSByte = Mode LSByte = Device
 char commands [NUMCOMMANDS][5] = {"010C", "010D"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
 //This way we can use a case statement based on how many times through the command loop we have gone to get the name
@@ -283,12 +283,13 @@ void loop()
   //}
   
   //OBD-II
-  obd2->flush(); //Just in case
+  //obd2->flush(); //Just in case
+  obd2->clear();
   obd2->println(commands[command_index]); //Vehicle speed command
   //Serial.println(commands[command_index]); //Testing what I'm sending out
   
-  //getResponse(); //Responds first with the command you sent
-  //getResponse(); //The actual information we want
+  getResponse(); //Responds first with the command you sent
+  getResponse(); //The actual information we want
   //Serial.println(rxData);
   
   switch(command_index){
@@ -308,8 +309,9 @@ void loop()
       Serial.println("This shoudln't happen");
   }  
   //delay(100); //So we don't query the CANbus too fast and cause a buffer overflow
-  obd2->flush();
-  clear_rx();
+  //obd2->flush();
+  obd2->clear();
+  //clear_rx();
   command_index++;
   if(command_index >= NUMCOMMANDS){ //Just so we don't accidentally overflow the int if it was running for a long time
     command_index = 0;
