@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <math.h>
+#include <QFile>
 
 CrashDetectionThread::CrashDetectionThread(QObject *)
 {
@@ -65,36 +66,46 @@ void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot 
     }
 
     if(data.accelerometerZ*10 <= -8 && data.accelerometerZ*10 >= -10){
-        qDebug() << "Vehicle has flipped!";
+        qDebug() << "FLIP!";
         emit situationDetected("Vehicle has flipped!");
     }
 
     /* check for spinout */
-    //normal driving - x: 20 y: 15 z: 25
-    //spinout test - x:20 y:20 z:50
+    //normal driving gyro values - x: 20 y: 15 z: 25
+    //spinout test gyro values - x:20 y:20 z:50
 
-    if(data.gyroZ >= 35){
-       qDebug() << "You might be having a bad time.";
+    /* naive spinout catch... */
+
+    //we suspect spinning when the gyro is high
+    if(data.gyroZ >= SPIN_MAX){
+        qDebug() << "SPINOUT likely.";
+        emit situationDetected("Vehicle has spunout!");
+
+//        int avgAccAngle;
+//        if(!prevData.isEmpty()){
+//            avgAccAngle = (tan(prevData[0].accelerometerX/prevData[0].accelerometerY) + tan(prevData[1].accelerometerX/prevData[1].accelerometerY) + tan(prevData[2].accelerometerX/prevData[2].accelerometerY)) / 3;
+//        }
+
+//        //if current acceleration angle is different the average --> we're turning
+//        if(tan(data.accelerometerX/data.accelerometerY) != avgAccAngle){
+//            qDebug() << "We think we're turning.";
+//        }
+//        //if current acceleration angle is the same --> we're not turning
+//        else if(tan(data.accelerometerX/data.accelerometerY) == avgAccAngle){
+//            qDebug() << "Not turning, you're having a bad time!";
+//        }
     }
 
-    if(!prevData.isEmpty()){
-        //average acceleration angle x/y
-        //average gyro angle
+//    //save last 3 packet data
+//    if(prevData.size() >= 3){
+//        prevData.removeFirst();
+//    }
 
-        //we suspect spinning when the gyro is high
-            //if current acceleration angle is different the average --> we're turning
-                //not spinning
-            //if current acceleration angle is the same --> we're not turning
-                //spinning
+//    prevData.append(data);
+
+    else{
+        qDebug() << "normal driving";
     }
-
-    //save last 3 packet data
-    if(prevData.size() >= 3){
-        prevData.removeFirst();
-    }
-
-    prevData.append(data);
-
 }
 
 void CrashDetectionThread::run(){
@@ -103,116 +114,127 @@ void CrashDetectionThread::run(){
     }
 }
 
-////hacky code for week 10 checkoffs
+//hacky code for week 10 checkoffs -- using simulation data
 //void CrashDetectionThread::run(){
 
-//    //reading from simulation output
-//    qDebug() << "in CrashDetectionThread::run()";
-
 //    SensorData data;
-//    char buf[128];
-//    int n;
-//    int fd;
-//    int lineCount;
 
-//    fd = open("/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
-//    //fd = open("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt", O_RDONLY);
-//    if(fd == -1){
-//        qDebug() << "failed to open file!";
-//    }
+//    /* lab computer paths */
+//    //QString filename = "/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt";
+//    //QString filename = "/home/cornell/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/spinout.txt";
 
-//    n = 1;
-//    lineCount = 0;
+//    /* faith's home computer paths */
+//    //QString filename = "/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/roll.txt";
+//    QString filename = "/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/spinout.txt";
 
-//    while(n > 0){
-//        n = read(fd, &buf, sizeof(buf));
-//        lineCount++;
-//        if(lineCount % 20 == 0){
-//            qDebug() << "\n<----- 2 SECONDS PASSED------>\n";
+//    int lineNum = 0;
+//    QFile inputFile(filename);
+//    if(inputFile.open(QIODevice::ReadOnly)){
+
+//        QTextStream in(&inputFile);
+//        while(!in.atEnd()){
+
+//            QString line = in.readLine();
+//            lineNum++;
+//            //qDebug() << "Parsing line: " << lineNum;
+//            data = parseData(line);
+//            //dumpData(data);
+
+//            /* naive checks for rollover */
+//            if ((data.accelerometerX * 10) >= ROLLOVER_MAX){
+//                qDebug() << "Looks like the vehicle is rolling";
+//            }
+
+//            if (abs((data.accelerometerY * 10)) >= ROLLOVER_MAX){
+//                qDebug() << "Looks like the vehicle is flipping";
+//            }
+
+//            if(data.accelerometerZ*10 <= -8 && data.accelerometerZ*10 >= -10){
+//                qDebug() << "ROLLOVER LIKELY.";
+//                emit situationDetected("Vehicle has flipped!");
+//            }
+
+//            //max normal driving gyro values - x: 20 y: 15 z: 25
+//            //max spinout simulation gyro values - x:20 y:20 z:50
+
+//            /* naive spinout catch... */
+
+//            //we suspect spinning when the gyro is high
+//            if(abs(data.gyroZ) >= SPIN_MAX){
+//                qDebug() << "SPINOUT SUSPECTED.";
+
+//                /* smarter algorithm... not working... */
+//                int avgAccAngle;
+//                if(prevData.size() == 3){
+//                    avgAccAngle = (tan(prevData[0].accelerometerX/prevData[0].accelerometerY) + tan(prevData[1].accelerometerX/prevData[1].accelerometerY) + tan(prevData[2].accelerometerX/prevData[2].accelerometerY)) / 3;
+
+//                    //if current acceleration angle is different the average --> we're turning
+//                    if(tan(data.accelerometerX/data.accelerometerY) != avgAccAngle){
+//                        qDebug() << "We're probably just turning... false positive.";
+//                    }
+
+//                    //if current acceleration angle is the same --> we're not turning
+//                    if(tan(data.accelerometerX/data.accelerometerY) == avgAccAngle){
+//                        qDebug() << "Spinout... you're having a bad time!";
+//                    }
+
+//                }
+
+//                //save last 3 packet data
+//                if(prevData.size() >= 3){
+//                    prevData.removeFirst();
+//                }
+
+//                prevData.append(data);
+//            }
 //        }
-//        data = parseData(buf);
-//        dumpData(data);
-//        //analyze data
-//    }
 
-//    close(fd);
+//        inputFile.close();
+//    }
 //}
 
 //hacky code for week 10 checkoffs
-double CrashDetectionThread::strToDouble(char* str)
-{
-    char* endptr;
-    double value = strtod(str, &endptr);
-    if (*endptr) return 0;
-    return value;
-}
-
-//hacky code for week 10 checkoffs
-SensorData CrashDetectionThread::parseData(char *buffer){
+SensorData CrashDetectionThread::parseData(QString line){
 
     SensorData data;
-    char *token = (char *)malloc(10*sizeof(char));
-    token = strtok(buffer, ",");
-    for (int i=0; token != NULL; i++) {
+    QStringList splitLine = line.split(",");
+    //qDebug() << "line: " << splitLine;
+    //qDebug() << splitLine.size();
+    for(int i = 0; i < splitLine.size(); ++i){
+        //qDebug() << "item " << i << " : " << splitLine[i];
+
         if (i == 0) {
-            data.accelerometerX = strToDouble(token);
+            data.accelerometerX = splitLine[i].toDouble();
         }
         else if (i == 1) {
-            data.accelerometerY = strToDouble(token);
+            data.accelerometerY = splitLine[i].toDouble();
         }
         else if (i == 2) {
-            data.accelerometerZ = strToDouble(token);
+            data.accelerometerZ = splitLine[i].toDouble();
         }
         else if (i == 3) {
-            data.gyroX = strToDouble(token);
+            data.gyroX = splitLine[i].toDouble();
         }
         else if (i == 4) {
-            data.gyroY = strToDouble(token);
+            data.gyroY = splitLine[i].toDouble();
         }
         else if (i == 5) {
-            data.gyroZ = strToDouble(token);
-        }
-        else if (i == 6) {
-            data.fix = atoi(token);
-        }
-        else if (i == 7) {
-            data.satellites = atoi(token);
-        }
-        else if (i == 8) {
-            data.hour = (time_t)atoi(token);
-        }
-        else if (i == 9) {
-            data.minute = (time_t)atoi(token);
-        }
-        else if (i == 10) {
-            data.second = (time_t)atoi(token);
-        }
-        else if (i == 11) {
-            data.month = (time_t)atoi(token);
-        }
-        else if (i == 12) {
-            data.day = (time_t)atoi(token);
-        }
-        else if (i == 13) {
-            data.year = (time_t)atoi(token);
-        }
-        else if (i == 14) {
-            data.lattitude = strToDouble(token);
-        }
-        else if (i == 15) {
-            data.longitude = strToDouble(token);
-        }
-        else if (i == 16) {
-            data.speed = atoi(token);
-        }
-        else if (i == 17) {
-            //strcpy(data.command, token);
-        }
-        else if (i == 18) {
-            //data.value = atoi(token);
+            data.gyroZ = splitLine[i].toDouble();
         }
 
-        token = strtok(NULL, ",");
+//        else if (i == 6){
+//            data.magX = splitLine[i].toDouble();
+//        }
+//        else if (i == 7) {
+//            data.magY = splitLine[i].toDouble();
+//        }
+//        else if (i == 8) {
+//            data.magZ = splitLine[i].toDouble();
+//        }
+
+        else{
+            break;
+        }
     }
 
     return data;
@@ -227,10 +249,8 @@ void CrashDetectionThread::dumpData(SensorData data){
     qDebug() << "Gyro X: "           << data.gyroX;
     qDebug() << "Gyro Y: "           << data.gyroY;
     qDebug() << "Gyro Z: "           << data.gyroZ;
-//    qDebug() << "Time Hour: "        << (int)data.hour;
-//    qDebug() << "Time Minutes: "     << (int)data.minute;
-//    qDebug() << "Time Seconds: "     << (int)data.second;
-//    qDebug() << "Date Month: "       << (int)data.month;
-//    qDebug() << "Date Day: "         << (int)data.day;
-//    qDebug() << "Date Year: "        << (int)data.year;
+//    qDebug() << "Mag X: "            << data.magX;
+//    qDebug() << "Mag Y: "            << data.magY;
+//    qDebug() << "Mag Z: "            << data.magZ;
+
 }
