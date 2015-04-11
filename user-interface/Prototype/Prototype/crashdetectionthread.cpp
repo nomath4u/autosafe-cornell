@@ -108,6 +108,28 @@ void CrashDetectionThread::analyzeData(const SensorData &data) /*this is a slot 
     }
 }
 
+double CrashDetectionThread::getDirection() {
+    SensorData temp;
+    int avg_magx, avg_magy;
+    int size = prevData.size();
+    double direction;
+    if(prevData.isEmpty()){
+        qDebug() << "getDirection:Previous data list is empty.";
+    } else {
+        for(int i=0; i < size; ++i) {
+            temp = prevData.at(i);
+            avg_magx += temp.magX;
+            avg_magy += temp.magY;
+        }
+        avg_magx = avg_magx/size;
+        avg_magy = avg_magy/size;
+        direction = tan(avg_magy)/tan(avg_magx);
+        qDebug() << "Direction" << directio
+        return direction;
+    }
+    return -1;
+}
+
 void CrashDetectionThread::run(){
     forever {
         //run thread

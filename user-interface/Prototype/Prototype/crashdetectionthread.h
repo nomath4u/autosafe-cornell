@@ -25,7 +25,7 @@ class CrashDetectionThread : public QThread
 
 private:
     void complementaryFilter(SensorData data);
-
+    double getDirection();
 public:
     CrashDetectionThread(QObject *parent = 0);
     ~CrashDetectionThread();
