@@ -67,7 +67,9 @@ struct packet{
 
 /*Globals*/
 //Encoder
-const int buttonPin = 0;    // the number of the pushbutton pin
+const int buttonPin = 10; // the number of the pushbutton pin
+const int lencoder = 11;
+const int rencoder = 12;
 int buttonState;             // the current reading from the input pin
 int lastButtonState = LOW;   // the previous reading from the input pin
 long lastDebounceTime = 0;  // the last time the output pin was toggled
@@ -80,7 +82,7 @@ int16_t gx, gy, gz;
 int16_t mx, my, mz;
 
 //GPS
-Adafruit_GPS GPS(&Serial2);
+Adafruit_GPS GPS(&Serial3);
 
 //OBD-II
 char rxData[20];
@@ -101,8 +103,8 @@ enum cmd_names{ //The names of the commands with the same ordering as the comman
 packet spacket;
 
 void setup(){
-  pinMode(2, INPUT_PULLUP);
-  pinMode(3, INPUT_PULLUP);
+  pinMode(lencoder, INPUT_PULLUP);
+  pinMode(rencoder, INPUT_PULLUP);
   pinMode(buttonPin, INPUT_PULLUP);
     
   //9DOF
@@ -125,7 +127,7 @@ void setup(){
   delay(2000); //Same as before
   
   //GPS
-  Serial2.begin(9600);
+  Serial3.begin(9600);
   Serial.println("Initializing GPS!");
      
   GPS.begin(9600);  
@@ -169,8 +171,8 @@ int deal_with_encoder(void){
   int spin = NONE;
   static int old_encoder = 0;
     
-  pin_one = digitalRead(1);
-  pin_two = digitalRead(2);
+  pin_one = digitalRead(lencoder);
+  pin_two = digitalRead(rencoder);
     
   encoder = concatenate(pin_one,pin_two); 
 
@@ -263,7 +265,7 @@ void loop()
   //if(GPS.newNMEAreceived()){
   while(1){
     //delay(1);
-    if(Serial2.available()){
+    if(Serial3.available()){
     c = GPS.read();
     if(GPS.newNMEAreceived()){
     //if(c == '\n'){
@@ -284,6 +286,7 @@ void loop()
   
   //OBD-II
   //obd2->flush(); //Just in case
+  if(obd2->available()){ //Don't want to have it hang when not plugged in
   obd2->clear();
   obd2->println(commands[command_index]); //Vehicle speed command
   //Serial.println(commands[command_index]); //Testing what I'm sending out
@@ -308,10 +311,13 @@ void loop()
     default:
       Serial.println("This shoudln't happen");
   }  
-  //delay(100); //So we don't query the CANbus too fast and cause a buffer overflow
-  //obd2->flush();
   obd2->clear();
-  //clear_rx();
+  } else {
+    //OBDII isn't available
+    //Serial.println("OBDII not available");
+    spacket.name = "NULL";
+    spacket.obdval = 0;
+  }
   command_index++;
   if(command_index >= NUMCOMMANDS){ //Just so we don't accidentally overflow the int if it was running for a long time
     command_index = 0;

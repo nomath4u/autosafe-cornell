@@ -6,6 +6,7 @@
 from time import sleep
 import serial
 import argparse
+import datetime
 parser = argparse.ArgumentParser(description='Send arduino data to file')
 parser.add_argument("filename", help="name of file to store data")
 parser.add_argument("device", help="path to arduino device")
@@ -18,6 +19,6 @@ data_file = open(args.filename, 'w') #Open the file, clobber existing
 while True:
  out = ser.readline();
  data_file.write(out) # Read the newest output from the Arduino and send it to the file
- print out;
+ print out + str(datetime.datetime.now().time());
 # data_file.write("Test\n")
 
