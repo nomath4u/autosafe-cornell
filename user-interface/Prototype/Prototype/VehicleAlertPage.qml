@@ -5,11 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Styles 1.1
 
 /* this needs to be vehicle specific codes ie: check engine light is on with xxx code */
+Item {
 
-Rectangle {
-    Rectangle {
-        color: "blue"
-        anchors.fill: parent
-    }
 }
 

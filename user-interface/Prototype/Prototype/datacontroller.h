@@ -58,13 +58,25 @@ public:
 public slots:
     void parseData(char* buffer);
     void getMessage(const QString &msg);
-    void handleSituation(const QString &msg);
+    void handleLocalIncident(const QString &msg);
+
+    //for testing UI without sensor data/crash detection or network connection
+    void handleTestCrashFromQML();
+    void handleTestNetworkMessageFromQML();
+    void handleTabLeftFromQML();
+    void handleTabRightFromQML();
 
 signals:
     void updateDiagnosticInfo();
     void updateMessages();
     void sendToCrashDetection(const SensorData &data);
     void sendMessageOverNetwork(const QString &msg);
+
+    //for testing UI without sensor data/crash detection or network connection
+    void confirmLocalIncident();
+    void alertDriverToIncidentAhead();
+    void tabRight();
+    void tabLeft();
 
 protected:
     QQmlApplicationEngine _Engine;

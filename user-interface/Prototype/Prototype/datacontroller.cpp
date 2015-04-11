@@ -194,7 +194,7 @@ void DataController::getMessage(const QString &msg){
     emit updateMessages();
 }
 
-void DataController::handleSituation(const QString &msg){
+void DataController::handleLocalIncident(const QString &msg){
     _MessageList.append(msg);
     emit updateMessages();
 
@@ -202,6 +202,26 @@ void DataController::handleSituation(const QString &msg){
 
     //send out over network
     emit sendMessageOverNetwork("!" + msg);
+}
+
+void DataController::handleTestCrashFromQML(){
+    //qDebug() << "Test crash from QML detected!";
+    emit confirmLocalIncident();
+}
+
+void DataController::handleTestNetworkMessageFromQML(){
+    //qDebug() << "Test network message from QML detected!";
+    emit alertDriverToIncidentAhead();
+}
+
+void DataController::handleTabLeftFromQML(){
+    //qDebug() << "Tab left detected!";
+    emit tabLeft();
+}
+
+void DataController::handleTabRightFromQML(){
+    //qDebug() << "Tab right detected!";
+    emit tabRight();
 }
 
 void DataController::runSensorThread()
@@ -217,7 +237,7 @@ void DataController::runCrashDetectionThread()
     qDebug() << "DataController: Running crash detection thread.";
     CrashDetectionThread *crashDetectionThread = new CrashDetectionThread(this);
     connect(this, SIGNAL(sendToCrashDetection(SensorData)), crashDetectionThread, SLOT(analyzeData(SensorData)));
-    connect(crashDetectionThread, SIGNAL(situationDetected(QString)), this, SLOT(handleSituation(QString)));
+    connect(crashDetectionThread, SIGNAL(situationDetected(QString)), this, SLOT(handleLocalIncident(QString)));
     crashDetectionThread->start();
 }
 
@@ -227,6 +247,5 @@ void DataController::runNetworkThread()
     NetworkThread *networkThread = new NetworkThread(this);
     connect(networkThread, SIGNAL(messageReceived(QString)), this, SLOT(getMessage(QString)));
     connect(this, SIGNAL(sendMessageOverNetwork(QString)), networkThread, SLOT(sendMessage(QString)));
-
     networkThread->start();
 }

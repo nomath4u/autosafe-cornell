@@ -5,7 +5,6 @@
 #include <QStringListModel>
 
 #include "datacontroller.h"
-#include "networkthread.h"
 
 int main(int argc, char* argv[])
 {
@@ -13,8 +12,8 @@ int main(int argc, char* argv[])
     QQmlApplicationEngine engine;
 
     DataController appData;
-    appData.runSensorThread();
-    appData.runCrashDetectionThread();
+    //appData.runSensorThread();
+    //appData.runCrashDetectionThread();
     //appData.runNetworkThread();
 
     engine.rootContext()->setContextProperty("appData", &appData);
@@ -24,4 +23,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

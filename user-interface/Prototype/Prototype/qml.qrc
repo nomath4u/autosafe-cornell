@@ -4,8 +4,8 @@
         <file>tab_selected.png</file>
         <file>tabs_standard.png</file>
         <file>toolbar.png</file>
-        <file>DiagnosticPage.qml</file>
-        <file>ConditionsPage.qml</file>
-        <file>AlertsPage.qml</file>
+        <file>VehicleInfoPage.qml</file>
+        <file>NetworkAlertPage.qml</file>
+        <file>VehicleAlertPage.qml</file>
     </qresource>
 </RCC>

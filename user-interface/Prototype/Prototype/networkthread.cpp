@@ -223,5 +223,4 @@ void NetworkThread::run(){
 
     shutdown(s, SHUT_RDWR);
 
-
 }
