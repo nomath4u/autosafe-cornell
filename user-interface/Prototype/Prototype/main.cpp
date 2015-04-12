@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     QQmlApplicationEngine engine;
 
     DataController appData;
-    //appData.runSensorThread();
+    appData.runSensorThread();
     //appData.runCrashDetectionThread();
     //appData.runNetworkThread();
 

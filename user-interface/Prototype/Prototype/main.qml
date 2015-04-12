@@ -83,6 +83,7 @@ ApplicationWindow {
             Connections {
                 target: appData
                 onTabLeft : {
+                    console.log("Made it to Tab Left in QML!");
                     if(navigationTabView.currentIndex - 1 < 0){
                         navigationTabView.currentIndex = navigationTabView.count - 1;
                     }
@@ -91,6 +92,7 @@ ApplicationWindow {
                     }
                 }
                 onTabRight : {
+                    console.log("Made it to Tab Right in QML!");
                     if(navigationTabView.currentIndex + 1 > navigationTabView.count){
                         navigationTabView.currentIndex = 0;
                     }

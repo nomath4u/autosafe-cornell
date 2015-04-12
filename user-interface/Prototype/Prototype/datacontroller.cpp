@@ -34,91 +34,94 @@ double DataController::strToDouble(char* str)
 }
 
 void DataController::parseData(char *buffer){
-
-    //qDebug() << "UIDataController: Parsing data.";
-
-    char *token = (char *)malloc(10*sizeof(char));
+    char *token = (char *)malloc(100*sizeof(char));
     token = strtok(buffer, ",");
     for (int i=0; token != NULL; i++) {
-        if (i == 0) {
-            _AccelerometerX = strToDouble(token);
+        switch (i) {
+            case 0:
+                _AccelerometerX = strToDouble(token);
+                break;
+            case 1:
+                _AccelerometerY = strToDouble(token);
+                break;
+            case 2:
+                _AccelerometerZ = strToDouble(token);
+                break;
+           case 3:
+                _GyroX = strToDouble(token);
+                break;
+            case 4:
+                _GyroY = strToDouble(token);
+                break;
+            case 5:
+                _GyroZ = strToDouble(token);
+                break;
+            case 6:
+                _MagX = strToDouble(token);
+                break;
+            case 7:
+                _MagY = strToDouble(token);
+                break;
+            case 8:
+                _MagZ = strToDouble(token);
+                break;
+            case 9:
+                _PositionFix = atoi(token);
+                break;
+            case 10:
+                _Satellites = atoi(token);
+                break;
+            case 11:
+                _Hour = (time_t)atoi(token);
+                break;
+            case 12:
+                _Minute = (time_t)atoi(token);
+                break;
+            case 13:
+                _Second = (time_t)atoi(token);
+                break;
+            case 14:
+                _Month = (time_t)atoi(token);
+                break;
+            case 15:
+                _Day = (time_t)atoi(token);
+                break;
+            case 16:
+                _Year = (time_t)atoi(token);
+                break;
+            case 17:
+                _CoordinatesLat = strToDouble(token);
+                break;
+            case 18:
+                _CoordinatesLong = strToDouble(token);
+                break;
+            case 19:
+                _Speed = atoi(token);
+                break;
+            case 20:
+                _OBDIICommand = token;
+                break;
+            case 21:
+                _OBDIIValue = atoi(token);
+                break;
+            case 22:
+                _KnobTurn = atoi(token);
+                break;
+            case 23:
+                _KnobPress = atoi(token);
+                break;
         }
-        else if (i == 1) {
-            _AccelerometerY = strToDouble(token);
-        }
-        else if (i == 2) {
-            _AccelerometerZ = strToDouble(token);
-        }
-        else if (i == 3) {
-            _GyroX = strToDouble(token);
-        }
-        else if (i == 4) {
-            _GyroY = strToDouble(token);
-        }
-        else if (i == 5) {
-            _GyroZ = strToDouble(token);
-        }
-        else if (i == 6){
-            _MagX = strToDouble(token);
-        }
-        else if (i == 7) {
-            _MagY = strToDouble(token);
-        }
-        else if (i == 8) {
-            _MagZ = strToDouble(token);
-        }
-        else if (i == 9) {
-            _PositionFix = atoi(token);
-        }
-        else if (i == 10) {
-            _Satellites = atoi(token);
-        }
-        else if (i == 11) {
-            _Hour = (time_t)atoi(token);
-        }
-        else if (i == 12) {
-            _Minute = (time_t)atoi(token);
-        }
-        else if (i == 13) {
-            _Second = (time_t)atoi(token);
-        }
-        else if (i == 14) {
-            _Month = (time_t)atoi(token);
-        }
-        else if (i == 15) {
-            _Day = (time_t)atoi(token);
-        }
-        else if (i == 16) {
-            _Year = (time_t)atoi(token);
-        }
-        else if (i == 17) {
-            _CoordinatesLat = strToDouble(token);
-        }
-        else if (i == 18) {
-            _CoordinatesLong = strToDouble(token);
-        }
-        else if (i == 19) {
-            _Speed = atoi(token);
-        }
-        else if (i == 20) {
-            //strcpy(_OBDIICommand, token);
-        }
-        else if (i == 21) {
-            _OBDIIValue = atoi(token);
-        }
+
         token = strtok(NULL, ",");
+
     }
 
-    emit updateDiagnosticInfo();
-
-    SensorData data = getDataPacket();
-    emit sendToCrashDetection(data);
-
-    //dumpData();
+    //handle data
+    emit dataAvailable();
+    handleData();
 }
 
 void DataController::dumpData(){
-
     qDebug() << "Accelerometer X: "  << _AccelerometerX;
     qDebug() << "Accelerometer Y: "  << _AccelerometerY;
     qDebug() << "Accelerometer Z: "  << _AccelerometerZ;
@@ -139,30 +142,33 @@ void DataController::dumpData(){
     qDebug() << "Lattitude: "        << _CoordinatesLat;
     qDebug() << "Longitude: "        << _CoordinatesLong;
     qDebug() << "Speed: "            << _Speed;
-    //qDebug() << "OBDII Command: "    << _OBDIICommand;
-    //qDebug() << "OBDII Value: "      << _OBDIIValue;
+    qDebug() << "OBDII Command: "    << _OBDIICommand;
+    qDebug() << "OBDII Value: "      << _OBDIIValue;
+    qDebug() << "KnobTurn: "          << _KnobTurn;
+    qDebug() << "KnobPress: "          << _KnobPress;
     qDebug() << "-------------------------------------------------";
 }
 
-QStringList DataController::getList()
-{
-    //qDebug() << "UIDataController: Updating data list.";
-    _DiagnosticDataList.clear();
-    _DiagnosticDataList.append("Accelerometer X: " + QString::number(_AccelerometerX));
-    _DiagnosticDataList.append("Accelerometer Y: " + QString::number(_AccelerometerY));
-    _DiagnosticDataList.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
-    _DiagnosticDataList.append("Gyro X: " + QString::number(_GyroX));
-    _DiagnosticDataList.append("Gyro Y: " + QString::number(_GyroY));
-    _DiagnosticDataList.append("Gyro Z: " + QString::number(_GyroZ));
-    _DiagnosticDataList.append("Mag X: " + QString::number(_MagX));
-    _DiagnosticDataList.append("Mag Y: " + QString::number(_MagY));
-    _DiagnosticDataList.append("Mag Z: " + QString::number(_MagZ));
+//do stuff with the new data
+void DataController::handleData(){
 
-    return _DiagnosticDataList;
-}
+    dumpData();
 
-QStringList DataController::getMessageList(){
-    return _MessageList;
+    //control UI if necessary 0 = nothing 1 = left 2 = right
+    if (_KnobTurn == 1) {
+        emit tabLeft();
+    }
+
+    else if (_KnobTurn == 2) {
+        emit tabRight();
+    }
+
+    //update diagnostic info
+    emit updateDiagnosticInfo();
+
+    //send new data to crash detection
+    SensorData data = getDataPacket();
+    emit sendToCrashDetection(data);
 }
 
 SensorData DataController::getDataPacket(){
@@ -184,8 +190,33 @@ SensorData DataController::getDataPacket(){
     data.month = _Month;
     data.year = _Year;
     data.speed = _Speed;
+    data.knobTurn = _KnobTurn;
+    data.knobPress = _KnobPress;
 
     return data;
+}
+
+//List displayed on UI
+QStringList DataController::getList()
+{
+    //qDebug() << "UIDataController: Updating data list.";
+    _DiagnosticDataList.clear();
+    _DiagnosticDataList.append("Accelerometer X: " + QString::number(_AccelerometerX));
+    _DiagnosticDataList.append("Accelerometer Y: " + QString::number(_AccelerometerY));
+    _DiagnosticDataList.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
+    _DiagnosticDataList.append("Gyro X: " + QString::number(_GyroX));
+    _DiagnosticDataList.append("Gyro Y: " + QString::number(_GyroY));
+    _DiagnosticDataList.append("Gyro Z: " + QString::number(_GyroZ));
+    _DiagnosticDataList.append("Mag X: " + QString::number(_MagX));
+    _DiagnosticDataList.append("Mag Y: " + QString::number(_MagY));
+    _DiagnosticDataList.append("Mag Z: " + QString::number(_MagZ));
+
+    return _DiagnosticDataList;
+}
+
+//List displayed on UI
+QStringList DataController::getMessageList(){
+    return _MessageList;
 }
 
 void DataController::getMessage(const QString &msg){
@@ -204,6 +235,11 @@ void DataController::handleLocalIncident(const QString &msg){
     emit sendMessageOverNetwork("!" + msg);
 }
 
+void DataController::handleMessageFromNetwork(const QString &msg){
+
+}
+
+/**** UI TEST FUNCTIONS - disregard when connected to sensors/network ****/
 void DataController::handleTestCrashFromQML(){
     //qDebug() << "Test crash from QML detected!";
     emit confirmLocalIncident();
@@ -224,6 +260,8 @@ void DataController::handleTabRightFromQML(){
     emit tabRight();
 }
 
+
+/************************ THREAD SETUP **************************************/
 void DataController::runSensorThread()
 {
     qDebug() << "UIDataController: Running sensor thread.";

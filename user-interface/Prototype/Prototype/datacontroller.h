@@ -29,7 +29,8 @@ struct SensorData {
     int satellites;
     char *command;
     int value;
-
+    int knobTurn;
+    int knobPress;
     double roll;
     double pitch;
 };
@@ -56,17 +57,21 @@ public:
     Q_INVOKABLE QStringList getMessageList();
 
 public slots:
+    void handleData();
     void parseData(char* buffer);
     void getMessage(const QString &msg);
     void handleLocalIncident(const QString &msg);
+    void handleMessageFromNetwork(const QString &msg);
 
     //for testing UI without sensor data/crash detection or network connection
     void handleTestCrashFromQML();
     void handleTestNetworkMessageFromQML();
+
     void handleTabLeftFromQML();
     void handleTabRightFromQML();
 
 signals:
+    void dataAvailable();
     void updateDiagnosticInfo();
     void updateMessages();
     void sendToCrashDetection(const SensorData &data);
@@ -80,7 +85,7 @@ signals:
 
 protected:
     QQmlApplicationEngine _Engine;
-    QList<QString> _DiagnosticDataList;
+
     double _AccelerometerX;
     double _AccelerometerY;
     double _AccelerometerZ;
@@ -101,9 +106,13 @@ protected:
     double _CoordinatesLong;
     int _PositionFix;
     double _Speed;
-    char *_OBDIICommand;
+    QString _OBDIICommand;
     int _OBDIIValue;
+    int _KnobTurn;
+    int _KnobPress;
 
+    //UI Data Lists
+    QList<QString> _DiagnosticDataList;
     QList<QString> _MessageList;
 };
 

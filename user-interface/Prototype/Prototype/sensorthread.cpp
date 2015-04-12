@@ -119,7 +119,6 @@ void SensorThread::run(){
 
     fd = openPort();
 
-
     forever{
         n = read(fd, &buffer, sizeof(buffer));
         if (n == -1)
@@ -128,6 +127,7 @@ void SensorThread::run(){
             qDebug() << "Read error: " << e;
         }
 
+        qDebug() << "buffer contents: " << buffer;
         emit bufferReady(buffer);
     }
 #endif
