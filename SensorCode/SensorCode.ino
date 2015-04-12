@@ -102,10 +102,13 @@ enum cmd_names{ //The names of the commands with the same ordering as the comman
 
 packet spacket;
 
+IntervalTimer knobTimer;
+
 void setup(){
   pinMode(lencoder, INPUT_PULLUP);
   pinMode(rencoder, INPUT_PULLUP);
   pinMode(buttonPin, INPUT_PULLUP);
+  knobTimer.begin(knob_rotate, 20000); //Run every 20ms
     
   //9DOF
   // join I2C bus
@@ -223,7 +226,7 @@ int deal_with_encoder(void){
 
 void loop()
 {
-  spacket.spin = deal_with_encoder();
+  //spacket.spin = deal_with_encoder();
   int depressed = digitalRead(buttonPin);  
   //Serial.print("Spin: ");
   //Serial.println(spacket.spin);
@@ -404,4 +407,8 @@ void clear_rx(){
   for(i = 0; i < 20; i++){
     rxData[i] = 0;
   }
+}
+
+void knob_rotate(void){
+  spacket.spin = deal_with_encoder();
 }
