@@ -57,6 +57,9 @@ struct packet{
   double gyx;
   double gyy;
   double gyz;
+  double magx;
+  double magy;
+  double magz;
   /*OBD-II*/
   String name;
   long obdval;
@@ -116,13 +119,13 @@ void setup(){
   // initialize serial communication
   Serial.begin(9600);
   // initialize device
-  Serial.println("Initializing I2C devices...");
+  //Serial.println("Initializing I2C devices...");
   accelgyro.initialize();
   // verify connection
-  Serial.println("Testing device connections...");
-  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+  //Serial.println("Testing device connections...");
+  //Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
   //OBDII
-  Serial.println("Initializing OBDII connection");
+ // Serial.println("Initializing OBDII connection");
   obd2->begin(9600);
   delay(1500); //Have to give it a second to fire up, adapted value may be able to decrease
   obd2->println("ATZ"); //Get the bus ready
@@ -131,7 +134,7 @@ void setup(){
   
   //GPS
   Serial3.begin(9600);
-  Serial.println("Initializing GPS!");
+  //Serial.println("Initializing GPS!");
      
   GPS.begin(9600);  
   //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
@@ -262,7 +265,11 @@ void loop()
   //store raw gyro data scalled in degrees       
   spacket.gyx = double(gx)/131;
   spacket.gyy = double(gy)/131;
-  spacket.gyz = double(gz)/131; 
+  spacket.gyz = double(gz)/131;
+ 
+  spacket.magx = double(mx);
+  spacket.magy = double(my);
+  spacket.magz = double(mz); 
  
   char c;
   //if(GPS.newNMEAreceived()){
@@ -318,7 +325,7 @@ void loop()
   } else {
     //OBDII isn't available
     //Serial.println("OBDII not available");
-    spacket.name = "NULL";
+    spacket.name = "0";
     spacket.obdval = 0;
   }
   command_index++;
@@ -370,6 +377,9 @@ int send_packet(){
   Serial.print(spacket.gyx); Serial.print(",");
   Serial.print(spacket.gyy); Serial.print(",");
   Serial.print(spacket.gyz); Serial.print(",");
+  Serial.print(spacket.magx); Serial.print(",");
+  Serial.print(spacket.magy); Serial.print(",");
+  Serial.print(spacket.magz); Serial.print(",");
   Serial.print(spacket.fix); Serial.print(",");
   Serial.print(spacket.num_satellite); Serial.print(",");
   Serial.print(spacket.time.hour); Serial.print(",");
