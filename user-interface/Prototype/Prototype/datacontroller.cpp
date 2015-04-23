@@ -5,7 +5,8 @@
 
 #include <QDebug>
 #include <QStringListModel>
-
+#include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -17,7 +18,30 @@
 
 DataController::DataController(QObject *)
 {
-
+    _AccelerometerX                          = 0;
+    _AccelerometerY                          = 0;
+    _AccelerometerZ                          = 0;
+    _GyroX                                   = 0;
+    _GyroY                                   = 0;
+    _GyroZ                                   = 0;
+    _MagX                                    = 0;
+    _MagY                                    = 0;
+    _MagZ                                    = 0;
+    _PositionFix                             = 0;
+    _Satellites                              = 0;
+    _Hour                                    = 0;
+    _Minute                                  = 0;
+    _Second                                  = 0;
+    _Month                                   = 0;
+    _Day                                     = 0;
+    _Year                                    = 0;
+    _CoordinatesLat                          = 0;
+    _CoordinatesLong                         = 0;
+    _Speed                                   = 0;
+    _OBDIICommand                            = "";
+    _OBDIIValue                              = 0;
+    _KnobTurn                                = 0;
+    _KnobPress                               = 0;
 }
 
 DataController::~DataController()
@@ -147,6 +171,42 @@ void DataController::dumpData(){
     qDebug() << "KnobTurn: "          << _KnobTurn;
     qDebug() << "KnobPress: "          << _KnobPress;
     qDebug() << "-------------------------------------------------";
+
+    FILE *f = fopen("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/outFile.txt", "a");
+    if (f == NULL)
+    {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+
+    fprintf(f, "%f,%f,%f,%f,%f,%f,%f,%f,%f,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\n",_AccelerometerX,_AccelerometerY,_AccelerometerZ, _GyroX, _GyroY, _GyroZ, _MagX, _MagY, _MagZ);
+
+//    outFile << to_string(_AccelerometerX    );
+//    outFile << to_string(_AccelerometerY    );
+//    outFile << to_string(_AccelerometerZ    );
+//    outFile << to_string(_GyroX             );
+//    outFile << to_string(_GyroY             );
+//    outFile << to_string(_GyroZ             );
+//    outFile << to_string(_MagX              );
+//    outFile << to_string(_MagY              );
+//    outFile << to_string(_MagZ              );
+//    outFile << to_string(_PositionFix       );
+//    outFile << to_string(_Satellites        );
+//    outFile << to_string(_Hour              );
+//    outFile << to_string(_Minute            );
+//    outFile << to_string(_Second            );
+//    outFile << to_string(_Month             );
+//    outFile << to_string(_Day               );
+//    outFile << to_string(_Year              );
+//    outFile << to_string(_CoordinatesLat    );
+//    outFile << to_string(_CoordinatesLong   );
+//    outFile << to_string(_Speed             );
+//    outFile << to_string(_OBDIICommand      );
+//    outFile << to_string(_OBDIIValue        );
+//    outFile << to_string(_KnobTurn          );
+//    outFile << to_string(_KnobPress         );
+
+    fclose(f);
 }
 
 //do stuff with the new data
