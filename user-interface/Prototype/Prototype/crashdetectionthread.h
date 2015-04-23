@@ -26,6 +26,11 @@ class CrashDetectionThread : public QThread
 private:
     void complementaryFilter(SensorData data);
     double getDirection();
+    int getRhumbLineBearing();
+    double deg2rad(double);
+    double rad2deg(double);
+    QString getCompassDir(double);
+
 public:
     CrashDetectionThread(QObject *parent = 0);
     ~CrashDetectionThread();
