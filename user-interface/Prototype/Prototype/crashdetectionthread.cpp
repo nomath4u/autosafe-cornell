@@ -22,26 +22,31 @@ CrashDetectionThread::~CrashDetectionThread()
 
 void CrashDetectionThread::analyzeData(const SensorData &data)
 {
-    /* naive checks for rollover */
-    if ((data.accelerometerX * 10) >= ROLLOVER_MAX){
-        qDebug() << "Looks like the vehicle is rolling";
+
+    //impact detection
+    if(abs(data.accelerometerX) >= 1.5 || abs(data.accelerometerY) >= 1.5){
+        emit crashDetected("Vehicle has crashed!");
     }
 
-    if (abs((data.accelerometerY * 10)) >= ROLLOVER_MAX){
-        qDebug() << "Looks like the vehicle is flipping";
-    }
-
-    if(data.accelerometerZ*10 <= -8 && data.accelerometerZ*10 >= -10){
+#ifdef RCDEMO
+    //roll detection
+    if(data.accelerometerZ > 0.69){
         qDebug() << "FLIP!";
         emit crashDetected("Vehicle has flipped!");
     }
+#endif
 
-    //we suspect spinning when the gyro is high
+#ifndef RCDEMO
+    //roll detection
+    if(data.accelerometerZ < -0.69){
+        qDebug() << "FLIP!";
+        emit crashDetected("Vehicle has flipped!");
+    }
+#endif
+
+    //spinning out
     if(data.gyroZ >= SPIN_MAX){
-        qDebug() << "SPINOUT likely.";
         emit crashDetected("Vehicle has spunout!");
-    } else{
-        qDebug() << "normal driving";
     }
 }
 

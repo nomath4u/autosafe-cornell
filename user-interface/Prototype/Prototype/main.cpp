@@ -12,9 +12,9 @@ int main(int argc, char* argv[])
     QQmlApplicationEngine engine;
 
     DataController appData;
-    //appData.runSensorThread();
-    //appData.runCrashDetectionThread();
-    //appData.runNetworkThread();
+    appData.runSensorThread();
+    appData.runCrashDetectionThread();
+    appData.runNetworkThread();
 
     engine.rootContext()->setContextProperty("appData", &appData);
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

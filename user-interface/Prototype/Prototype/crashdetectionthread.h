@@ -14,6 +14,7 @@
 #define STOP_FORCE -3
 #define TBONE_FORCE 3
 
+#define RCDEMO
 
 class CrashDetectionThread : public QThread
 {

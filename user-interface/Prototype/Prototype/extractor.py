@@ -4,7 +4,7 @@ x = 0
 y = 0
 z = 0
 
-with open('outFile.txt', 'rb') as csvfile:
+with open('impact_ashley_driving.txt', 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',')
 	for row in reader:
 		if(len(row) == 24):

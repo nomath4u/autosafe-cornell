@@ -187,7 +187,7 @@ void DataController::dumpData(){
 
 void DataController::handleData(){
 
-    dumpData();
+    //dumpData();
 
     //control UI if necessary 0 = nothing 1 = left 2 = right
     if (_KnobTurn == 1) {
@@ -239,11 +239,10 @@ QStringList DataController::getVehicleInfoList()
     _DiagnosticDataList.append("GPS Position Fix: " + QString::number(_PositionFix));
     _DiagnosticDataList.append("GPS Lat: " + QString::number(_CoordinatesLat) + " GPS Long: " + QString::number(_CoordinatesLong));
 
-/*
+
     _DiagnosticDataList.append("Accelerometer - X: " + QString::number(_AccelerometerX) + " Y: " + QString::number(_AccelerometerY) + " Z: " + QString::number(_AccelerometerZ));
     _DiagnosticDataList.append("Gyroscope - X: " + QString::number(_GyroX) + " Y: " + QString::number(_GyroY) + " Z: " + QString::number(_GyroZ));
     _DiagnosticDataList.append("Magnetometer - X: " + QString::number(_MagX) + " Y: " + QString::number(_MagY) + "Z: " + QString::number(_MagZ));
-*/
 
     for (int i = 0; i < _OBDIIData.length(); i++){
         _DiagnosticDataList.append(_OBDIIData.at(i).OBDIICommand + " : " + QString::number(_OBDIIData.at(i).OBDIIValue));
@@ -279,6 +278,7 @@ void DataController::handleCrash(const QString &msg){
 
 
 /**** UI TEST FUNCTIONS - disregard when connected to sensors/network ****/
+
 void DataController::handleTestCrashFromQML(){
     emit confirmLocalIncident();
 }
@@ -297,6 +297,7 @@ void DataController::handleTabRightFromQML(){
 
 
 /************************ THREAD SETUP **************************************/
+
 void DataController::runSensorThread()
 {
     qDebug() << "UIDataController: Running sensor thread.";
@@ -319,6 +320,6 @@ void DataController::runNetworkThread()
     qDebug() << "Running Network thread.";
     NetworkThread *networkThread = new NetworkThread(this);
     connect(networkThread, SIGNAL(messageReceived(QString)), this, SLOT(getMessage(QString)));
-    connect(this, SIGNAL(sendMessageOverNetwork(QString)), networkThread, SLOT(sendMessage(QString)));
+    connect(this, SIGNAL(sendMessage(QString)), networkThread, SLOT(sendMessage(QString)));
     networkThread->start();
 }

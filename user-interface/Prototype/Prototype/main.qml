@@ -142,7 +142,7 @@ ApplicationWindow {
         Connections {
             target: appData
             onConfirmLocalIncident : {
-                console.log("Local crash detected!");
+                //console.log("Local crash detected!");
 
 //                messageDialog.visible = true
 //                messageDialog.icon = StandardIcon.Warning
@@ -150,7 +150,7 @@ ApplicationWindow {
 //                messageDialog.text = "Alerting network.\nPress knob to cancel."
             }
             onAlertDriverToIncidentAhead : {
-                console.log("Network message received, changing tab to 'Road Conditions'!");
+                //console.log("Network message received, changing tab to 'Road Conditions'!");
                 navigationTabView.currentIndex = 2;
                 //flash title text to red 3 times??
             }
