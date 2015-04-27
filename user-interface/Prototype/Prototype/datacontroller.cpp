@@ -137,11 +137,9 @@ void DataController::parseData(char *buffer){
         }
 
         token = strtok(NULL, ",");
-
     }
 
-    //handle data
-    emit dataAvailable();
+    //emit dataAvailable();
     handleData();
 }
 
@@ -172,6 +170,9 @@ void DataController::dumpData(){
     qDebug() << "KnobPress: "          << _KnobPress;
     qDebug() << "-------------------------------------------------";
 
+
+    /* FOR TESTING */
+/*
     FILE *f = fopen("/home/fs/Desktop/autosafe-cornell/user-interface/Prototype/Prototype/outFile.txt", "a");
     if (f == NULL)
     {
@@ -180,36 +181,10 @@ void DataController::dumpData(){
     }
 
     fprintf(f, "%f,%f,%f,%f,%f,%f,%f,%f,%f,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\n",_AccelerometerX,_AccelerometerY,_AccelerometerZ, _GyroX, _GyroY, _GyroZ, _MagX, _MagY, _MagZ);
-
-//    outFile << to_string(_AccelerometerX    );
-//    outFile << to_string(_AccelerometerY    );
-//    outFile << to_string(_AccelerometerZ    );
-//    outFile << to_string(_GyroX             );
-//    outFile << to_string(_GyroY             );
-//    outFile << to_string(_GyroZ             );
-//    outFile << to_string(_MagX              );
-//    outFile << to_string(_MagY              );
-//    outFile << to_string(_MagZ              );
-//    outFile << to_string(_PositionFix       );
-//    outFile << to_string(_Satellites        );
-//    outFile << to_string(_Hour              );
-//    outFile << to_string(_Minute            );
-//    outFile << to_string(_Second            );
-//    outFile << to_string(_Month             );
-//    outFile << to_string(_Day               );
-//    outFile << to_string(_Year              );
-//    outFile << to_string(_CoordinatesLat    );
-//    outFile << to_string(_CoordinatesLong   );
-//    outFile << to_string(_Speed             );
-//    outFile << to_string(_OBDIICommand      );
-//    outFile << to_string(_OBDIIValue        );
-//    outFile << to_string(_KnobTurn          );
-//    outFile << to_string(_KnobPress         );
-
     fclose(f);
+*/
 }
 
-//do stuff with the new data
 void DataController::handleData(){
 
     dumpData();
@@ -223,14 +198,13 @@ void DataController::handleData(){
         emit tabRight();
     }
 
-    //update diagnostic info
     emit updateDiagnosticInfo();
 
-    //send new data to crash detection
     SensorData data = getDataPacket();
     emit sendToCrashDetection(data);
 }
 
+//function used to send necessary data to crash detection
 SensorData DataController::getDataPacket(){
     SensorData data;
 
@@ -256,67 +230,68 @@ SensorData DataController::getDataPacket(){
     return data;
 }
 
-//List displayed on UI
-QStringList DataController::getList()
+//vehicle info displayed on UI
+QStringList DataController::getVehicleInfoList()
 {
-    //qDebug() << "UIDataController: Updating data list.";
     _DiagnosticDataList.clear();
-    _DiagnosticDataList.append("Accelerometer X: " + QString::number(_AccelerometerX));
-    _DiagnosticDataList.append("Accelerometer Y: " + QString::number(_AccelerometerY));
-    _DiagnosticDataList.append("Accelerometer Z: " + QString::number(_AccelerometerZ));
-    _DiagnosticDataList.append("Gyro X: " + QString::number(_GyroX));
-    _DiagnosticDataList.append("Gyro Y: " + QString::number(_GyroY));
-    _DiagnosticDataList.append("Gyro Z: " + QString::number(_GyroZ));
-    _DiagnosticDataList.append("Mag X: " + QString::number(_MagX));
-    _DiagnosticDataList.append("Mag Y: " + QString::number(_MagY));
-    _DiagnosticDataList.append("Mag Z: " + QString::number(_MagZ));
+    _DiagnosticDataList.append("Date: " + QString::number(_Month) + "/" + QString::number(_Day) + "/" + QString::number(_Year));
+    _DiagnosticDataList.append("Time: " + QString::number(_Hour) + ":" + QString::number(_Minute) + ":" + QString::number(_Second));
+    _DiagnosticDataList.append("GPS Position Fix: " + QString::number(_PositionFix));
+    _DiagnosticDataList.append("GPS Lat: " + QString::number(_CoordinatesLat) + " GPS Long: " + QString::number(_CoordinatesLong));
+
+/*
+    _DiagnosticDataList.append("Accelerometer - X: " + QString::number(_AccelerometerX) + " Y: " + QString::number(_AccelerometerY) + " Z: " + QString::number(_AccelerometerZ));
+    _DiagnosticDataList.append("Gyroscope - X: " + QString::number(_GyroX) + " Y: " + QString::number(_GyroY) + " Z: " + QString::number(_GyroZ));
+    _DiagnosticDataList.append("Magnetometer - X: " + QString::number(_MagX) + " Y: " + QString::number(_MagY) + "Z: " + QString::number(_MagZ));
+*/
+
+    for (int i = 0; i < _OBDIIData.length(); i++){
+        _DiagnosticDataList.append(_OBDIIData.at(i).OBDIICommand + " : " + QString::number(_OBDIIData.at(i).OBDIIValue));
+    }
 
     return _DiagnosticDataList;
 }
 
-//List displayed on UI
+//OBDII codes displayed on UI
+QStringList DataController::getVehicleAlertsList(){
+    _VehicleAlertList.clear();
+
+    //get trouble codes
+
+    return _VehicleAlertList;
+}
+
+//Network messages displayed on UI
 QStringList DataController::getMessageList(){
     return _MessageList;
 }
 
 void DataController::getMessage(const QString &msg){
     _MessageList.append(msg);
-    qDebug() << "Made it to getMessage" << _MessageList;
     emit updateMessages();
 }
 
-void DataController::handleLocalIncident(const QString &msg){
-    _MessageList.append(msg);
-    emit updateMessages();
+void DataController::handleCrash(const QString &msg){
+    //allow user to cancel crash
 
-    //confirm with driver that situation happened
-
-    //send out over network
-    emit sendMessageOverNetwork("!" + msg);
+    emit sendMessage("!" + msg);
 }
 
-void DataController::handleMessageFromNetwork(const QString &msg){
-
-}
 
 /**** UI TEST FUNCTIONS - disregard when connected to sensors/network ****/
 void DataController::handleTestCrashFromQML(){
-    //qDebug() << "Test crash from QML detected!";
     emit confirmLocalIncident();
 }
 
 void DataController::handleTestNetworkMessageFromQML(){
-    //qDebug() << "Test network message from QML detected!";
     emit alertDriverToIncidentAhead();
 }
 
 void DataController::handleTabLeftFromQML(){
-    //qDebug() << "Tab left detected!";
     emit tabLeft();
 }
 
 void DataController::handleTabRightFromQML(){
-    //qDebug() << "Tab right detected!";
     emit tabRight();
 }
 
@@ -335,7 +310,7 @@ void DataController::runCrashDetectionThread()
     qDebug() << "DataController: Running crash detection thread.";
     CrashDetectionThread *crashDetectionThread = new CrashDetectionThread(this);
     connect(this, SIGNAL(sendToCrashDetection(SensorData)), crashDetectionThread, SLOT(analyzeData(SensorData)));
-    connect(crashDetectionThread, SIGNAL(situationDetected(QString)), this, SLOT(handleLocalIncident(QString)));
+    connect(crashDetectionThread, SIGNAL(crashDetected(QString)), this, SLOT(handleCrash(QString)));
     crashDetectionThread->start();
 }
 

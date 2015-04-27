@@ -34,7 +34,7 @@ public slots:
     void analyzeData(const SensorData &data);
 
 signals:
-    void situationDetected(const QString &msg);
+    void crashDetected(const QString &msg);
 };
 
 #endif // CRASHDETECTIONTHREAD_H

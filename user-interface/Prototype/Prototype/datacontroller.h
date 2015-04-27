@@ -35,6 +35,11 @@ struct SensorData {
     double pitch;
 };
 
+struct OBDIIData {
+    QString OBDIICommand;
+    int OBDIIValue;
+};
+
 class DataController : public QObject
 {
     Q_OBJECT
@@ -53,31 +58,29 @@ public:
 
     SensorData getDataPacket();
 
-    Q_INVOKABLE QStringList getList();
+    Q_INVOKABLE QStringList getVehicleInfoList();
+    Q_INVOKABLE QStringList getVehicleAlertsList();
     Q_INVOKABLE QStringList getMessageList();
 
 public slots:
     void handleData();
     void parseData(char* buffer);
     void getMessage(const QString &msg);
-    void handleLocalIncident(const QString &msg);
-    void handleMessageFromNetwork(const QString &msg);
+    void handleCrash(const QString &msg);
 
     //for testing UI without sensor data/crash detection or network connection
     void handleTestCrashFromQML();
     void handleTestNetworkMessageFromQML();
-
     void handleTabLeftFromQML();
     void handleTabRightFromQML();
 
 signals:
-    void dataAvailable();
     void updateDiagnosticInfo();
     void updateMessages();
     void sendToCrashDetection(const SensorData &data);
-    void sendMessageOverNetwork(const QString &msg);
+    void sendMessage(const QString &msg);
 
-    //for testing UI without sensor data/crash detection or network connection
+    //for testing UI without other threads
     void confirmLocalIncident();
     void alertDriverToIncidentAhead();
     void tabRight();
@@ -111,8 +114,11 @@ protected:
     int _KnobTurn;
     int _KnobPress;
 
+    QList<OBDIIData> _OBDIIData;
+
     //UI Data Lists
     QList<QString> _DiagnosticDataList;
+    QList<QString> _VehicleAlertList;
     QList<QString> _MessageList;
 };
 

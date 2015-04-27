@@ -63,7 +63,8 @@ ApplicationWindow {
 
             Tab {
                 id: vehicleInfoTab
-                title: "Vehicle Information"
+                //title: "Vehicle Information"
+                title: "Diagnostic Information"
                 VehicleInfoPage { visible: true }
 
             }
@@ -76,14 +77,15 @@ ApplicationWindow {
 
             Tab {
                 id: networkAlertTab
-                title: "Network Alerts"
+                //title: "Network Alerts"
+                title: "Road Conditions"
                 NetworkAlertPage { visible: true }
             }
 
             Connections {
                 target: appData
                 onTabLeft : {
-                    console.log("Made it to Tab Left in QML!");
+                    //console.log("Made it to Tab Left in QML!");
                     if(navigationTabView.currentIndex - 1 < 0){
                         navigationTabView.currentIndex = navigationTabView.count - 1;
                     }
@@ -92,7 +94,7 @@ ApplicationWindow {
                     }
                 }
                 onTabRight : {
-                    console.log("Made it to Tab Right in QML!");
+                    //console.log("Made it to Tab Right in QML!");
                     if(navigationTabView.currentIndex + 1 > navigationTabView.count){
                         navigationTabView.currentIndex = 0;
                     }
@@ -130,29 +132,27 @@ ApplicationWindow {
 
         }
 
-        //TODO: set title and text when an incident is detected or when network detects incident - add Windows-style countdown??
         MessageDialog {
             id: messageDialog
             onAccepted: {
-                //console.log("Some debug text here...")
-                //Qt.quit()
+                //cancel network alert?
             }
         }
 
         Connections {
             target: appData
             onConfirmLocalIncident : {
-                messageDialog.visible = true
-                messageDialog.icon = StandardIcon.Warning
-                messageDialog.title = "LOCAL: INCIDENT DETECTED"
-                messageDialog.text = "Alerting network.\nPress knob to cancel."
+                console.log("Local crash detected!");
+
+//                messageDialog.visible = true
+//                messageDialog.icon = StandardIcon.Warning
+//                messageDialog.title = "Crash detected!"
+//                messageDialog.text = "Alerting network.\nPress knob to cancel."
             }
             onAlertDriverToIncidentAhead : {
-                messageDialog.visible = true
-                messageDialog.visible = true
-                messageDialog.icon = StandardIcon.Critical
-                messageDialog.title = "NETWORK: INCIDENT AHEAD"
-                messageDialog.text = "Proceed with caution."
+                console.log("Network message received, changing tab to 'Road Conditions'!");
+                navigationTabView.currentIndex = 2;
+                //flash title text to red 3 times??
             }
         }
     }

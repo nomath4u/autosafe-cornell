@@ -45,7 +45,7 @@ QString NetworkThread::crypt (unsigned char* message)
 
 void NetworkThread::sendMessage(const QString &msg){
     send_message("10.0.0.1", msg);
-    qDebug() << "Signal to emit crash over network was received!!";
+    qDebug() << "Sending message over network!!";
 
     //pause network thread for 10 mins?
 }
@@ -124,10 +124,6 @@ void NetworkThread::run(){
     // Test Send Message
     QString Test = "Hello this is my message";
     send_message("10.0.0.2", Test);
-
-
-
-
 
     struct sockaddr_in si_me, si_other;
     QString recv;

@@ -60,7 +60,7 @@ Item {
                 Text {
                     id: elementLabel
                     anchors.left: parent.left
-                    text: appData.getList()[index]
+                    text: appData.getVehicleInfoList()[index]
                     font.pointSize: 16
                     color: "white"
                 }
@@ -70,7 +70,7 @@ Item {
         Connections{
             target: appData
             onUpdateDiagnosticInfo : { /* must have "on" and camel case signal name! - slot registers automatically */
-                listView.model = appData.getList()
+                listView.model = appData.getVehicleInfoList()
             }
         }
     }

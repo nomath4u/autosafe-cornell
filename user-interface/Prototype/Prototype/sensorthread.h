@@ -8,7 +8,7 @@
 
 #define BAUDRATE B9600
 
-#define DEMO
+#define DEMO //comment this out when using hardware
 
 class SensorThread : public QThread
 {

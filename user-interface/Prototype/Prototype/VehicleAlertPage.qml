@@ -4,8 +4,34 @@ import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Styles 1.1
 
-/* this needs to be vehicle specific codes ie: check engine light is on with xxx code */
 Item {
 
-}
+    width: parent.width
+    height: parent.height
 
+    ListView {
+        id: listView
+        anchors.fill: parent
+        spacing: 40
+        delegate: Item {
+            Rectangle {
+                color: "#404040"
+                Text {
+                    id: elementLabel
+                    anchors.left: parent.left
+                    text: appData.getVehicleAlertsList()[index]
+                    font.pointSize: 16
+                    color: "white"
+                }
+            }
+        }
+
+        Connections{
+            target: appData
+            onUpdateDiagnosticInfo : { /* must have "on" and camel case signal name! - slot registers automatically */
+                listView.model = appData.getVehicleAlertsList()
+            }
+        }
+    }
+
+}
