@@ -17,7 +17,7 @@
 
 #define OBDRX 7
 #define OBDTX 8
-#define NUMCOMMANDS 5
+#define NUMCOMMANDS 7
 
 //Buffer for UART
 #define RX_BUFFER_SIZE 255
@@ -97,14 +97,16 @@ int command_index = 0 ; //For keeping track of iterations through loop
 //SoftwareSerial obd2(OBDRX,OBDTX);
 HardwareSerial *obd2 = &Serial3;
 //command format is MSByte = Mode LSByte = Device
-char commands [NUMCOMMANDS][5] = {"010C", "010D", "010A", "015C", "015B"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
+char commands [NUMCOMMANDS][5] = {"010C", "010D", "010A", "015C", "015B", "012F", "0170"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
 //This way we can use a case statement based on how many times through the command loop we have gone to get the name
 enum cmd_names{ //The names of the commands with the same ordering as the commands array
   RPM,
-  Speed
-  Fuel_Pressure
-  Oil_Temp
-  Battery
+  Speed,
+  Fuel_Pressure,
+  Oil_Temp,
+  Battery,
+  Fuel_Input,
+  Boost
 };
 
 packet spacket;
@@ -330,16 +332,24 @@ void loop()
       spacket.obdval = strtol(&rxData[6],0,16);
       break;
     case Fuel_Pressure:
-      spacket.name = "Fuel_Pressure";
+      spacket.name = "Fuel Pressure";
       spacket.obdval = strtol(&rxData[6],0,16)*3;
       break;
     case Oil_Temp:
-      spacket.name = "Oil_Temp";
+      spacket.name = "Oil Temp";
       spacket.obdval = strtol(&rxData[6],0,16)-40;
       break;
     case Battery:
       spacket.name = "Battery";
       spacket.obdval = strtol(&rxData[6],0,16)*100/255;
+      break;
+    case Fuel_Input:
+      spacket.name = "Fuel Input";
+      spacket.obdval = strtol(&rxData[6],0,16)*100/255;
+      break;
+    case Boost:
+      spacket.name = "Boost";
+      spacket.obdval = strtol(&rxData[6],0,16);
       break;
     default:
       Serial.println("This shoudln't happen");
