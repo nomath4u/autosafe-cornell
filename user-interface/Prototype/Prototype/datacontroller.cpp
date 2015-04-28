@@ -282,6 +282,7 @@ void DataController::getMessage(const QString &msg){
     _MessageList.append(msg);
     qDebug() << _MessageList;
     emit updateMessages();
+    emit alertDriverToIncidentAhead();
 }
 
 void DataController::handleCrash(const QString &msg){

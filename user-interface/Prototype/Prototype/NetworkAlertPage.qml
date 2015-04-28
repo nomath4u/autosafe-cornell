@@ -5,58 +5,33 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Styles 1.1
 
 Item {
-    ScrollView {
+    width: parent.width
+    height: parent.height
 
-        width: parent.width
-        height: parent.height
-
-        flickableItem.interactive: true
-
-        ListView {
-            id: messageListView
-            anchors.fill: parent
-            spacing: 40
-            delegate: Item {
-                Rectangle {
-                    Text {
-                        id: elementLabel
-                        anchors.left: parent.left
-                        text: appData.getMessageList()[index]
-                        font.pointSize: 16
-                        color: "white"
-                    }
-                }
-            }
-
-            Connections{
-                target: appWindow
-                onNetworkTabUpdate : {
-                    console.log("Updating messages");
-                    messageListView.model = appData.getMessageList()
-                    console.log(appData.getMessageList());
-
+    ListView {
+        id: messageListView
+        anchors.fill: parent
+        spacing: 40
+        delegate: Item {
+            Rectangle {
+                Text {
+                    id: elementLabel
+                    anchors.left: parent.left
+                    text: appData.getMessageList()[index]
+                    font.pointSize: 16
+                    color: "red"
                 }
             }
         }
 
-        style: ScrollViewStyle {
-                transientScrollBars: true
-                handle: Item {
-                    implicitWidth: 14
-                    implicitHeight: 26
-                    Rectangle {
-                        color: "#424246"
-                        anchors.fill: parent
-                        anchors.topMargin: 6
-                        anchors.leftMargin: 4
-                        anchors.rightMargin: 4
-                        anchors.bottomMargin: 6
-                    }
-                }
-                scrollBarBackground: Item {
-                    implicitWidth: 14
-                    implicitHeight: 26
-                }
+        Connections{
+            target: appWindow
+            onNetworkTabUpdate : {
+                console.log("Updating messages");
+                messageListView.model = appData.getMessageList()
+                console.log(appData.getMessageList());
+
             }
+        }
     }
 }

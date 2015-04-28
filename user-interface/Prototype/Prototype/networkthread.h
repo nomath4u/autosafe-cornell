@@ -9,6 +9,8 @@
 #define BUFLEN 512  //Max length of buffer
 #define PORT 8888   //The port on which to listen for incoming data
 
+#define NEW_MSG 0
+#define OLD_MSG 1
 
 class NetworkThread : public QThread
 {
