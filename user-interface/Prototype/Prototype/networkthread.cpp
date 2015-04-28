@@ -43,26 +43,30 @@ QString NetworkThread::crypt (unsigned char* message)
     return s;
 }
 
-void NetworkThread::sendMessage(const QString &msg){
-    send_message("10.0.0.1", msg);
+void NetworkThread::sendMessage(const QString &msg, int flag){
+    send_message("10.0.0.1", msg, flag);
+    send_message("10.0.0.2", msg, flag);
     qDebug() << "Sending message over network!!";
 
     //pause network thread for 10 mins?
 }
 
-int NetworkThread::send_message(const char* who, QString message)
+int NetworkThread::send_message(const char* who, QString message, int flag)
 {
     struct sockaddr_in si_other;
     int s, slen=sizeof(si_other);
     QString send;
 
-    message.append(QString(":%1").arg(time(NULL)));
-    send = crypt((unsigned char*)qstrdup(message.toLocal8Bit()));
+    if (flag == NEW_MSG){
+        message.append(QString(":%1").arg(time(NULL)));
+    }
+        send = crypt((unsigned char*)qstrdup(message.toLocal8Bit()));
 
-    //send.replace(1,1,'v'); // For testing Hash verification
+        //send.replace(1,1,'v'); // For testing Hash verification
 
-    send.append(":");
-    send.append(message);
+        send.append(":");
+        send.append(message);
+
 
     qDebug() << "SEND:" << send;
 
@@ -122,8 +126,8 @@ void NetworkThread::run(){
     QString hash, mess;
 
     // Test Send Message
-    QString Test = "Hello this is my message";
-    send_message("10.0.0.2", Test);
+    //QString Test = "Hello this is my message";
+    //send_message("10.0.0.2", Test);
 
     struct sockaddr_in si_me, si_other;
     QString recv;
@@ -205,8 +209,7 @@ void NetworkThread::run(){
         if (mess.at(0) == '!') {
             printf("Crash!\n");
             fflush(stdout);
-            //send_message("10.0.0.2", "OH NO!");
-            //send_message("10.0.0.3", "OH NO!");
+            //sendMessage(mess, OLD_MSG);
             //exit(1);
 
             emit messageReceived("Warning: crash ahead!");
