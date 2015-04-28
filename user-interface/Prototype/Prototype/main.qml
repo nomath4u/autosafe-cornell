@@ -5,9 +5,12 @@ import QtQuick.Dialogs 1.2
 import QtQuick.Controls.Styles 1.1
 
 ApplicationWindow {
+    id: appWindow
     visible: true
     width: 800
     height: 600
+
+    signal networkTabUpdate
 
 //Auto Safe header
 //    toolBar: BorderImage {
@@ -150,6 +153,7 @@ ApplicationWindow {
             onAlertDriverToIncidentAhead : {
                 //console.log("Network message received, changing tab to 'Road Conditions'!");
                 navigationTabView.currentIndex = 2;
+                networkTabUpdate();
                 //flash title text to red 3 times??
             }
         }

@@ -29,9 +29,12 @@ Item {
             }
 
             Connections{
-                target: appData
-                onUpdateMessages : {
+                target: appWindow
+                onNetworkTabUpdate : {
+                    console.log("Updating messages");
                     messageListView.model = appData.getMessageList()
+                    console.log(appData.getMessageList());
+
                 }
             }
         }
