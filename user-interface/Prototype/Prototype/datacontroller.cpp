@@ -278,21 +278,23 @@ QStringList DataController::getMessageList(){
 }
 
 void DataController::getMessage(const QString &msg){
+    qDebug() << "getting message, appending to list for UI";
     _MessageList.append(msg);
+    qDebug() << _MessageList;
     emit updateMessages();
 }
 
 void DataController::handleCrash(const QString &msg){
     //allow user to cancel crash
 
-    emit sendMessage("!" + msg);
+    emit sendMessage("!" + msg, NEW_MSG);
 }
 
 
 /**** UI TEST FUNCTIONS - disregard when connected to sensors/network ****/
 
 void DataController::handleTestCrashFromQML(){
-    emit confirmLocalIncident();
+    emit sendMessage("!Crash detected!", NEW_MSG);
 }
 
 void DataController::handleTestNetworkMessageFromQML(){
@@ -312,7 +314,7 @@ void DataController::handleTabRightFromQML(){
 
 void DataController::runSensorThread()
 {
-    qDebug() << "UIDataController: Running sensor thread.";
+    //qDebug() << "UIDataController: Running sensor thread.";
     SensorThread *sensorThread = new SensorThread(this);
     connect(sensorThread, SIGNAL(bufferReady(char*)), this, SLOT(parseData(char*)));
     sensorThread->start();
@@ -320,7 +322,7 @@ void DataController::runSensorThread()
 
 void DataController::runCrashDetectionThread()
 {
-    qDebug() << "DataController: Running crash detection thread.";
+    //qDebug() << "DataController: Running crash detection thread.";
     CrashDetectionThread *crashDetectionThread = new CrashDetectionThread(this);
     connect(this, SIGNAL(sendToCrashDetection(SensorData)), crashDetectionThread, SLOT(analyzeData(SensorData)));
     connect(crashDetectionThread, SIGNAL(crashDetected(QString)), this, SLOT(handleCrash(QString)));
@@ -329,9 +331,9 @@ void DataController::runCrashDetectionThread()
 
 void DataController::runNetworkThread()
 {
-    qDebug() << "Running Network thread.";
+    //qDebug() << "Running Network thread.";
     NetworkThread *networkThread = new NetworkThread(this);
     connect(networkThread, SIGNAL(messageReceived(QString)), this, SLOT(getMessage(QString)));
-    connect(this, SIGNAL(sendMessage(QString)), networkThread, SLOT(sendMessage(QString)));
+    connect(this, SIGNAL(sendMessage(QString, int)), networkThread, SLOT(sendMessage(QString, int)));
     networkThread->start();
 }
