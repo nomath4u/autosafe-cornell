@@ -78,7 +78,7 @@ signals:
     void updateDiagnosticInfo();
     void updateMessages();
     void sendToCrashDetection(const SensorData &data);
-    void sendMessage(const QString &msg);
+    void sendMessage(const QString &msg, const int flag);
 
     //for testing UI without other threads
     void confirmLocalIncident();
