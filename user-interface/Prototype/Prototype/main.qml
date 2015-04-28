@@ -66,7 +66,6 @@ ApplicationWindow {
                 //title: "Vehicle Information"
                 title: "Diagnostic Information"
                 VehicleInfoPage { visible: true }
-
             }
 
             Tab {
@@ -110,8 +109,7 @@ ApplicationWindow {
             TabViewStyle {
                 tabsAlignment: Qt.AlignVCenter
                 tabOverlap: 0
-
-                tab: Item {
+                tab: Rectangle {
                     implicitWidth: control.width/control.count
                     implicitHeight: 50
                     BorderImage {
@@ -127,7 +125,7 @@ ApplicationWindow {
                         }
                     }
                 }
-
+                frame: Rectangle { color: "#312F2F" }
             }
 
         }

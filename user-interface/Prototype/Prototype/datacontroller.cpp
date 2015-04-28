@@ -139,6 +139,20 @@ void DataController::parseData(char *buffer){
         token = strtok(NULL, ",");
     }
 
+    //number of basic diagnostic info commands we want to grab
+    //replace values as they come in
+
+    OBDIIData obdiidata;
+    obdiidata.OBDIICommand = _OBDIICommand;
+    obdiidata.OBDIIValue = _OBDIIValue;
+
+    //trouble codes
+    if(_OBDIICommand == "TRBL"){
+       _OBDIITroubleCodes.append(obdiidata);
+    } else{
+        _OBDIIData.append(obdiidata);
+    }
+
     //emit dataAvailable();
     handleData();
 }
@@ -169,7 +183,6 @@ void DataController::dumpData(){
     qDebug() << "KnobTurn: "          << _KnobTurn;
     qDebug() << "KnobPress: "          << _KnobPress;
     qDebug() << "-------------------------------------------------";
-
 
     /* FOR TESTING */
 /*
@@ -234,15 +247,14 @@ SensorData DataController::getDataPacket(){
 QStringList DataController::getVehicleInfoList()
 {
     _DiagnosticDataList.clear();
-    _DiagnosticDataList.append("Date: " + QString::number(_Month) + "/" + QString::number(_Day) + "/" + QString::number(_Year));
-    _DiagnosticDataList.append("Time: " + QString::number(_Hour) + ":" + QString::number(_Minute) + ":" + QString::number(_Second));
+    //_DiagnosticDataList.append("Date: " + QString::number(_Month) + "/" + QString::number(_Day) + "/" + QString::number(_Year));
+    //_DiagnosticDataList.append("Time: " + QString::number(_Hour) + ":" + QString::number(_Minute) + ":" + QString::number(_Second));
     _DiagnosticDataList.append("GPS Position Fix: " + QString::number(_PositionFix));
     _DiagnosticDataList.append("GPS Lat: " + QString::number(_CoordinatesLat) + " GPS Long: " + QString::number(_CoordinatesLong));
 
-
-    _DiagnosticDataList.append("Accelerometer - X: " + QString::number(_AccelerometerX) + " Y: " + QString::number(_AccelerometerY) + " Z: " + QString::number(_AccelerometerZ));
-    _DiagnosticDataList.append("Gyroscope - X: " + QString::number(_GyroX) + " Y: " + QString::number(_GyroY) + " Z: " + QString::number(_GyroZ));
-    _DiagnosticDataList.append("Magnetometer - X: " + QString::number(_MagX) + " Y: " + QString::number(_MagY) + "Z: " + QString::number(_MagZ));
+    //_DiagnosticDataList.append("Accelerometer - X: " + QString::number(_AccelerometerX) + " Y: " + QString::number(_AccelerometerY) + " Z: " + QString::number(_AccelerometerZ));
+    //_DiagnosticDataList.append("Gyroscope - X: " + QString::number(_GyroX) + " Y: " + QString::number(_GyroY) + " Z: " + QString::number(_GyroZ));
+    //_DiagnosticDataList.append("Magnetometer - X: " + QString::number(_MagX) + " Y: " + QString::number(_MagY) + "Z: " + QString::number(_MagZ));
 
     for (int i = 0; i < _OBDIIData.length(); i++){
         _DiagnosticDataList.append(_OBDIIData.at(i).OBDIICommand + " : " + QString::number(_OBDIIData.at(i).OBDIIValue));

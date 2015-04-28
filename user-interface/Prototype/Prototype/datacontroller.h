@@ -115,6 +115,7 @@ protected:
     int _KnobPress;
 
     QList<OBDIIData> _OBDIIData;
+    QList<OBDIIData> _OBDIITroubleCodes;
 
     //UI Data Lists
     QList<QString> _DiagnosticDataList;

@@ -18,7 +18,6 @@ Item {
             spacing: 40
             delegate: Item {
                 Rectangle {
-                    color: "#404040"
                     Text {
                         id: elementLabel
                         anchors.left: parent.left
