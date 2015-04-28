@@ -70,7 +70,7 @@ struct packet{
 
 /*Globals*/
 //Encoder
-const int buttonPin = 10; // the number of the pushbutton pin
+const int buttonPin = 14; // the number of the pushbutton pin
 const int lencoder = 11;
 const int rencoder = 12;
 int buttonState;             // the current reading from the input pin
@@ -85,8 +85,9 @@ int16_t gx, gy, gz;
 int16_t mx, my, mz;
 
 //GPS
-Adafruit_GPS GPS(&Serial3);
-
+SoftwareSerial thing(9,10);
+Adafruit_GPS GPS(&Serial2);
+//Adafruit_GPS GPS(&thing);
 //OBD-II
 char rxData[20];
 int rxIndex=0;
@@ -94,7 +95,7 @@ int vehicleRPM=0; //Used as an example until we decide on commands
 int command_index = 0 ; //For keeping track of iterations through loop
 //HardwareSerial obd2(Serial3);
 //SoftwareSerial obd2(OBDRX,OBDTX);
-HardwareSerial *obd2 = &Serial1;
+HardwareSerial *obd2 = &Serial3;
 //command format is MSByte = Mode LSByte = Device
 char commands [NUMCOMMANDS][5] = {"010C", "010D"}; //This could be done better,NUMCOMMANDS must be updated, 5 because of null terminator
 //This way we can use a case statement based on how many times through the command loop we have gone to get the name
@@ -135,8 +136,9 @@ void setup(){
   //GPS
   Serial3.begin(9600);
   //Serial.println("Initializing GPS!");
-     
-  GPS.begin(9600);  
+  Serial2.begin(9600);
+  GPS.begin(9600); 
+  //thing. 
   //GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_ALLDATA);
   GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
   GPS.sendCommand(PMTK_SET_NMEA_UPDATE_5HZ); // 1 Hz update rate
@@ -272,10 +274,16 @@ void loop()
   spacket.magz = double(mz); 
  
   char c;
+  /*while(1){
+  c = GPS.read();
+  Serial.print("GPS: ");
+  Serial.println(c);
+  delay(50);
+  }*/
   //if(GPS.newNMEAreceived()){
   while(1){
     //delay(1);
-    if(Serial3.available()){
+    if(Serial2.available()){
     c = GPS.read();
     if(GPS.newNMEAreceived()){
     //if(c == '\n'){
