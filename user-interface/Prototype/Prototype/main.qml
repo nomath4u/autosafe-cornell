@@ -6,30 +6,12 @@ import QtQuick.Controls.Styles 1.1
 
 ApplicationWindow {
     id: appWindow
+    title: "Auto Safe"
     visible: true
-    width: 800
-    height: 600
+    width: 1280
+    height: 720
 
     signal networkTabUpdate
-
-//Auto Safe header
-//    toolBar: BorderImage {
-//        border.bottom: 8
-//        source: "toolbar.png"
-//        width: parent.width
-//        height: 75
-
-//        Text {
-//            font.pixelSize: 42
-//            anchors.verticalCenter: parent.verticalCenter
-//            anchors.top: parent.top
-//            anchors.topMargin: 10
-//            anchors.left: parent.left
-//            anchors.leftMargin: 10
-//            color: "white"
-//            text: "Auto Safe"
-//        }
-//    }
 
     Item {
         focus: true
@@ -114,21 +96,26 @@ ApplicationWindow {
                 tabOverlap: 0
                 tab: Rectangle {
                     implicitWidth: control.width/control.count
-                    implicitHeight: 50
+                    implicitHeight: 150
                     BorderImage {
                         anchors.fill: parent
-                        border.bottom: 8
-                        border.top: 8
-                        source: styleData.selected ? "tab_selected.png":"tabs_standard.png"
+                        border.bottom: 15
+                        border.top: 15
+                        source: styleData.selected ? "tab_selected5.png":"tabs_standard3.png"
                         Text {
                             anchors.centerIn: parent
                             color: "white"
                             text: styleData.title.toUpperCase()
-                            font.pixelSize: 18
+
+                            font.pixelSize: 28
                         }
                     }
                 }
-                frame: Rectangle { color: "#312F2F" }
+                frame: Rectangle {
+                    color: "black"
+                    border.color: "white"
+                    border.width: 2
+                }
             }
 
         }

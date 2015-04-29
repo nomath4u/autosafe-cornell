@@ -9,47 +9,6 @@ Item {
     width: parent.width
     height: parent.height
 
-    /* for UI testing only! static list of values */
-//    Item {
-//       ListModel {
-//           id: dataModel
-
-//           ListElement {
-//               label: "RPM"
-//               value: "1000"
-//           }
-
-//           ListElement {
-//               label: "Speed"
-//               value: "10 MPH"
-//           }
-//           ListElement {
-//               label: "Stuff"
-//               value: "More stuff..."
-//           }
-//       }
-//    }
-
-//    ListView {
-//        id: listView
-//        model: dataModel
-//        anchors.fill: parent
-//        spacing: 5
-//        delegate: Rectangle {
-//                width: parent.width
-//                height: 40
-//                Text {
-//                    id: elementLabel
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    anchors.left: parent.left
-//                    text: model.label + " " + model.value
-//                    font.pointSize: 18
-//            }
-//        }
-//    }
-
-    /* REAL CODE! */
-
     ListView {
         id: listView
         anchors.fill: parent
@@ -60,8 +19,9 @@ Item {
                 Text {
                     id: elementLabel
                     anchors.left: parent.left
+
                     text: appData.getVehicleInfoList()[index]
-                    font.pointSize: 16
+                    font.pointSize: 24
                     color: "white"
                 }
             }
@@ -69,7 +29,7 @@ Item {
 
         Connections{
             target: appData
-            onUpdateDiagnosticInfo : { /* must have "on" and camel case signal name! - slot registers automatically */
+            onUpdateDiagnosticInfo : {
                 listView.model = appData.getVehicleInfoList()
             }
         }

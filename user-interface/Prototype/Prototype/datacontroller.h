@@ -114,8 +114,14 @@ protected:
     int _KnobTurn;
     int _KnobPress;
 
-    QList<OBDIIData> _OBDIIData;
-    QList<OBDIIData> _OBDIITroubleCodes;
+    long _OBDIITRBL;
+    int _OBDIIRPMS;
+    int _OBDIISpeed;
+    int _OBDIIFuelPressure;
+    int _OBDIIOilTemp;
+    int _OBDIIBattery;
+    int _OBDIIFuelInput;
+    int _OBDIIBoost;
 
     //UI Data Lists
     QList<QString> _DiagnosticDataList;

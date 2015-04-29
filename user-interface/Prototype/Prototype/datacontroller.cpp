@@ -42,6 +42,15 @@ DataController::DataController(QObject *)
     _OBDIIValue                              = 0;
     _KnobTurn                                = 0;
     _KnobPress                               = 0;
+
+    _OBDIITRBL = 0;
+    _OBDIIRPMS = 0;
+    _OBDIISpeed = 0;
+    _OBDIIFuelPressure = 0;
+    _OBDIIOilTemp = 0;
+    _OBDIIBattery = 0;
+    _OBDIIFuelInput = 0;
+    _OBDIIBoost = 0;
 }
 
 DataController::~DataController()
@@ -121,6 +130,7 @@ void DataController::parseData(char *buffer){
                 break;
             case 19:
                 _Speed = atoi(token);
+                _Speed = _Speed * 2.23694;
                 break;
             case 20:
                 _OBDIICommand = token;
@@ -139,18 +149,29 @@ void DataController::parseData(char *buffer){
         token = strtok(NULL, ",");
     }
 
-    //number of basic diagnostic info commands we want to grab
-    //replace values as they come in
-
-    OBDIIData obdiidata;
-    obdiidata.OBDIICommand = _OBDIICommand;
-    obdiidata.OBDIIValue = _OBDIIValue;
-
-    //trouble codes
-    if(_OBDIICommand == "TRBL"){
-       _OBDIITroubleCodes.append(obdiidata);
-    } else{
-        _OBDIIData.append(obdiidata);
+    if (_OBDIICommand == "TRBL"){
+        _OBDIITRBL = _OBDIIValue;
+    }
+    else if (_OBDIICommand == "RPM") {
+        _OBDIIRPMS = _OBDIIValue;
+    }
+    else if (_OBDIICommand == "Speed") {
+        _OBDIISpeed = _OBDIIValue * 0.621371; //convert to miles per hour
+    }
+    else if (_OBDIICommand == "Fuel Pressure") {
+        _OBDIIFuelPressure = _OBDIIValue;
+    }
+    else if(_OBDIICommand == "Oil Temp") {
+        _OBDIIOilTemp = _OBDIIValue;
+    }
+    else if (_OBDIICommand == "Battery") {
+        _OBDIIBattery = _OBDIIValue;
+    }
+    else if (_OBDIICommand == "Fuel Input") {
+        _OBDIIFuelInput = _OBDIIValue;
+    }
+    else if ("Boost") {
+        _OBDIIBoost = _OBDIIValue;
     }
 
     //emit dataAvailable();
@@ -249,25 +270,37 @@ QStringList DataController::getVehicleInfoList()
     _DiagnosticDataList.clear();
     //_DiagnosticDataList.append("Date: " + QString::number(_Month) + "/" + QString::number(_Day) + "/" + QString::number(_Year));
     //_DiagnosticDataList.append("Time: " + QString::number(_Hour) + ":" + QString::number(_Minute) + ":" + QString::number(_Second));
-    _DiagnosticDataList.append("GPS Position Fix: " + QString::number(_PositionFix));
-    _DiagnosticDataList.append("GPS Lat: " + QString::number(_CoordinatesLat) + " GPS Long: " + QString::number(_CoordinatesLong));
-
     //_DiagnosticDataList.append("Accelerometer - X: " + QString::number(_AccelerometerX) + " Y: " + QString::number(_AccelerometerY) + " Z: " + QString::number(_AccelerometerZ));
     //_DiagnosticDataList.append("Gyroscope - X: " + QString::number(_GyroX) + " Y: " + QString::number(_GyroY) + " Z: " + QString::number(_GyroZ));
     //_DiagnosticDataList.append("Magnetometer - X: " + QString::number(_MagX) + " Y: " + QString::number(_MagY) + "Z: " + QString::number(_MagZ));
 
-    for (int i = 0; i < _OBDIIData.length(); i++){
-        _DiagnosticDataList.append(_OBDIIData.at(i).OBDIICommand + " : " + QString::number(_OBDIIData.at(i).OBDIIValue));
-    }
+    _DiagnosticDataList.append("GPS Position Fix: " + QString::number(_PositionFix));
+    _DiagnosticDataList.append("GPS Lat: " + QString::number(_CoordinatesLat) + " GPS Long: " + QString::number(_CoordinatesLong));
+    _DiagnosticDataList.append("Speed (GPS): " + QString::number(_Speed));
+    _DiagnosticDataList.append("RPM: " + QString::number(_OBDIIRPMS));
+    _DiagnosticDataList.append("Speed (ODBII): " + QString::number(_OBDIISpeed) + " km/h");
+    _DiagnosticDataList.append("Fuel Pressure: " + QString::number(_OBDIIFuelPressure) + " kPa");
+    _DiagnosticDataList.append("Oil Temperature: " + QString::number(_OBDIIOilTemp) + " degrees celsius");
+    _DiagnosticDataList.append("Hybrid Battery: " + QString::number(_OBDIIBattery) + " % remaining");
+    _DiagnosticDataList.append("Fuel: " + QString::number(_OBDIIFuelInput) + " % remaining");
+    _DiagnosticDataList.append("Boost: " + QString::number(_OBDIIBoost));
 
     return _DiagnosticDataList;
 }
 
 //OBDII codes displayed on UI
 QStringList DataController::getVehicleAlertsList(){
+
     _VehicleAlertList.clear();
 
-    //get trouble codes
+    if (_OBDIITRBL != 0) {
+        _VehicleAlertList.append("Trouble codes received:\n");
+        _VehicleAlertList.append(QString::number(_OBDIITRBL, 16));
+    }
+
+    else {
+        _VehicleAlertList.append("No trouble codes, presently.");
+    }
 
     return _VehicleAlertList;
 }

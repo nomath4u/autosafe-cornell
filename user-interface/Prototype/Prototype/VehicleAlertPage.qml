@@ -28,7 +28,7 @@ Item {
 
         Connections{
             target: appData
-            onUpdateDiagnosticInfo : { /* must have "on" and camel case signal name! - slot registers automatically */
+            onUpdateDiagnosticInfo : {
                 listView.model = appData.getVehicleAlertsList()
             }
         }

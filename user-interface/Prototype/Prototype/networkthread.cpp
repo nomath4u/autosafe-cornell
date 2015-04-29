@@ -45,10 +45,8 @@ QString NetworkThread::crypt (unsigned char* message)
 
 void NetworkThread::sendMessage(const QString &msg, int flag){
     send_message("10.0.0.1", msg, flag);
-    send_message("10.0.0.2", msg, flag);
+    send_message("10.0.0.3", msg, flag);
     qDebug() << "Sending message over network!!";
-
-    //pause network thread for 10 mins?
 }
 
 int NetworkThread::send_message(const char* who, QString message, int flag)

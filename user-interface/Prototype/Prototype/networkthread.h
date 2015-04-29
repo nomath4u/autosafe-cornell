@@ -23,13 +23,13 @@ public:
 
     void die(const char *s);
     QString crypt (unsigned char* message);
-    int send_message(const char *who, QString send);
+    int send_message(const char *who, QString send, int flag);
     void message_data(QString s, QStringList* l);
     bool check_recv(QString s, QStringList* l);
     bool verify_hash(QString s, QString h);
 
 public slots:
-    void sendMessage(const QString &msg);
+    void sendMessage(const QString &msg, int flag);
 
 signals:
     void bufferReady(char* buffer);

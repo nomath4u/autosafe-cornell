@@ -11,14 +11,17 @@ Item {
     ListView {
         id: messageListView
         anchors.fill: parent
-        spacing: 40
+        spacing: 50
         delegate: Item {
             Rectangle {
                 Text {
                     id: elementLabel
                     anchors.left: parent.left
+                    anchors.topMargin: 75
+                    anchors.leftMargin: 20
                     text: appData.getMessageList()[index]
-                    font.pointSize: 16
+                    font.weight: bold
+                    font.pointSize: 36
                     color: "red"
                 }
             }
