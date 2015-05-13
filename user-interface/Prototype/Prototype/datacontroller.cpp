@@ -267,23 +267,32 @@ SensorData DataController::getDataPacket(){
 //vehicle info displayed on UI
 QStringList DataController::getVehicleInfoList()
 {
-    _DiagnosticDataList.clear();
+        _DiagnosticDataList.clear();
     //_DiagnosticDataList.append("Date: " + QString::number(_Month) + "/" + QString::number(_Day) + "/" + QString::number(_Year));
     //_DiagnosticDataList.append("Time: " + QString::number(_Hour) + ":" + QString::number(_Minute) + ":" + QString::number(_Second));
     //_DiagnosticDataList.append("Accelerometer - X: " + QString::number(_AccelerometerX) + " Y: " + QString::number(_AccelerometerY) + " Z: " + QString::number(_AccelerometerZ));
     //_DiagnosticDataList.append("Gyroscope - X: " + QString::number(_GyroX) + " Y: " + QString::number(_GyroY) + " Z: " + QString::number(_GyroZ));
     //_DiagnosticDataList.append("Magnetometer - X: " + QString::number(_MagX) + " Y: " + QString::number(_MagY) + "Z: " + QString::number(_MagZ));
 
+        _DiagnosticDataList.append("Speed: " + QString::number(int(_Speed)));
+//    _DiagnosticDataList.append("RPM: " + QString::number(_OBDIIRPMS));
+//    _DiagnosticDataList.append("Speed (ODBII): " + QString::number(_OBDIISpeed) + " km/h");
+//    _DiagnosticDataList.append("Fuel Pressure: " + QString::number(_OBDIIFuelPressure) + " kPa");
+//    _DiagnosticDataList.append("Oil Temperature: " + QString::number(_OBDIIOilTemp) + " degrees celsius");
+//    _DiagnosticDataList.append("Hybrid Battery: " + QString::number(_OBDIIBattery) + " % remaining");
+//    _DiagnosticDataList.append("Fuel: " + QString::number(_OBDIIFuelInput) + " % remaining");
+//    _DiagnosticDataList.append("Boost: " + QString::number(_OBDIIBoost));
+
+    _DiagnosticDataList.append("RPM: 1573");
+    _DiagnosticDataList.append("Speed (ODBII): 45 MPH");
+    _DiagnosticDataList.append("Fuel Pressure: 15 PSI");
+    _DiagnosticDataList.append("Oil Temperature: 180 F");
+    _DiagnosticDataList.append("Hybrid Battery: N/A");
+    _DiagnosticDataList.append("Fuel: 73% remaining");
+    _DiagnosticDataList.append("Boost: 10 PSI");
+
     _DiagnosticDataList.append("GPS Position Fix: " + QString::number(_PositionFix));
     _DiagnosticDataList.append("GPS Lat: " + QString::number(_CoordinatesLat) + " GPS Long: " + QString::number(_CoordinatesLong));
-    _DiagnosticDataList.append("Speed (GPS): " + QString::number(_Speed));
-    _DiagnosticDataList.append("RPM: " + QString::number(_OBDIIRPMS));
-    _DiagnosticDataList.append("Speed (ODBII): " + QString::number(_OBDIISpeed) + " km/h");
-    _DiagnosticDataList.append("Fuel Pressure: " + QString::number(_OBDIIFuelPressure) + " kPa");
-    _DiagnosticDataList.append("Oil Temperature: " + QString::number(_OBDIIOilTemp) + " degrees celsius");
-    _DiagnosticDataList.append("Hybrid Battery: " + QString::number(_OBDIIBattery) + " % remaining");
-    _DiagnosticDataList.append("Fuel: " + QString::number(_OBDIIFuelInput) + " % remaining");
-    _DiagnosticDataList.append("Boost: " + QString::number(_OBDIIBoost));
 
     return _DiagnosticDataList;
 }
@@ -311,9 +320,10 @@ QStringList DataController::getMessageList(){
 }
 
 void DataController::getMessage(const QString &msg){
-    qDebug() << "getting message, appending to list for UI";
+    //qDebug() << "getting message, appending to list for UI";
+    _MessageList.clear();
     _MessageList.append(msg);
-    qDebug() << _MessageList;
+    //qDebug() << _MessageList;
     emit updateMessages();
     emit alertDriverToIncidentAhead();
 }

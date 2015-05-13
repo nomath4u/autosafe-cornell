@@ -10,6 +10,7 @@
 #include <QString>
 #include <errno.h>
 
+int counter = 0;
 char cryptkey[] = "cornellcup2015";
 
 NetworkThread::NetworkThread(QObject *){
@@ -44,9 +45,9 @@ QString NetworkThread::crypt (unsigned char* message)
 }
 
 void NetworkThread::sendMessage(const QString &msg, int flag){
-    send_message("10.0.0.1", msg, flag);
-    send_message("10.0.0.3", msg, flag);
-    qDebug() << "Sending message over network!!";
+       send_message("192.168.137.132", msg, flag);
+       //send_message("10.0.0.3", msg, flag);
+       qDebug() << "Sending message over network!!";
 }
 
 int NetworkThread::send_message(const char* who, QString message, int flag)
@@ -119,7 +120,7 @@ bool NetworkThread::verify_hash(QString s, QString h){
 }
 
 void NetworkThread::run(){
-    qDebug() << "IN NETWORK";
+    //qDebug() << "IN NETWORK";
     QStringList* ds=new QStringList;
     QString hash, mess;
 
@@ -163,7 +164,7 @@ void NetworkThread::run(){
         //for (i=0; i < BUFLEN ; i++) {
         //    buf[i] = "";
         //}
-        printf("Waiting for data...");
+        //printf("Waiting for data...");
         fflush(stdout);
 
         //try to receive some data, this is a blocking call
@@ -188,7 +189,7 @@ void NetworkThread::run(){
         printf("Data: %s\n" , buf);
 
         QRegExp sep(":");
-        qDebug() << "REG:" << recv.section(sep,0,0);
+        //qDebug() << "REG:" << recv.section(sep,0,0);
         hash = recv.section(sep,0,0);
         mess = recv.section(sep,1,2);
 
@@ -200,7 +201,7 @@ void NetworkThread::run(){
                 qDebug() << "NON message";
             }
         }
-        qDebug() << *ds;
+        //qDebug() << *ds;
 
 
         // Parse Message and do stuff

@@ -65,7 +65,7 @@ void SensorThread::run(){
     char buffer[128];
 
 #ifdef DEMO
-    qDebug() << "DEMO!";
+    //qDebug() << "DEMO!";
 
     struct sockaddr_in si_me, si_other;
 

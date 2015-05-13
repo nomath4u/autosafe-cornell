@@ -20,7 +20,6 @@ Item {
                     anchors.topMargin: 75
                     anchors.leftMargin: 20
                     text: appData.getMessageList()[index]
-                    font.weight: bold
                     font.pointSize: 36
                     color: "red"
                 }
@@ -30,11 +29,23 @@ Item {
         Connections{
             target: appWindow
             onNetworkTabUpdate : {
-                console.log("Updating messages");
+                //console.log("Updating messages");
                 messageListView.model = appData.getMessageList()
-                console.log(appData.getMessageList());
+                timeout.start();
+                //console.log(appData.getMessageList());
 
             }
+        }
+    }
+
+    Timer {
+        id: timeout
+        interval: 2000
+        running: true
+        repeat: false
+        onTriggered: {
+            messageListView.model = " ";
+            navigationTabView.currentIndex = 0;
         }
     }
 }
