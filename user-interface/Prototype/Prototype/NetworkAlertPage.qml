@@ -29,20 +29,18 @@ Item {
         Connections{
             target: appWindow
             onNetworkTabUpdate : {
-                //console.log("Updating messages");
+                console.log("Updating messages");
                 messageListView.model = appData.getMessageList()
-                timeout.start();
-                //console.log(appData.getMessageList());
+                console.log(appData.getMessageList());
 
             }
         }
     }
 
     Timer {
-        id: timeout
         interval: 2000
         running: true
-        repeat: false
+        repeat: true
         onTriggered: {
             messageListView.model = " ";
             navigationTabView.currentIndex = 0;

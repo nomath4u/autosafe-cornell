@@ -62,10 +62,10 @@ int SensorThread::openPort()
 void SensorThread::run(){
 
     int fd, n, e;
-    char buffer[128];
+    char buffer[152];
 
 #ifdef DEMO
-    //qDebug() << "DEMO!";
+    qDebug() << "DEMO!";
 
     struct sockaddr_in si_me, si_other;
 
@@ -127,7 +127,7 @@ void SensorThread::run(){
             qDebug() << "Read error: " << e;
         }
 
-        qDebug() << "buffer contents: " << buffer;
+        //qDebug() << "buffer contents: " << buffer;
         emit bufferReady(buffer);
     }
 #endif

@@ -34,6 +34,7 @@ public slots:
 signals:
     void bufferReady(char* buffer);
     void messageReceived(const QString &msg);
+    void DirectionRecieved(const int dir);
 };
 
 #endif // NETWORKTHREAD_H

@@ -219,9 +219,129 @@ void DataController::dumpData(){
 */
 }
 
+double DataController::getDirection() {
+    SensorData temp;
+    int avg_magx, avg_magy;
+    int size = prevData.size();
+    double direction;
+    if(prevData.isEmpty()){
+        qDebug() << "getDirection:Previous data list is empty.";
+    } else {
+        for(int i=0; i < size; ++i) {
+            temp = prevData.at(i);
+            avg_magx += temp.magX;
+            avg_magy += temp.magY;
+        }
+        avg_magx = avg_magx/size;
+        avg_magy = avg_magy/size;
+        direction = tan(avg_magy)/tan(avg_magx);
+        qDebug() << "Direction" << direction;
+        return direction;
+    }
+    return -1;
+}
+
+double DataController::deg2rad(double d) {
+    return d * M_PI/180;
+}
+
+double DataController::rad2deg(double r) {
+    return r * 180/M_PI;
+}
+
+int DataController::getRhumbLineBearing() {
+    double dLon, dPhi, lon1, lat1, lon2, lat2;
+    int size = prevData.size();
+    if (size > 50 && _PositionFix == 1) {
+    lon1 = prevData.at(size - 50).longitude;
+    lat1 = prevData.at(size - 50).lattitude;
+    lon2 = prevData.last().longitude;
+    lat2 = prevData.last().lattitude;
+    //difference in longitudinal coordinates
+    //dLon = deg2rad(lon2) - deg2rad(lon1);
+    dLon = (sin(deg2rad(lon2)-deg2rad(lon1) * cos(deg2rad(lat2))));
+    //difference in the phi of latitudinal coordinates
+    //dPhi = log(tan(deg2rad(lat2) / 2 + M_PI / 4) / tan(deg2rad(lat1) / 2 + M_PI / 4));
+    dPhi = (cos(deg2rad(lat1)) * sin(deg2rad(lat2)) - sin(deg2rad(lat1)) * cos(deg2rad(lat2)) - cos(deg2rad(lon2)-deg2rad(lon1)));
+
+
+    //we need to recalculate dLon if it is greater than pi
+    if(abs(dLon) > M_PI) {
+        if(dLon > 0) {
+            dLon = (2 * M_PI - dLon) * -1;
+        } else {
+            dLon = 2 * M_PI + dLon;
+        }
+    }
+    return (int)(rad2deg(atan2(dLon, dPhi)));
+    }
+    return 0;
+}
+
+QString DataController::getCompassDir(int bearing) {
+    int tmp = bearing / 22.5;
+    QString dir;
+    switch (tmp) {
+    case 1:
+        dir = "NNE";
+        break;
+    case 2:
+         dir = "NE";
+         break;
+    case 3:
+         dir = "ENE";
+         break;
+    case 4:
+         dir = "E";
+         break;
+    case 5:
+         dir = "ESE";
+         break;
+    case 6:
+         dir = "SE";
+         break;
+    case 7:
+         dir = "SSE";
+         break;
+    case 8:
+         dir = "S";
+         break;
+    case 9:
+         dir = "SSW";
+         break;
+    case 10:
+         dir = "SW";
+         break;
+    case 11:
+         dir = "WSW";
+         break;
+    case 12:
+         dir = "W";
+         break;
+    case 13:
+         dir = "WNW";
+         break;
+    case 14:
+         dir = "NW";
+         break;
+    case 15:
+         dir = "NNW";
+         break;
+    default:
+        dir = "N";
+        break;
+    }
+    return dir;
+}
+
 void DataController::handleData(){
 
     //dumpData();
+
+    int bearing = getRhumbLineBearing();
+    //qDebug() << "Bearing:" << bearing;
+    //qDebug() << "Lon:" << _CoordinatesLong << "Lat:" << _CoordinatesLat;
+    //qDebug() << "Direction:" << getCompassDir(bearing);
 
     //control UI if necessary 0 = nothing 1 = left 2 = right
     if (_KnobTurn == 1) {
@@ -261,21 +381,25 @@ SensorData DataController::getDataPacket(){
     data.knobTurn = _KnobTurn;
     data.knobPress = _KnobPress;
 
+    prevData.append(data);
+    if (prevData.size() > 500) {
+        prevData.removeFirst();
+    }
     return data;
 }
 
 //vehicle info displayed on UI
 QStringList DataController::getVehicleInfoList()
 {
-        _DiagnosticDataList.clear();
+    _DiagnosticDataList.clear();
     //_DiagnosticDataList.append("Date: " + QString::number(_Month) + "/" + QString::number(_Day) + "/" + QString::number(_Year));
     //_DiagnosticDataList.append("Time: " + QString::number(_Hour) + ":" + QString::number(_Minute) + ":" + QString::number(_Second));
     //_DiagnosticDataList.append("Accelerometer - X: " + QString::number(_AccelerometerX) + " Y: " + QString::number(_AccelerometerY) + " Z: " + QString::number(_AccelerometerZ));
     //_DiagnosticDataList.append("Gyroscope - X: " + QString::number(_GyroX) + " Y: " + QString::number(_GyroY) + " Z: " + QString::number(_GyroZ));
     //_DiagnosticDataList.append("Magnetometer - X: " + QString::number(_MagX) + " Y: " + QString::number(_MagY) + "Z: " + QString::number(_MagZ));
 
-        _DiagnosticDataList.append("Speed: " + QString::number(int(_Speed)));
-//    _DiagnosticDataList.append("RPM: " + QString::number(_OBDIIRPMS));
+    _DiagnosticDataList.append("Speed: " + QString::number(int(_Speed)) + " MPH");
+    _DiagnosticDataList.append("RPM: " + QString::number(_OBDIIRPMS));
 //    _DiagnosticDataList.append("Speed (ODBII): " + QString::number(_OBDIISpeed) + " km/h");
 //    _DiagnosticDataList.append("Fuel Pressure: " + QString::number(_OBDIIFuelPressure) + " kPa");
 //    _DiagnosticDataList.append("Oil Temperature: " + QString::number(_OBDIIOilTemp) + " degrees celsius");
@@ -283,14 +407,11 @@ QStringList DataController::getVehicleInfoList()
 //    _DiagnosticDataList.append("Fuel: " + QString::number(_OBDIIFuelInput) + " % remaining");
 //    _DiagnosticDataList.append("Boost: " + QString::number(_OBDIIBoost));
 
-    _DiagnosticDataList.append("RPM: 1573");
-    _DiagnosticDataList.append("Speed (ODBII): 45 MPH");
     _DiagnosticDataList.append("Fuel Pressure: 15 PSI");
     _DiagnosticDataList.append("Oil Temperature: 180 F");
     _DiagnosticDataList.append("Hybrid Battery: N/A");
-    _DiagnosticDataList.append("Fuel: 73% remaining");
+    _DiagnosticDataList.append("Fuel: 88 % remaining");
     _DiagnosticDataList.append("Boost: 10 PSI");
-
     _DiagnosticDataList.append("GPS Position Fix: " + QString::number(_PositionFix));
     _DiagnosticDataList.append("GPS Lat: " + QString::number(_CoordinatesLat) + " GPS Long: " + QString::number(_CoordinatesLong));
 
@@ -320,10 +441,18 @@ QStringList DataController::getMessageList(){
 }
 
 void DataController::getMessage(const QString &msg){
-    //qDebug() << "getting message, appending to list for UI";
+    qDebug() << "getting message, appending to list for UI" << msg;
+    QRegExp sep(":");
+    qDebug() << "dir:" << msg.section(sep,0,0);
+    int dir = msg.section(sep,0,0).toInt();
+    if (dir > getRhumbLineBearing() - 90 && dir < getRhumbLineBearing() + 90){
+        qDebug() << "Same Direction" << dir;
+    }
+    //msg.append(" To the ");
+    //msg.append(getCompassDir(dir));
     _MessageList.clear();
-    _MessageList.append(msg);
-    //qDebug() << _MessageList;
+    _MessageList.append(msg.section(sep,1,2) + " To the " + getCompassDir(dir));
+    qDebug() << _MessageList;
     emit updateMessages();
     emit alertDriverToIncidentAhead();
 }

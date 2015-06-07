@@ -62,6 +62,15 @@ public:
     Q_INVOKABLE QStringList getVehicleAlertsList();
     Q_INVOKABLE QStringList getMessageList();
 
+    QList<SensorData> prevData;
+
+private:
+    double getDirection();
+    int getRhumbLineBearing();
+    double deg2rad(double);
+    double rad2deg(double);
+    QString getCompassDir(int);
+
 public slots:
     void handleData();
     void parseData(char* buffer);
